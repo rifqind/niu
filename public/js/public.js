@@ -8,11 +8,62 @@ $(document).ready(function () {
                 url: url_key.href,
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data.tabels[0].label);
+
+                    document.getElementById("judul-tabel").innerHTML =
+                        data.tabels[0].label;
+                    // generate & assign columns
+                    let columnsHTML = `<td>${data.row_label[0].label}</td>`;
+
+                    columnsHTML += data.columns
+                        .map((column) => `<td>${column.label}</td>`)
+                        .join("");
+
+                    document.getElementById("header-tabel").innerHTML =
+                        columnsHTML;
+                    console.log({ columnsHTML });
+
+                    // generate & assign rows
+
+                    rowsHTML = data.rows.map((row) => {
+                        columnInput = data.columns
+                            .map(
+                                (column) =>
+                                    `<td><input id="${row.id}-${column.id}"/></td>`
+                            )
+                            .join("");
+                        let anu = `<tr><td>${row.label}</td>${columnInput}</tr>`;
+                        console.log({ label: anu });
+                        return anu;
+                    });
+
+                    document.getElementById("body-tabel").innerHTML = rowsHTML;
+                    data.datacontents.map((content) => {
+                        contentSplitted = content.label.split("-");
+                        rowId = contentSplitted[1];
+                        columnId = contentSplitted[2];
+
+                        rowLabel = data.rows.find((row) => {
+                            if (row.id == rowId) return row.label;
+                        });
+                        document.getElementById(`${rowId}-${columnId}`).value =
+                            content.value;
+                    });
+                    // data.datacontents.map((content) => {
+                    //     contentSplitted = content.label.split("-");
+                    //     rowLabel = data.rows.find(
+                    //         (row) => row.id == contentSplitted[1]
+                    //     );
+
+                    //     return `<tr>
+                    //     <td>${rowLabel}</td>
+                    //     <td>${content.value}</td>
+                    //     </tr>`;
+                    // });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     reject(errorThrown);
-                }
+                },
             });
         }
     });
