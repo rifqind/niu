@@ -6,6 +6,7 @@ use App\Models\Column;
 use App\Models\Datacontent;
 use App\Models\Row;
 use App\Models\Tabel;
+use App\Models\Rowlabel;
 use Illuminate\Http\Request;
 
 class TabelController extends Controller
@@ -22,12 +23,13 @@ class TabelController extends Controller
         ]);
     }
 
-    public function getDatacontent(Request $request){
+    public function getDatacontent(Request $request)
+    {
         $tabel_id = $request->query('tabel_id');
-        $data = Datacontent::where('label', 'LIKE', $tabel_id.'%')->get();
+        $data = Datacontent::where('label', 'LIKE', $tabel_id . '%')->get();
         $id_rows = [];
         $id_columns = [];
-        foreach($data as $dat){
+        foreach ($data as $dat) {
             $split = explode("-", $dat->label);
             array_push($id_rows, $split[1]);
             array_push($id_columns, $split[2]);
@@ -36,12 +38,14 @@ class TabelController extends Controller
         }
         $tabels = Tabel::where('id', $tabel_id)->get();
         $rows = Row::whereIn('id', $id_rows)->get();
+        $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
         $columns = Column::whereIn('id', $id_columns)->get();
 
         return response()->json([
             'datacontents' => $data,
             'tabels' => $tabels,
             'rows' => $rows,
+            'row_label' => $rowLabel,
             'columns' => $columns,
             'tahun' => $tahun,
             'turtahuns' => $turtahuns,

@@ -31,14 +31,26 @@
             @endforeach
             </option>
         </select>
+        <hr>
+        Judul Tabel : <div id="judul-tabel"></div>
+        <table id="tabel">
+            <thead id="header-tabel">
+
+            </thead>
+            <tbody id="body-tabel"></tbody>
+            <tfoot></tfoot>
+        </table>
+
     </div>
+
+
     <x-slot name="script">
         <!-- Additional JS resources -->
         <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
-            const url_key = new URL ('{{ route('tabel.getDatacontent') }}')
+            const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             $(function() {
                 //Initialize Select2 Elements
                 $('.select2').select2()
