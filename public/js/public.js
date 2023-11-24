@@ -32,9 +32,9 @@ $(document).ready(function () {
                                     `<td><input id="${row.id}-${column.id}"/></td>`
                             )
                             .join("");
-                        let anu = `<tr><td>${row.label}</td>${columnInput}</tr>`;
-                        console.log({ label: anu });
-                        return anu;
+                        let valueIndex = `<tr><td>${row.label}</td>${columnInput}</tr>`;
+                        // console.log({ label: anu });
+                        return valueIndex;
                     });
 
                     document.getElementById("body-tabel").innerHTML = rowsHTML;
