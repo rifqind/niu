@@ -102,7 +102,7 @@ $(document).ready(function () {
             },
         });
     });
-    // $(".update-pen").on("click", function (e) {});
+    // $(".update-pen").on("click", function (e) 
     $("#updateDinas").on("click", function (e) {
         let id = $("#idHidden").val();
         let nama = $("#namaModal").val();
@@ -118,7 +118,7 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
-                alert(data);
+                alert(data)
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
