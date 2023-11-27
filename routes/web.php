@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TabelController;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//tabel
 Route::get('/test', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
+
+//dinas
+Route::get('/dinas', [DinasController::class, 'index'])->middleware(['auth', 'verified']);
+
+Route::get('dinas/create', [DinasController::class, 'create'])->middleware(['auth', 'verified'])->name('dinas.create');
+Route::get('dinas/index', [DinasController::class, 'index'])->middleware(['auth', 'verified'])->name('dinas.index');
+Route::get('dinas/search', [DinasController::class, 'search'])->middleware(['auth', 'verified'])->name('dinas.search');
+Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth', 'verified'])->name('dinas.store');
 
 require __DIR__.'/auth.php';
