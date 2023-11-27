@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('columns', function (Blueprint $table) {
             $table->id();
             $table->string('label');
-            $table->unsignedBigInteger('id_columns_group');
+            $table->unsignedBigInteger('id_columns_group')->default("1");
         });
     }
 

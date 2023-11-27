@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
 Route::get('/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.test');
 Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
+Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas

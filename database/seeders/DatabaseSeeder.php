@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TabelSeeder::class);
         $this->call(TurtahunSeeder::class);
         $this->call(DatacontentSeeder::class);
+        $this->call(DinasSeeder::class);
+        $this->call(RegionSeeder::class);
     }
 }

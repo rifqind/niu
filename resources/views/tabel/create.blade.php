@@ -37,7 +37,11 @@
             </div>
             <div class="form-group">
                 <label for="dinas">Dinas Tabel</label>
-                <input type="text" class="form-control" name="dinas">
+                <select name="dinas" class="form-control">
+                    @foreach ($daftar_dinas as $item)
+                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="subjek">Subjek Tabel</label>
@@ -61,18 +65,36 @@
             </div>
             <b>Row List</b>
             <hr>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="row-list" id="row-list">
-                <label class="form-check-label" for="row-list">Bolmong</label>
-            </div>
+            @foreach ($row_list as $key => $item)
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="row-list" id="row-list-{{ $key }}"
+                        value="{{ $item->id }}">
+                    <label class="form-check-label" for="row-list-{{ $key }}">{{ $item->label }}</label>
+                </div>
+            @endforeach
             <br>
             <hr>
             <b>Detail Variabel</b>
+
             <div class="form-group">
-                <label for="kolom">Kolom Tabel</label>
-                <input type="text" class="form-control" name="kolom">
+                <label for="kolom-grup">Grup Kolom</label>
+                <select name="kolom-grup" class="form-control">
+                    @foreach ($kolom_grup as $item)
+                        <option value="{{ $item->id }}">{{ $item->label }}</option>
+                    @endforeach
+                </select>
             </div>
 
+            <b>Daftar Kolom</b>
+            <hr>
+            @foreach ($daftar_kolom as $key => $item)
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="column-list"
+                        id="column-list-{{ $key }}" value="{{ $item->id }}">
+                    <label class="form-check-label" for="column-list-{{ $key }}">{{ $item->label }}</label>
+                </div>
+            @endforeach
+            <br>
             <div class="form-group">
                 <label for="tahun">Tahun Tabel</label>
                 <input type="text" class="form-control" name="tahun">
@@ -83,7 +105,7 @@
                 <input type="text" class="form-control" name="periode">
             </div>
 
-
+            <button type="button" id="submit-create-table" class="btn btn-primary">Buat Tabel</button>
         </form>
 
     </div>
@@ -125,14 +147,82 @@
 
             nomor.value = "R/001";
             judul.value = "Judul Tabel";
-            dinas.value = "Dinas";
-            subjek.value = "Sosial";
+            dinas.value = "1";
+            subjek.value = "1";
             unit.value = "Persentase";
             row_label.value = "1";
 
-            kolom.value = "Laki-laki";
+            // kolom.value = "Laki-laki";
             tahun.value = "2023";
             periode.value = "Januari";
+
+            // submit action 
+            function handleSubmitCreateTable() {
+                // prepare table
+                let table = {
+                    'nomor': document.getElementsByName('nomor')[0].value,
+                    'label': document.getElementsByName('judul')[0].value,
+                    'unit': document.getElementsByName('unit')[0].value,
+                    'id_dinas': document.getElementsByName('dinas')[0].value,
+                    'id_subjek': document.getElementsByName('subjek')[0].value,
+                };
+
+                // prepare rows 
+                let rows_selected = [...document.getElementsByName('row-list')].filter(item => item.checked).map(item =>
+                    item.value);
+                let row = {
+                    'row_label': document.getElementsByName('row-label')[0].value,
+                    'rows_selected': rows_selected
+                };
+                //prepare kolom 
+                let columns_selected = [...document.getElementsByName('column-list')].filter(item => item.checked).map(item =>
+                    item.value);
+                let column = {
+                    'kolom': columns_selected
+                };
+
+                // prepare periode 
+                let periode = {
+                    'tahun': document.getElementsByName('tahun')[0].value,
+                    'periode': document.getElementsByName('periode')[0].value,
+                }
+                let token = '{{ csrf_token() }}'
+
+                let data = {
+                    table,
+                    row,
+                    column,
+                    periode,
+                    _token: '{{ csrf_token() }}',
+                }
+
+                // prepare sending data
+
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', '/tables/create', true);
+
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                let jsonData = JSON.stringify(data);
+
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        var response = JSON.parse(xhr.responseText);
+                        console.log('Success:', response);
+                    } else {
+                        console.error('Error:', xhr.status, xhr.statusText);
+                    }
+                };
+                xhr.onerror = function() {
+                    console.error('Network Error');
+                };
+                xhr.send(jsonData);
+            }
+
+
+            document.getElementById('submit-create-table').addEventListener('click', handleSubmitCreateTable);
         </script>
     </x-slot>
 </x-niu-layout>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Column;
+use App\Models\ColumnGroup;
 use App\Models\Datacontent;
+use App\Models\Dinas;
+use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
 use App\Models\Rowlabel;
@@ -19,6 +22,7 @@ class TabelController extends Controller
         //
         $tables = Tabel::all();
         $table_objects = [];
+        $daftar_region = Region::get();
         foreach ($tables as $table) {
             $tabels = Tabel::where('id', $table->id)->get();
             $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
@@ -48,7 +52,7 @@ class TabelController extends Controller
 
 
         return view('tabel.index', [
-            'tables' => $table_objects
+            'tables' => $table_objects,
         ]);
     }
     public function test()
@@ -96,10 +100,21 @@ class TabelController extends Controller
     {
         $tabel = Tabel::all();
         $rowLabel = RowLabel::get();
+        $daftar_dinas = Dinas::get();
+        $daftar_kolom = Column::get();
+        $kolom_grup = ColumnGroup::get();
+
+        $row_list = Row::where('id_rowlabels', '1')->get();
+
 
         return view('tabel.create', [
             'tabel' => $tabel,
             'row_labels' => $rowLabel,
+            'daftar_dinas' => $daftar_dinas,
+            'daftar_kolom' => $daftar_kolom,
+            'row_list' => $row_list,
+            'kolom_grup' => $kolom_grup,
+
         ]);
     }
 
@@ -108,7 +123,24 @@ class TabelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // insert table
+        $newTable = Tabel::create($request->table);
+        // generate datacontents
+        $data_contents = [];
+        foreach ($request->row["rows_selected"] as $row) {
+            foreach ($request->column["kolom"] as $column) {
+                $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-1";
+                $datavalue = "";
+                array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
+            }
+        }
+        Datacontent::insert($data_contents);
+        return response()->json([
+            "column" => $request->column,
+            "periode" => $request->periode,
+            "row" => $request->row,
+            "table" => $request->table,
+        ]);
     }
 
     /**
