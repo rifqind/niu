@@ -27,7 +27,8 @@
             </div>
             <div class="ml-auto mr-1">
                 <form action="{{ route('dinas.search') }}" method="GET">
-                    <input type="text" class="form-control" placeholder="Cari Dinas" name="search">
+                    <input id="cariDinas" type="text" class="form-control" placeholder="Cari Dinas" name="search">
+                </form>
             </div>
         </div>
         <table class="table table-hover" id="tabel-dinas">
