@@ -24,14 +24,33 @@
                         </p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ url('monitoring') }}" class="nav-link {{ Request::is('monitoring') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
+                    <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
-                            Monitoring PDRB
+                            Kelola Dinas
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                </li> --}}
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('dinas/index') }}" class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Daftar Dinas
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('dinas/create') }}" class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Tambah Dinas
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item {{ Request::is('lapangan-usaha*') ? 'menu-open' : '' }}">
                     <a href="" class="nav-link {{ Request::is('lapangan-usaha*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-chart-pie"></i>

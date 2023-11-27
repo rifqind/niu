@@ -19,8 +19,10 @@
     <link rel="stylesheet" href="{{ url('') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+
     {{ $head }}
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}
 </head>
 
 <body class="hold-transition layout-fixed">
@@ -58,11 +60,11 @@
             <!-- Main content -->
             <section class="content">
 
-                <div class="loader d-none">                                            
-                  <div class="spinner-grow text-success"></div>
-                  <div class="spinner-grow text-success"></div>
-                  <div class="spinner-grow text-success"></div>
-                  <div class="spinner-grow text-success"></div>
+                <div class="loader d-none">
+                    <div class="spinner-grow text-success"></div>
+                    <div class="spinner-grow text-success"></div>
+                    <div class="spinner-grow text-success"></div>
+                    <div class="spinner-grow text-success"></div>
                 </div>
 
                 <div class="container-fluid">
@@ -92,6 +94,19 @@
     <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
     <script src="{{ url('') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="{{ url('') }}/plugins/toastr/toastr.min.js"></script>
+    <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script>
+        $(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+            })
+        });
+    </script>
     {{ $script }}
 </body>
 
