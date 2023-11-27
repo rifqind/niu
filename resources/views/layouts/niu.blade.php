@@ -20,6 +20,7 @@
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}

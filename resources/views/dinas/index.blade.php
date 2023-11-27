@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        create
+        index
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -34,8 +34,10 @@
             <thead>
                 <tr>
                     <td class="first-column">No.</td>
-                    <td>Dinas</td>
-                    <td>Wilayah Kerja</td>
+                    <td class="text-center">Dinas</td>
+                    <td class="text-center">Wilayah Kerja</td>
+                    <td class="text-center">Edit</td>
+                    <td class="text-center">Hapus</td>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +45,24 @@
                     <tr>
                         <td>{{ $din->number }}</td>
                         <td>{{ $din->nama }}</td>
-                        <td>{{ $din->regions->nama }}</td>
+                        <td class="text-center">{{ $din->regions->nama }}</td>
+                        <td class="text-center">
+                            <a href=""
+                                class="update-pen"
+                                data-dinas="{{ json_encode([
+                                    'id' => $din->id,
+                                    'nama' => $din->nama,
+                                    'id_regions' => $din->id_regions,
+                                ]) }}"
+                                data-toggle="modal" data-target="#updateModal">
+                                <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="">
+                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -54,7 +73,12 @@
             </div>
         </div>
     </div>
+    @include('dinas.modal')
     <x-slot name="script">
         <script src="{{ asset('js/dinas.js') }}"></script>
+        <script>
+            const tokens = '{{ csrf_token() }}'
+            const update_URL = new URL("{{ route('dinas.update') }}")
+        </script>
     </x-slot>
 </x-niu-layout>
