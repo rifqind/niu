@@ -31,7 +31,9 @@ Route::middleware('auth')->group(function () {
 });
 
 //tabel
-Route::get('/test', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
+Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
+Route::get('/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.test');
+Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas
@@ -42,4 +44,4 @@ Route::get('dinas/index', [DinasController::class, 'index'])->middleware(['auth'
 Route::get('dinas/search', [DinasController::class, 'search'])->middleware(['auth', 'verified'])->name('dinas.search');
 Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth', 'verified'])->name('dinas.store');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -17,6 +17,43 @@ class TabelController extends Controller
     public function index()
     {
         //
+        $tables = Tabel::all();
+        $table_objects = [];
+        foreach ($tables as $table) {
+            $tabels = Tabel::where('id', $table->id)->get();
+            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
+
+            $id_rows = [];
+            $id_columns = [];
+            foreach ($data as $dat) {
+                $split = explode("-", $dat->label);
+                array_push($id_rows, $split[1]);
+                array_push($id_columns, $split[2]);
+                $tahun = $split[3];
+                $turtahuns = $split[4];
+            }
+            $rows = Row::whereIn('id', $id_rows)->get();
+            $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+            $columns = Column::whereIn('id', $id_columns)->get();
+            array_push($table_objects, [
+                'datacontents' => $data,
+                'tabels' => $tabels,
+                'rows' => $rows,
+                'row_label' => $rowLabel,
+                'columns' => $columns,
+                'tahun' => $tahun,
+                'turtahuns' => $turtahuns,
+            ]);
+        }
+
+
+        return view('tabel.index', [
+            'tables' => $table_objects
+        ]);
+    }
+    public function test()
+    {
+        //
         $tabel = Tabel::all();
         return view('tabel.test', [
             'tabel' => $tabel
@@ -57,7 +94,13 @@ class TabelController extends Controller
      */
     public function create()
     {
-        //
+        $tabel = Tabel::all();
+        $rowLabel = RowLabel::get();
+
+        return view('tabel.create', [
+            'tabel' => $tabel,
+            'row_labels' => $rowLabel,
+        ]);
     }
 
     /**
