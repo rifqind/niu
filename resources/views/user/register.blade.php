@@ -1,17 +1,14 @@
-<x-niu-layout>
+<x-register-layout>
     <x-slot name="header">
-            {{ __('Dashboard') }}
+        {{ __('Pengguna') }}
     </x-slot>
     <x-slot name="title">
-        Dashboard
+        Kelola Pengguna
     </x-slot>
     <x-slot name="head">
-
     </x-slot>
-    <x-slot name="breadcrumb">
-        
-    </x-slot>
+    
     <x-slot name="script">
 
     </x-slot>
-</x-niu-layout>
+</x-register-layout>

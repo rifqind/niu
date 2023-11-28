@@ -3,6 +3,7 @@
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TabelController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,4 +45,10 @@ Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth
 Route::post('dinas/update', [DinasController::class, 'update'])->middleware(['auth', 'verified'])->name('dinas.update');
 Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['auth', 'verified'])->name('dinas.delete');
 
+
+//users
+Route::middleware(['auth', 'verified'])->group(function(){
+    Route::get('user/index', [UserController::class, 'index'])->name('users.index');
+    Route::get('user/register', [UserController::class, 'register'])->name('users.register');
+});
 require __DIR__.'/auth.php';

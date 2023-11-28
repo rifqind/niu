@@ -34,7 +34,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('dinas/index') }}" class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
+                            <a href="{{ url('dinas/index') }}"
+                                class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
                                 <i class="nav-icon fa-solid fa-list-ol"></i>
                                 <p>
                                     Daftar Dinas
@@ -42,7 +43,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('dinas/create') }}" class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
+                            <a href="{{ url('dinas/create') }}"
+                                class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
                                 <i class="nav-icon fa-solid fa-plus"></i>
                                 <p>
                                     Tambah Dinas
@@ -160,6 +162,13 @@
                             </li>
                         @endif
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('user/index') }}"
+                        class="nav-link {{ Request::is('/', 'user/index') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-users"></i>
+                        <p>Kelola Pengguna</p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ url('fenomena/viewAll') }}"
