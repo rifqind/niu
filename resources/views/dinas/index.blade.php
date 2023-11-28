@@ -21,14 +21,20 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row justify-content-between">
             <div class="ml-1 h4 mb-3">
-                DINAS
+                DAFTAR DINAS
             </div>
-            <div class="ml-auto mr-1">
-                <form action="{{ route('dinas.search') }}" method="GET">
-                    <input id="cariDinas" type="text" class="form-control" placeholder="Cari Dinas" name="search">
-                </form>
+            <div class="mr-1 justify-content-between row">
+                <div class="ml-auto mr-1">
+                    <a href="{{ route('dinas.create') }}" class="btn btn-info">Tambah</a>
+                </div>
+                <div class="ml-auto mr-1">
+                    <form action="{{ route('dinas.search') }}" method="GET">
+                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;" placeholder="Cari Dinas"
+                            name="search">
+                    </form>
+                </div>
             </div>
         </div>
         <table class="table table-hover" id="tabel-dinas">
@@ -48,8 +54,7 @@
                         <td>{{ $din->nama }}</td>
                         <td class="text-center">{{ $din->regions->nama }}</td>
                         <td class="text-center">
-                            <a href=""
-                                class="update-pen"
+                            <a href="" class="update-pen"
                                 data-dinas="{{ json_encode([
                                     'id' => $din->id,
                                     'nama' => $din->nama,
@@ -60,7 +65,11 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a href="">
+                            <a href="" class="delete-trash"
+                                data-dinas="{{ json_encode([
+                                    'id' => $din->id,
+                                ]) }}"
+                                data-toggle="modal" data-target="#deleteModal">
                                 <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                             </a>
                         </td>
@@ -80,6 +89,7 @@
         <script>
             const tokens = '{{ csrf_token() }}'
             const update_URL = new URL("{{ route('dinas.update') }}")
+            const delete_URL = new URL("{{ route('dinas.delete') }}")
         </script>
     </x-slot>
 </x-niu-layout>

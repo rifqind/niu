@@ -108,8 +108,11 @@ class DinasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(Request $request)
     {
         //
+        $id = $request->id;
+        Dinas::destroy($id);
+        return response()->json('Berhasil Hapus');
     }
 }
