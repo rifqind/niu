@@ -26,7 +26,7 @@
                 </li>
                 <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
                     <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="nav-icon fa-solid fa-building"></i>
                         <p>
                             Kelola Dinas
                             <i class="fas fa-angle-left right"></i>
@@ -35,7 +35,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ url('dinas/index') }}" class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-list-ol"></i>
                                 <p>
                                     Daftar Dinas
                                 </p>
@@ -43,7 +43,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('dinas/create') }}" class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-plus"></i>
                                 <p>
                                     Tambah Dinas
                                 </p>

@@ -44,7 +44,10 @@ function updateTable(dinas) {
             </a>
             </td>
             <td class="text-center">
-                <a href="">
+                <a href=""
+                class="delete-trash"
+                data-dinas="${(id = data.id)}"
+                data-toggle="modal" data-target="#deleteModal">
                     <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                 </a>
             </td>
@@ -57,7 +60,7 @@ function updateTable(dinas) {
 $(document).on("click", ".update-pen", function (e) {
     // Your click event handling code here
     let check = $("#cariDinas").val();
-    if (check != '') {
+    if (check != "") {
         let dinas = $(this).data("dinas");
         let split_dinas = dinas.split(/\s*,\s*/);
         let id = split_dinas[0];
@@ -102,7 +105,7 @@ $(document).ready(function () {
             },
         });
     });
-    // $(".update-pen").on("click", function (e) 
+    // $(".update-pen").on("click", function (e)
     $("#updateDinas").on("click", function (e) {
         let id = $("#idHidden").val();
         let nama = $("#namaModal").val();
@@ -118,7 +121,7 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
-                alert(data)
+                alert(data);
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -126,4 +129,39 @@ $(document).ready(function () {
             },
         });
     });
+
+    $("#deleteDinas").on("click", function (e) {
+        let id = $("#idHidden").val();
+
+        $.ajax({
+            type: "POST",
+            url: delete_URL.href,
+            data: {
+                id: id,
+                _token: tokens,
+            },
+            success: function (data) {
+                alert(data);
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            },
+        });
+    });
+});
+
+$(document).on("click", ".delete-trash", function (e) {
+    // Your click event handling code here
+    let check = $("#cariDinas").val();
+    if (check != "") {
+        let dinas = $(this).data("dinas");
+        $("#idHidden").val(dinas);
+    } else {
+        e.preventDefault();
+        let dinas = $(this).data("dinas");
+        console.log(dinas);
+        //change value modal
+        $("#idHidden").val(dinas.id);
+    }
 });
