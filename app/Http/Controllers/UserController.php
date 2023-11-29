@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dinas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -28,10 +31,13 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function register(Request $request)
+    public function register()
     {
         //
-        return view('user.register');
+        $dinas = Dinas::all();
+        return view('user.register', [
+            'dinas' => $dinas,
+        ]);
     }
 
     /**
@@ -40,6 +46,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'noHp' => ['required', 'string', 'max:13']
+        ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'noHp' => $request->noHp,
+            'id_dinas' => $request->id_dinas,
+        ]);
+        return response()->json([
+            'message' => 'Berhasil',
+            'user' => $user
+        ]);
+        // return redirect('user.index');
     }
 
     /**

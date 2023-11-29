@@ -50,5 +50,6 @@ Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['au
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('user/index', [UserController::class, 'index'])->name('users.index');
     Route::get('user/register', [UserController::class, 'register'])->name('users.register');
+    Route::post('user/store', [UserController::class, 'store'])->name('users.store');
 });
 require __DIR__.'/auth.php';

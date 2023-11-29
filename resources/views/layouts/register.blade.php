@@ -59,24 +59,15 @@
 
             <!-- Main content -->
             <section class="content">
-
-                <div class="loader d-none">
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                </div>
-
-                <div class="container-fluid">
+                {{-- <div class="container-fluid"> --}}
                     {{ $slot }}
-                </div>
-
+                {{-- </div> --}}
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
 
-        @include('layouts.footer')
+        {{-- @include('layouts.footer') --}}
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -106,7 +97,7 @@
             //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4',
-                width: '100%',
+                // width: '100%',
             })
         });
     </script>
