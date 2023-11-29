@@ -52,7 +52,7 @@
                         </td>
                         <td>...</td>
                         <td>
-                            <a href="/tables/view/{{ $tab['tabels'][0]->id }}">Lihat</a>
+                            <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a>
                             <a href="/tables/edit/{{ $tab['tabels'][0]->id }}">Ubah</a>
                             <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a>
 

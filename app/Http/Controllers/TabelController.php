@@ -148,7 +148,36 @@ class TabelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tabel = Tabel::where('id', $id)->first();;
+
+
+        $data = Datacontent::where('label', 'LIKE', $id . '%')->get();
+        $id_rows = [];
+        $id_columns = [];
+        foreach ($data as $dat) {
+            $split = explode("-", $dat->label);
+            array_push($id_rows, $split[1]);
+            array_push($id_columns, $split[2]);
+            $tahun = $split[3];
+            $turtahuns = $split[4];
+        }
+        // $tabels = Tabel::where('id', $id)->get();
+        $rows = Row::whereIn('id', $id_rows)->get();
+        $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+        $columns = Column::whereIn('id', $id_columns)->get();
+
+
+
+        return view('tabel.show', [
+            'datacontents' => $data,
+            // 'tabels' => $tabels,
+            'rows' => $rows,
+            'row_label' => $rowLabel,
+            'columns' => $columns,
+            'tahun' => $tahun,
+            'turtahuns' => $turtahuns,
+            'tabel' => $tabel
+        ]);
     }
 
     /**
