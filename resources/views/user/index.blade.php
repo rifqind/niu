@@ -29,18 +29,18 @@
             </div>
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
-                    <a href="{{ route('users.register') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('users.registerNew') }}" class="btn btn-info">Tambah</a>
                 </div>
                 <div class="ml-auto mr-1">
-                    <form action="{{ route('dinas.search') }}" method="GET">
-                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;"
+                    <form action="{{ route('users.search') }}" method="GET" id="formSearch">
+                        <input id="cariUsers" type="text" class="form-control" style="min-width: 25vw;"
                             placeholder="Cari Pengguna" name="search">
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <table class="table table-hover" id="tabel-dinas">
+    <table class="table table-hover" id="tabel-user">
         <thead>
             <tr>
                 <td class="first-column">No.</td>
@@ -60,12 +60,35 @@
                     <td>{{ $user->dinas->nama }}</td>
                     <td class="text-center">{{ $user->noHp }}</td>
                     <td class="text-center">{{ $user->role }}</td>
+                    <td class="text-center">
+                        <a href="{{ route('users.reset', ['id' => $user->id]) }}" class="update-pen"
+                        {{-- data-toggle="modal" data-target="#updateModal" --}}
+                        >
+                        <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a href="" class="delete-trash"
+                            data-users="{{ json_encode([
+                                'id' => $user->id,
+                            ]) }}"
+                            data-toggle="modal" data-target="#deleteModal"
+                            >
+                            <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                        </a>
+                    </td>
 
                 </tr>
             @endforeach
         </tbody>
+        @include('user.modal')
     </table>
     <x-slot name="script">
-
+        <script src="{{ asset('js/user.js') }}"></script>
+        <script>
+            const tokens = '{{ csrf_token() }}'
+            const reset_URL = new URL ("{{ route('users.reset') }}")
+            const delete_URL = new URL ("{{ route('users.delete') }}")
+        </script>
     </x-slot>
 </x-niu-layout>

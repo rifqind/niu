@@ -17,9 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->get('/', function () {
+    return view('dashboard');
 });
+Route::get('/login', [UserController::class, 'login'])->name('users.login');
+Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
+Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
+Route::post('user/store', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 //tabel
 Route::get('/test', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
@@ -47,9 +52,14 @@ Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['au
 
 
 //users
-Route::middleware(['auth', 'verified'])->group(function(){
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('user/index', [UserController::class, 'index'])->name('users.index');
-    Route::get('user/register', [UserController::class, 'register'])->name('users.register');
-    Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+    // Route::get('user/register', [UserController::class, 'register'])->name('users.register');
+    // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+    // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('user/search', [UserController::class, 'search'])->name('users.search');
+    Route::get('user/reset', [UserController::class, 'reset'])->name('users.reset');
+    Route::post('user/default', [UserController::class, 'default'])->name('users.default');
+    Route::post('user/delete', [UserController::class, 'delete'])->name('users.delete');
 });
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

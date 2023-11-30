@@ -26,6 +26,12 @@
                     <div class="card-body">
                         <div class="form-group">
                             <div class="row mx-2">
+                                <label for="username">Username</label>
+                            </div>
+                            <div class="row mx-2 mb-2">
+                                <input type="text" id="username" name="username" class="form-control">
+                            </div>
+                            <div class="row mx-2">
                                 <label for="name">Nama</label>
                             </div>
                             <div class="row mx-2 mb-2">

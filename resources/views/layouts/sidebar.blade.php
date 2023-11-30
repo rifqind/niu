@@ -165,7 +165,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ url('user/index') }}"
-                        class="nav-link {{ Request::is('/', 'user/index') ? 'active' : '' }}">
+                        class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
                         <i class="nav-icon fa-solid fa-users"></i>
                         <p>Kelola Pengguna</p>
                     </a>
