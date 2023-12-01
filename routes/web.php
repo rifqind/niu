@@ -3,6 +3,7 @@
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TabelController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->get('/', function () {
+    return view('dashboard');
 });
+Route::get('/login', [UserController::class, 'login'])->name('users.login');
+Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
+Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
+Route::post('user/store', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,18 +35,33 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 //tabel
 Route::get('/test', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas
-Route::get('/dinas', [DinasController::class, 'index'])->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/dinas', [DinasController::class, 'index']);
+    Route::get('dinas/create', [DinasController::class, 'create'])->name('dinas.create');
+    Route::get('dinas/index', [DinasController::class, 'index'])->name('dinas.index');
+    Route::get('dinas/search', [DinasController::class, 'search'])->name('dinas.search');
+    Route::post('dinas/store', [DinasController::class, 'store'])->name('dinas.store');
+    Route::post('dinas/update', [DinasController::class, 'update'])->name('dinas.update');
+    Route::post('dinas/delete', [DinasController::class, 'delete'])->name('dinas.delete');
+});
 
-Route::get('dinas/create', [DinasController::class, 'create'])->middleware(['auth', 'verified'])->name('dinas.create');
-Route::get('dinas/index', [DinasController::class, 'index'])->middleware(['auth', 'verified'])->name('dinas.index');
-Route::get('dinas/search', [DinasController::class, 'search'])->middleware(['auth', 'verified'])->name('dinas.search');
-Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth', 'verified'])->name('dinas.store');
-Route::post('dinas/update', [DinasController::class, 'update'])->middleware(['auth', 'verified'])->name('dinas.update');
-Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['auth', 'verified'])->name('dinas.delete');
 
-require __DIR__.'/auth.php';
+//users
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('user/index', [UserController::class, 'index'])->name('users.index');
+    // Route::get('user/register', [UserController::class, 'register'])->name('users.register');
+    // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+    // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('user/search', [UserController::class, 'search'])->name('users.search');
+    Route::get('user/reset', [UserController::class, 'reset'])->name('users.reset');
+    Route::post('user/role', [UserController::class, 'roleChange'])->name('users.roleChange');
+    Route::post('user/default', [UserController::class, 'default'])->name('users.default');
+    Route::post('user/delete', [UserController::class, 'delete'])->name('users.delete');
+});
+require __DIR__ . '/auth.php';

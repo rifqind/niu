@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
-
     {{ $head }}
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js'])
 </head>
@@ -31,17 +30,17 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('layouts.navbar')
+        {{-- @include('layouts.navbar') --}}
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('layouts.sidebar')
+        {{-- @include('layouts.sidebar') --}}
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper ml-0">
             <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
+            {{-- <section class="content-header"> --}}
+            {{-- <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>
@@ -54,30 +53,21 @@
                             </ol>
                         </div>
                     </div>
-                </div>
-                <!-- /.container-fluid -->
-            </section>
+                </div> --}}
+            <!-- /.container-fluid -->
+            {{-- </section> --}}
 
             <!-- Main content -->
             <section class="content">
-
-                <div class="loader d-none">
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                </div>
-
-                <div class="container-fluid">
+                {{-- <div class="container-fluid"> --}}
                     {{ $slot }}
-                </div>
-
+                {{-- </div> --}}
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
 
-        @include('layouts.footer')
+        {{-- @include('layouts.footer') --}}
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -97,6 +87,9 @@
     <script src="{{ url('') }}/plugins/toastr/toastr.min.js"></script>
     <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
     <script>
+        $(document).ready(function() {
+            $('.main-footer').css('margin-left', 0);
+        })
         $(function() {
             //Initialize Select2 Elements
             $('.select2').select2()
@@ -104,7 +97,7 @@
             //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4',
-                width: '100%',
+                // width: '100%',
             })
         });
     </script>

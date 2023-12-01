@@ -23,7 +23,7 @@
     <div class="container-fluid">
         <div class="row justify-content-between">
             <div class="ml-1 h4 mb-3">
-                DAFTAR DINAS
+                Daftar Dinas
             </div>
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
