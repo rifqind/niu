@@ -20,8 +20,10 @@ class DinasController extends Controller
             $din->number = $number;
             $number++;
         }
+        $regions = Region::all();
         return view('dinas.index', [
-            'dinas' => $dinas
+            'dinas' => $dinas,
+            'regions' => $regions
         ]);
     }
 
@@ -89,16 +91,28 @@ class DinasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
+        $id = $request->id;
+        $nama = $request->nama;
+        $id_regions = $request->id_regions;
+
+        Dinas::where('id', $id)->update([
+            'nama' => $nama,
+            'id_regions' => $id_regions,
+        ]);
+        return response()->json('Berhasil');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(Request $request)
     {
         //
+        $id = $request->id;
+        Dinas::destroy($id);
+        return response()->json('Berhasil Hapus');
     }
 }

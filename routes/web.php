@@ -45,5 +45,7 @@ Route::get('dinas/create', [DinasController::class, 'create'])->middleware(['aut
 Route::get('dinas/index', [DinasController::class, 'index'])->middleware(['auth', 'verified'])->name('dinas.index');
 Route::get('dinas/search', [DinasController::class, 'search'])->middleware(['auth', 'verified'])->name('dinas.search');
 Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth', 'verified'])->name('dinas.store');
+Route::post('dinas/update', [DinasController::class, 'update'])->middleware(['auth', 'verified'])->name('dinas.update');
+Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['auth', 'verified'])->name('dinas.delete');
 
 require __DIR__ . '/auth.php';

@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        create
+        index
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -21,21 +21,30 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row justify-content-between">
             <div class="ml-1 h4 mb-3">
-                DINAS
+                DAFTAR DINAS
             </div>
-            <div class="ml-auto mr-1">
-                <form action="{{ route('dinas.search') }}" method="GET">
-                    <input type="text" class="form-control" placeholder="Cari Dinas" name="search">
+            <div class="mr-1 justify-content-between row">
+                <div class="ml-auto mr-1">
+                    <a href="{{ route('dinas.create') }}" class="btn btn-info">Tambah</a>
+                </div>
+                <div class="ml-auto mr-1">
+                    <form action="{{ route('dinas.search') }}" method="GET">
+                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;" placeholder="Cari Dinas"
+                            name="search">
+                    </form>
+                </div>
             </div>
         </div>
         <table class="table table-hover" id="tabel-dinas">
             <thead>
                 <tr>
                     <td class="first-column">No.</td>
-                    <td>Dinas</td>
-                    <td>Wilayah Kerja</td>
+                    <td class="text-center">Dinas</td>
+                    <td class="text-center">Wilayah Kerja</td>
+                    <td class="text-center">Edit</td>
+                    <td class="text-center">Hapus</td>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +52,27 @@
                     <tr>
                         <td>{{ $din->number }}</td>
                         <td>{{ $din->nama }}</td>
-                        <td>{{ $din->regions->nama }}</td>
+                        <td class="text-center">{{ $din->regions->nama }}</td>
+                        <td class="text-center">
+                            <a href="" class="update-pen"
+                                data-dinas="{{ json_encode([
+                                    'id' => $din->id,
+                                    'nama' => $din->nama,
+                                    'id_regions' => $din->id_regions,
+                                ]) }}"
+                                data-toggle="modal" data-target="#updateModal">
+                                <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="" class="delete-trash"
+                                data-dinas="{{ json_encode([
+                                    'id' => $din->id,
+                                ]) }}"
+                                data-toggle="modal" data-target="#deleteModal">
+                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -54,7 +83,13 @@
             </div>
         </div>
     </div>
+    @include('dinas.modal')
     <x-slot name="script">
         <script src="{{ asset('js/dinas.js') }}"></script>
+        <script>
+            const tokens = '{{ csrf_token() }}'
+            const update_URL = new URL("{{ route('dinas.update') }}")
+            const delete_URL = new URL("{{ route('dinas.delete') }}")
+        </script>
     </x-slot>
 </x-niu-layout>
