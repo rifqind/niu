@@ -15,12 +15,14 @@ class DinasController extends Controller
     {
         //
         $number = 1;
-        $dinas = Dinas::orderBy('nama')->get();
+        $regions = Region::getMyRegion();
+        $id_regions = Region::getRegionId();
+        // dd($regions);
+        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
         foreach ($dinas as $din) {
             $din->number = $number;
             $number++;
         }
-        $regions = Region::all();
         return view('dinas.index', [
             'dinas' => $dinas,
             'regions' => $regions
@@ -33,7 +35,9 @@ class DinasController extends Controller
     public function create()
     {
         //
-        $regions = Region::all();
+        // $regions = Region::all();
+        $regions = Region::getMyRegion();
+        // $id_regions = Region::getRegionId();
         return view('dinas.create', [
             'regions' => $regions
         ]);
