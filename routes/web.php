@@ -42,6 +42,7 @@ Route::get('/tables/index', [TabelController::class, 'index'])->middleware(['aut
 Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('table.update');
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas

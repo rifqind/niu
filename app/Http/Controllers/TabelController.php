@@ -10,6 +10,7 @@ use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
 use App\Models\Rowlabel;
+use App\Models\Turtahun;
 use Illuminate\Http\Request;
 
 class TabelController extends Controller
@@ -154,27 +155,36 @@ class TabelController extends Controller
         $data = Datacontent::where('label', 'LIKE', $id . '%')->get();
         $id_rows = [];
         $id_columns = [];
+        $tahuns = [];
+        $turTahunKeys = [];
+
         foreach ($data as $dat) {
             $split = explode("-", $dat->label);
+
             array_push($id_rows, $split[1]);
             array_push($id_columns, $split[2]);
-            $tahun = $split[3];
-            $turtahuns = $split[4];
+            array_push($tahuns, $split[3]);
+            array_push($turTahunKeys, $split[4]);
         }
         // $tabels = Tabel::where('id', $id)->get();
         $rows = Row::whereIn('id', $id_rows)->get();
         $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
         $columns = Column::whereIn('id', $id_columns)->get();
+        $tahuns = array_unique($tahuns);
+        sort($tahuns);
+        // $turtahuns = array_unique($turtahuns);
+        // sort($turtahuns);
+        $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
 
 
 
         return view('tabel.show', [
             'datacontents' => $data,
             // 'tabels' => $tabels,
+            'tahuns' => $tahuns,
             'rows' => $rows,
             'row_label' => $rowLabel,
             'columns' => $columns,
-            'tahun' => $tahun,
             'turtahuns' => $turtahuns,
             'tabel' => $tabel
         ]);
@@ -191,9 +201,17 @@ class TabelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $data = $request->data;
+
+
+        // Update records in a single query
+        foreach ($data as $item) {
+
+            Datacontent::where('id', $item['id'])->update($item);
+        }
+        return response()->json($data);
     }
 
     /**
