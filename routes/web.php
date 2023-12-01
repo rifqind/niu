@@ -41,24 +41,26 @@ Route::get('/test', [TabelController::class, 'index'])->middleware(['auth', 'ver
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas
-Route::get('/dinas', [DinasController::class, 'index'])->middleware(['auth', 'verified']);
-
-Route::get('dinas/create', [DinasController::class, 'create'])->middleware(['auth', 'verified'])->name('dinas.create');
-Route::get('dinas/index', [DinasController::class, 'index'])->middleware(['auth', 'verified'])->name('dinas.index');
-Route::get('dinas/search', [DinasController::class, 'search'])->middleware(['auth', 'verified'])->name('dinas.search');
-Route::post('dinas/store', [DinasController::class, 'store'])->middleware(['auth', 'verified'])->name('dinas.store');
-Route::post('dinas/update', [DinasController::class, 'update'])->middleware(['auth', 'verified'])->name('dinas.update');
-Route::post('dinas/delete', [DinasController::class, 'delete'])->middleware(['auth', 'verified'])->name('dinas.delete');
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/dinas', [DinasController::class, 'index']);
+    Route::get('dinas/create', [DinasController::class, 'create'])->name('dinas.create');
+    Route::get('dinas/index', [DinasController::class, 'index'])->name('dinas.index');
+    Route::get('dinas/search', [DinasController::class, 'search'])->name('dinas.search');
+    Route::post('dinas/store', [DinasController::class, 'store'])->name('dinas.store');
+    Route::post('dinas/update', [DinasController::class, 'update'])->name('dinas.update');
+    Route::post('dinas/delete', [DinasController::class, 'delete'])->name('dinas.delete');
+});
 
 
 //users
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('user/index', [UserController::class, 'index'])->name('users.index');
     // Route::get('user/register', [UserController::class, 'register'])->name('users.register');
     // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
     // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
     Route::get('user/search', [UserController::class, 'search'])->name('users.search');
     Route::get('user/reset', [UserController::class, 'reset'])->name('users.reset');
+    Route::post('user/role', [UserController::class, 'roleChange'])->name('users.roleChange');
     Route::post('user/default', [UserController::class, 'default'])->name('users.default');
     Route::post('user/delete', [UserController::class, 'delete'])->name('users.delete');
 });

@@ -44,8 +44,10 @@
         <thead>
             <tr>
                 <td class="first-column">No.</td>
+                <td class="text-center">Username</td>
                 <td class="text-center">Nama</td>
                 <td class="text-center">Nama Instansi</td>
+                <td class="text-center">Wilayah Kerja</td>
                 <td class="text-center">No. HP</td>
                 <td class="text-center">Peran</td>
                 <td class="text-center">Edit</td>
@@ -56,24 +58,37 @@
             @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->number }}</td>
+                    <td>{{ $user->username }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->dinas->nama }}</td>
+                    <td>{{ $user->dinas->regions->nama }}</td>
                     <td class="text-center">{{ $user->noHp }}</td>
-                    <td class="text-center">{{ $user->role }}</td>
+                    <td class="text-center" id="roles">{{ $user->role }}</td>
                     <td class="text-center">
-                        <a href="{{ route('users.reset', ['id' => $user->id]) }}" class="update-pen"
-                        {{-- data-toggle="modal" data-target="#updateModal" --}}
-                        >
-                        <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                        <a href="{{ route('users.reset', ['id' => $user->id]) }}" class="update-pen mx-1"
+                            {{-- data-toggle="modal" data-target="#updateModal" --}}>
+                            <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
                         </a>
+                        {{-- @if ($user->role == 'produsen') --}}
+                        <a href="" class="mx-1 role-update"
+                            data-users="{{ json_encode([
+                                'id' => $user->id,
+                            ]) }}"><i
+                                class="role-icon fa-solid" title="Ubah Role"
+                                style="color: #1032e0;"></i></a>
+                        {{-- @else
+                            <a href=""  class="mx-1 role-update" data-users="{{ json_encode([
+                                'id' => $user->id
+                            ]) }}"><i class="fa-solid fa-user-tie"
+                                    title="Ubah Role" style="color: #1032e0;"></i></a>
+                        @endif --}}
                     </td>
                     <td class="text-center">
                         <a href="" class="delete-trash"
                             data-users="{{ json_encode([
                                 'id' => $user->id,
                             ]) }}"
-                            data-toggle="modal" data-target="#deleteModal"
-                            >
+                            data-toggle="modal" data-target="#deleteModal">
                             <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                         </a>
                     </td>
@@ -87,8 +102,9 @@
         <script src="{{ asset('js/user.js') }}"></script>
         <script>
             const tokens = '{{ csrf_token() }}'
-            const reset_URL = new URL ("{{ route('users.reset') }}")
-            const delete_URL = new URL ("{{ route('users.delete') }}")
+            const reset_URL = new URL("{{ route('users.reset') }}")
+            const delete_URL = new URL("{{ route('users.delete') }}")
+            const roleChange_URL = new URL("{{ route('users.roleChange') }}")
         </script>
     </x-slot>
 </x-niu-layout>

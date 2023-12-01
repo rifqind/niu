@@ -24,152 +24,44 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
-                        <i class="nav-icon fa-solid fa-building"></i>
-                        <p>
-                            Kelola Dinas
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url('dinas/index') }}"
-                                class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
-                                <i class="nav-icon fa-solid fa-list-ol"></i>
-                                <p>
-                                    Daftar Dinas
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('dinas/create') }}"
-                                class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
-                                <i class="nav-icon fa-solid fa-plus"></i>
-                                <p>
-                                    Tambah Dinas
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::is('lapangan-usaha*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ Request::is('lapangan-usaha*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-chart-pie"></i>
-                        <p>
-                            Lapangan Usaha
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url('lapangan-usaha/rekonsiliasi') }}"
-                                class="nav-link {{ Request::is('lapangan-usaha/rekonsiliasi') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entri PDRB</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('lapangan-usaha/diskrepansi') }}"
-                                class="nav-link {{ Request::is('lapangan-usaha/diskrepansi') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Diskrepansi</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('lapangan-usaha/adjustment') }}"
-                                class="nav-link {{ Request::is('lapangan-usaha/adjustment') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Adjustment</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('lapangan-usaha/daftarPokok') }}"
-                                class="nav-link {{ Request::is('lapangan-usaha/daftarPokok') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tabel Pokok</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('lapangan-usaha/fenomena') }}"
-                                class="nav-link {{ Request::is('lapangan-usaha/fenomena') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entri Fenomena</p>
-                            </a>
-                        </li>
-                        @if (auth()->user()->satker_id == 1)
+                @if (auth()->user()->role === 'admin')
+                    <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
+                        <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-building"></i>
+                            <p>
+                                Kelola Dinas
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ url('lapangan-usaha/monitoring') }}"
-                                    class="nav-link {{ Request::is('lapangan-usaha/monitoring') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Monitoring PDRB</p>
+                                <a href="{{ url('dinas/index') }}"
+                                    class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-list-ol"></i>
+                                    <p>
+                                        Daftar Dinas
+                                    </p>
                                 </a>
                             </li>
-                        @endif
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::is('pengeluaran*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ Request::is('pengeluaran*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-coins"></i>
-                        <p>
-                            Pengeluaran
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url('pengeluaran/rekonsiliasi') }}"
-                                class="nav-link {{ Request::is('pengeluaran/rekonsiliasi') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entri PDRB</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('pengeluaran/diskrepansi') }}"
-                                class="nav-link {{ Request::is('pengeluaran/diskrepansi') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Diskrepansi</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('pengeluaran/adjustment') }}"
-                                class="nav-link {{ Request::is('pengeluaran/adjustment') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Adjustment</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('pengeluaran/daftarPokok') }}"
-                                class="nav-link {{ Request::is('pengeluaran/daftarPokok') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tabel Pokok</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('pengeluaran/fenomena') }}"
-                                class="nav-link {{ Request::is('pengeluaran/fenomena') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entri Fenomena</p>
-                            </a>
-                        </li>
-                        @if (auth()->user()->satker_id == 1)
                             <li class="nav-item">
-                                <a href="{{ url('pengeluaran/monitoring') }}"
-                                    class="nav-link {{ Request::is('pengeluaran/monitoring') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Monitoring PDRB</p>
+                                <a href="{{ url('dinas/create') }}"
+                                    class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Tambah Dinas
+                                    </p>
                                 </a>
                             </li>
-                        @endif
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url('user/index') }}"
-                        class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
-                        <i class="nav-icon fa-solid fa-users"></i>
-                        <p>Kelola Pengguna</p>
-                    </a>
-                </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('user/index') }}"
+                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-users"></i>
+                            <p>Kelola Pengguna</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ url('fenomena/viewAll') }}"
                         class="nav-link {{ Request::is('fenomena/viewAll') ? 'active' : '' }}">

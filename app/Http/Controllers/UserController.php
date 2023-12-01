@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dinas;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,10 @@ class UserController extends Controller
     {
         //
         $number = 1;
-        $users = User::orderBy('name')->get();
+        $id_regions = Region::getRegionId();
+        $users = User::orderBy('name')
+            ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
+            ->whereIn('dinas.id_regions', $id_regions)->get(['users.*']);
         foreach ($users as $user) {
             $user->number = $number;
             $number++;
@@ -78,12 +82,14 @@ class UserController extends Controller
             return $query
                 ->where('users.name', 'like', '%' . $searchQuery . '%')
                 ->orWhere('dinas.nama', 'like', '%' . $searchQuery . '%')
+                ->orWhere('regions.nama', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.role', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.noHp', 'like', '%' . $searchQuery . '%');
         })
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
+            ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
             ->orderBy('dinas.nama')
-            ->get(['users.*', 'dinas.nama as dinas_nama']);
+            ->get(['users.*', 'dinas.nama as dinas_nama', 'regions.nama as region_nama']);
 
         $users->each(function ($user, $key) {
             $user->number = $key + 1;
@@ -115,6 +121,24 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function roleChange(Request $request)
+    {
+        $id = $request->id;
+        $user = User::where('id', $id)->first();
+        if ($user->role == 'produsen') {
+            # code...
+            $user = User::where('id', $id)->update([
+                'role' => 'admin'
+            ]);
+        } else {
+            $user = User::where('id', $id)->update([
+                'role' => 'produsen'
+            ]);
+        }
+        $user = User::where('id', $id)->first();
+        return response()->json(['role' => $user->role]);
     }
 
     public function reset(Request $request)
