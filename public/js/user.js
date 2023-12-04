@@ -95,6 +95,7 @@ $(document).ready(function () {
         // console.log("asu");
         e.preventDefault();
         $("#spinner-border").removeClass("d-none");
+
         $.ajax({
             url: $(this).attr("action"),
             type: "GET",
@@ -113,6 +114,7 @@ $(document).ready(function () {
     $("#resetPassword").on("click", function (e) {
         let id = $("#idHidden").val();
         $("#spinner-border").removeClass("d-none");
+
         $.ajax({
             url: default_URL.href,
             type: "POST",
