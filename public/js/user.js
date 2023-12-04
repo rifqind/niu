@@ -15,6 +15,24 @@ $("#storeUser").click(function (e) {
     });
 });
 
+$("#createUsers").submit(function (e) {
+    e.preventDefault();
+    // $('.loader').removeClass('d-none');
+    var users = $("#createUsers").serialize();
+    $("#spinner-border").removeClass("d-none");
+    console.log(users);
+    $.ajax({
+        type: "POST",
+        url: add_URL.href,
+        data: users,
+        success: function (data) {
+            // window.history.back();
+            $("#spinner-border").addClass("d-none");
+            window.location.href = this_URL.href;
+        },
+    });
+});
+
 function updateTable(users) {
     $("#tabel-user tbody").empty();
 
@@ -76,12 +94,15 @@ $(document).ready(function () {
     $("#formSearch").submit(function (e) {
         // console.log("asu");
         e.preventDefault();
+        $("#spinner-border").removeClass("d-none");
+
         $.ajax({
             url: $(this).attr("action"),
             type: "GET",
             data: $(this).serialize(),
             success: function (data) {
                 // console.log(data);
+                $("#spinner-border").addClass("d-none");
                 updateTable(data.users);
                 changeRoles();
             },
@@ -92,6 +113,8 @@ $(document).ready(function () {
     });
     $("#resetPassword").on("click", function (e) {
         let id = $("#idHidden").val();
+        $("#spinner-border").removeClass("d-none");
+
         $.ajax({
             url: default_URL.href,
             type: "POST",
@@ -100,6 +123,7 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
+                $("#spinner-border").addClass("d-none");
                 console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -109,7 +133,7 @@ $(document).ready(function () {
     });
     $("#deleteUser").on("click", function (e) {
         let id = $("#idHidden").val();
-        console.log(id);
+        $("#spinner-border").removeClass("d-none");
         $.ajax({
             type: "POST",
             url: delete_URL.href,
@@ -118,7 +142,7 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
-                alert(data);
+                $("#spinner-border").addClass("d-none");
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {

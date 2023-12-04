@@ -29,7 +29,7 @@
             </div>
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
-                    <a href="{{ route('users.registerNew') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('users.create') }}" class="btn btn-info">Tambah</a>
                 </div>
                 <div class="ml-auto mr-1">
                     <form action="{{ route('users.search') }}" method="GET" id="formSearch">

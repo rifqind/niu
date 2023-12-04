@@ -1,5 +1,6 @@
 $("#dinas-save").click(function () {
     // $('.loader').removeClass('d-none');
+    $("#spinner-border").removeClass("d-none");
     $.ajax({
         type: "POST",
         url: save_URL.href,
@@ -10,14 +11,13 @@ $("#dinas-save").click(function () {
         },
 
         success: function (data) {
-            // Toast.fire({
-            //     icon: 'success',
-            //     title: 'Berhasil',
-            //     text: 'Data berhasil disimpan.'
-            // })
-            // $('.loader').addClass('d-none')
-            // fetchData()
-            alert(data);
+            // alert(data);
+            $("#spinner-border").addClass("d-none");
+            window.location.href = this_URL;
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
         },
     });
 });
@@ -34,11 +34,7 @@ function updateTable(dinas) {
             <td class="text-center">
                 <a href=""
                 class="update-pen"
-                data-dinas="${[
-                    (id = data.id),
-                    (nama = data.nama),
-                    (id_regions = data.id_regions),
-                ]}"
+                data-dinas="${data.id};${data.nama};${data.id_regions}"
                 data-toggle="modal" data-target="#updateModal">
                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
             </a>
@@ -60,37 +56,37 @@ function updateTable(dinas) {
 $(document).on("click", ".update-pen", function (e) {
     // Your click event handling code here
     let check = $("#cariDinas").val();
-    if (check != "") {
-        let dinas = $(this).data("dinas");
-        let split_dinas = dinas.split(/\s*,\s*/);
-        let id = split_dinas[0];
-        let nama = split_dinas[1];
-        let id_regions = split_dinas[2];
-        $("#idHidden").val(id);
-        $("#namaModal").val(nama);
-        $("#regionsModal").val(id_regions);
-        $(`#regionsModal option[value='${id_regions}']`).prop("selected", true);
-        $("#regionsModal").trigger("change");
-    } else {
-        e.preventDefault();
-        let dinas = $(this).data("dinas");
-        console.log(dinas);
-        //change value modal
-        $("#idHidden").val(dinas.id);
-        $("#namaModal").val(dinas.nama);
-        $("#regionsModal").val(dinas.id_regions);
-        $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
-            "selected",
-            true
-        );
-        $("#regionsModal").trigger("change");
-    }
+    // if (check != "") {
+    let dinas = $(this).data("dinas");
+    let split_dinas = dinas.split(/\s*;\s*/);
+    let id = split_dinas[0];
+    let nama = split_dinas[1];
+    let id_regions = split_dinas[2];
+    $("#idHidden").val(id);
+    $("#namaModal").val(nama);
+    $("#regionsModal").val(id_regions);
+    $(`#regionsModal option[value='${id_regions}']`).prop("selected", true);
+    $("#regionsModal").trigger("change");
+    // } else {
+    //     e.preventDefault();
+    //     let dinas = $(this).data("dinas");
+    //     console.log(dinas);
+    //     //change value modal
+    //     $("#idHidden").val(dinas.id);
+    //     $("#namaModal").val(dinas.nama);
+    //     $("#regionsModal").val(dinas.id_regions);
+    //     $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
+    //         "selected",
+    //         true
+    //     );
+    //     $("#regionsModal").trigger("change");
+    // }
 });
 
 $(document).ready(function () {
     $("form").submit(function (e) {
         e.preventDefault();
-        $(".spinner-border").removeClass("d-none");
+        $("#spinner-border").removeClass("d-none");
         $.ajax({
             url: $(this).attr("action"),
             type: "GET",
@@ -99,7 +95,7 @@ $(document).ready(function () {
                 // console.log(data.dinas);
                 // $("table tbody").html(data);
                 setTimeout(function () {
-                    $(".spinner-border").addClass("d-none");
+                    $("#spinner-border").addClass("d-none");
                     updateTable(data.dinas);
                 }, 500);
             },
@@ -110,7 +106,7 @@ $(document).ready(function () {
         let id = $("#idHidden").val();
         let nama = $("#namaModal").val();
         let id_regions = $("#regionsModal").val();
-
+        $("#spinner-border").removeClass("d-none");
         $.ajax({
             type: "POST",
             url: update_URL.href,
@@ -121,7 +117,8 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
-                alert(data);
+                $("#spinner-border").addClass("d-none");
+                // alert(data);
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -132,6 +129,7 @@ $(document).ready(function () {
 
     $("#deleteDinas").on("click", function (e) {
         let id = $("#idHidden").val();
+        $("#spinner-border").removeClass("d-none");
 
         $.ajax({
             type: "POST",
@@ -141,7 +139,8 @@ $(document).ready(function () {
                 _token: tokens,
             },
             success: function (data) {
-                alert(data);
+                // alert(data);
+                $("#spinner-border").addClass("d-none");
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {

@@ -63,5 +63,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('user/role', [UserController::class, 'roleChange'])->name('users.roleChange');
     Route::post('user/default', [UserController::class, 'default'])->name('users.default');
     Route::post('user/delete', [UserController::class, 'delete'])->name('users.delete');
+    Route::post('user/add', [UserController::class, 'addUser'])->name('users.add');
+    Route::get('user/create', [UserController::class, 'create'])->name('users.create');
 });
 require __DIR__ . '/auth.php';

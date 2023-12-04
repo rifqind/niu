@@ -23,7 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
         'noHp',
-        'id_dinas'
+        'id_dinas',
+        'role'
     ];
 
     public function dinas(){
