@@ -28,14 +28,6 @@
         <form action="" id="table">
             <b>Detail Tabel</b>
             <div class="form-group">
-                <label for="nomor">Nomor Tabel</label>
-                <input type="text" class="form-control" name="nomor">
-            </div>
-            <div class="form-group">
-                <label for="judul">Judul Tabel</label>
-                <input type="text" class="form-control" name="judul">
-            </div>
-            <div class="form-group">
                 <label for="dinas">Dinas Tabel</label>
                 <select name="dinas" class="form-control">
                     @foreach ($daftar_dinas as $item)
@@ -44,8 +36,21 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="nomor">Nomor Tabel</label>
+                <input type="text" class="form-control" name="nomor">
+            </div>
+            <div class="form-group">
+                <label for="judul">Judul Tabel</label>
+                <input type="text" class="form-control" name="judul">
+            </div>
+            <div class="form-group">
                 <label for="subjek">Subjek Tabel</label>
-                <input type="text" class="form-control" name="subjek">
+
+                <select name="subjek" class="form-control">
+                    @foreach ($subjects as $item)
+                        <option value="{{ $item->id }}">{{ $item->label }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="unit">Unit Tabel</label>

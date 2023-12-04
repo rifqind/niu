@@ -61,6 +61,51 @@
                             <p>Kelola Pengguna</p>
                         </a>
                     </li>
+                    {{-- @endif --}}
+                    {{-- @if (auth()->user()->role === 'admin') --}}
+                    <li class="nav-item {{ Request::is('tables*') ? 'menu-open' : '' }}">
+                        <a href="" class="nav-link {{ Request::is('tables*') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-building"></i>
+                            <p>
+                                Kelola Tabel
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ url('tables/index') }}"
+                                    class="nav-link {{ Request::is('tables/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-list-ol"></i>
+                                    <p>
+                                        Daftar Tabel
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('tables/create') }}"
+                                    class="nav-link {{ Request::is('tables/create') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Tambah Tabel
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('user/index') }}"
+                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-users"></i>
+                            <p>Kelola Pengguna</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('subject/index') }}"
+                            class="nav-link {{ Request::is('subject/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-tags"></i>
+                            <p>Kelola Subjek</p>
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <a href="{{ url('fenomena/viewAll') }}"

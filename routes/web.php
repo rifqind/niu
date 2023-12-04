@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TabelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/master/subject/index', [SubjectController::class, 'index'])->middleware(['auth', 'verified'])->name('subject.index');
 
 //tabel
 Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');

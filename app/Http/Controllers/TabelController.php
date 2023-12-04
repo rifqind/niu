@@ -10,6 +10,7 @@ use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
 use App\Models\Rowlabel;
+use App\Models\Subject;
 use App\Models\Turtahun;
 use Illuminate\Http\Request;
 
@@ -104,6 +105,7 @@ class TabelController extends Controller
         $daftar_dinas = Dinas::get();
         $daftar_kolom = Column::get();
         $kolom_grup = ColumnGroup::get();
+        $subjects = Subject::all();
 
         $row_list = Row::where('id_rowlabels', '1')->get();
 
@@ -115,6 +117,7 @@ class TabelController extends Controller
             'daftar_kolom' => $daftar_kolom,
             'row_list' => $row_list,
             'kolom_grup' => $kolom_grup,
+            'subjects' => $subjects,
 
         ]);
     }

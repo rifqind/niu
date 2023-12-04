@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DatacontentSeeder::class);
         $this->call(DinasSeeder::class);
         $this->call(RegionSeeder::class);
+        $this->call(SubjectSeeder::class);
     }
 }
