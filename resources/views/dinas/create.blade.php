@@ -48,6 +48,7 @@
         <script>
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('dinas.store') }}")
+            const this_URL = new URL("{{ route('dinas.index') }}")
         </script>
     </x-slot>
 </x-niu-layout>

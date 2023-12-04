@@ -29,8 +29,14 @@
 <body class="hold-transition layout-fixed">
     <!-- Site wrapper -->
     <div class="wrapper">
-
+        <div class="text-center overlay d-none" id="spinner-border">
+            <div class="spinner-border text-info" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         <!-- Navbar -->
+        @include('layouts.modal')
+
         @include('layouts.navbar')
         <!-- /.navbar -->
 
@@ -61,12 +67,12 @@
             <!-- Main content -->
             <section class="content">
 
-                <div class="loader d-none">
+                {{-- <div class="loader d-none">
                     <div class="spinner-grow text-success"></div>
                     <div class="spinner-grow text-success"></div>
                     <div class="spinner-grow text-success"></div>
                     <div class="spinner-grow text-success"></div>
-                </div>
+                </div> --}}
 
                 <div class="container-fluid">
                     {{ $slot }}
