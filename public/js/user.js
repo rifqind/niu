@@ -20,7 +20,6 @@ $("#createUsers").submit(function (e) {
     // $('.loader').removeClass('d-none');
     var users = $("#createUsers").serialize();
     $("#spinner-border").removeClass("d-none");
-    console.log(users);
     $.ajax({
         type: "POST",
         url: add_URL.href,
@@ -30,8 +29,41 @@ $("#createUsers").submit(function (e) {
             $("#spinner-border").addClass("d-none");
             window.location.href = this_URL.href;
         },
+        error: function (data) {
+            $("#spinner-border").addClass("d-none");
+            // alert(errorThrown);
+            console.log(data.responseJSON.errors);
+            reportField(data.responseJSON.errors);
+        },
     });
 });
+
+function reportField(errors) {
+    errorCheck = [
+        "username",
+        "name",
+        "password",
+        "email",
+        "id_dinas",
+        "noHp",
+        "role",
+        "password",
+    ];
+    errorCheck.forEach(function (data) {
+        updateError({
+            field: data,
+            error: errors[data] ? errors[data] : "",
+        });
+    });
+}
+
+function updateError(data) {
+    if (data.error) {
+        $(`#error-${data.field}`).html(data.error);
+    } else {
+        $(`#error-${data.field}`).html("");
+    }
+}
 
 function updateTable(users) {
     $("#tabel-user tbody").empty();
