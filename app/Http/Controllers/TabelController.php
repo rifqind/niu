@@ -98,6 +98,13 @@ class TabelController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function get_rows_by_row_labels($id_rowLabels)
+    {
+        return Row::join('rowlabels', 'rows.id_rowlabels', '=', 'rowlabels.id')
+            ->where('rows.id_rowlabels', $id_rowLabels) // tbd
+            ->select('rows.id', 'rows.label', 'rowlabels.label as tipe')
+            ->get();
+    }
     public function create()
     {
         $tabel = Tabel::all();
@@ -107,8 +114,7 @@ class TabelController extends Controller
         $kolom_grup = ColumnGroup::get();
         $subjects = Subject::all();
 
-        $row_list = Row::where('id_rowlabels', '1')->get();
-
+        $row_list = $this->get_rows_by_row_labels(1);
 
         return view('tabel.create', [
             'tabel' => $tabel,
@@ -121,7 +127,6 @@ class TabelController extends Controller
 
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */

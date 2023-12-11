@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RowController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TabelController;
 use App\Http\Controllers\UserController;
@@ -56,6 +57,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('dinas/store', [DinasController::class, 'store'])->name('dinas.store');
     Route::post('dinas/update', [DinasController::class, 'update'])->name('dinas.update');
     Route::post('dinas/delete', [DinasController::class, 'delete'])->name('dinas.delete');
+    // rows
+    Route::get('/api/rows', [RowController::class, 'fetch'])->name('rows.fetch');
 });
 
 

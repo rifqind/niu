@@ -106,6 +106,12 @@
                 theme: 'bootstrap4',
                 width: '100%',
             })
+            $('.select2bs4-select').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                multiple: true,
+
+            })
         });
     </script>
     {{ $script }}

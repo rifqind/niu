@@ -8,7 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
+
         <style type="text/css">
         </style>
         @vite(['resources/css/app.css'])
@@ -62,7 +62,7 @@
             <br>
             <div class="form-group">
                 <label for="row-label">Row Label</label>
-                <select name="row-label" class="form-control">
+                <select name="row-label" class="form-control" onchange="handleRowLabel(this.value)">
                     @foreach ($row_labels as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -70,13 +70,46 @@
             </div>
             <b>Row List</b>
             <hr>
-            @foreach ($row_list as $key => $item)
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="row-list" id="row-list-{{ $key }}"
-                        value="{{ $item->id }}">
-                    <label class="form-check-label" for="row-list-{{ $key }}">{{ $item->label }}</label>
-                </div>
-            @endforeach
+            <div class="row">
+
+                <button type="button" class="btn btn-primary px-2" onclick="handleSelectAll(true);">Pilih
+                    Semua</button>
+                <button type="button" class="btn btn-secondary px-2" onclick="handleSelectAll(false);">Reset</button>
+            </div>
+            <div class="row">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                No.
+                            </th>
+                            <th scope="col">Tipe</th>
+                            <th scope="col">Label</th>
+                            <th scope="col">Pilih ?</th>
+                        </tr>
+                    </thead>
+                    <tbody id="row-list-body">
+                        @foreach ($row_list as $key => $item)
+                            <tr onclick="handleCheckRow({{ $key }})">
+                                <th scope="row">
+                                    {{ $key + 1 }}
+                                </th>
+                                <td>{{ $item->tipe }}</td>
+                                <td>{{ $item->label }}</td>
+                                <td> <input type="checkbox" aria-label="Checkbox for following text input"
+                                        class="row-list-checkbox" id="{{ $key }}">
+                                </td>
+                            </tr>
+                            {{-- <option value="{{ $item->id }}">{{ $item->label }}</option> --}}
+                        @endforeach
+                    </tbody>
+                </table>
+                {{-- <select name="row-list-select" id="row-list-select" class="select2bs4-select form form-select">
+                    @foreach ($row_list as $key => $item)
+                        <option value="{{ $item->id }}">{{ $item->label }}</option>
+                    @endforeach
+                </select> --}}
+            </div>
             <br>
             <hr>
             <b>Detail Variabel</b>
@@ -118,23 +151,9 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-        <script src="{{ asset('js/public.js') }}"></script>
+
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
-
-
-            $(function() {
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                })
-            });
             // set initial values
             const form = document.getElementById('table');
 
@@ -161,7 +180,29 @@
             tahun.value = "2023";
             periode.value = "Januari";
 
+            // handle select all
+            function handleSelectAll(isSelected) {
+                var selectedItems = $('.row-list-checkbox').each(function(index, item) {
+                    item.checked = isSelected;
+                    console.log({
+                        checked: item.checked
+                    });
+                });
+                return 1;
+            }
+
+            // handle select one row
+
+            function handleCheckRow(idRow) {
+                let rowChecked = document.getElementById(idRow).checked;
+                if (rowChecked) {
+                    return document.getElementById(idRow).checked = false;
+                }
+                return document.getElementById(idRow).checked = true;
+            }
+
             // submit action 
+
             function handleSubmitCreateTable() {
                 // prepare table
                 let table = {
@@ -225,6 +266,51 @@
                 };
                 xhr.send(jsonData);
             }
+
+            function handleRowLabel(id_rowLabels) {
+                // Create URL with parameters
+                let url = '{{ route('rows.fetch') }}?id_rowLabels=' + id_rowLabels;
+
+                // Create XMLHttpRequest
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+
+                // Set up event handlers
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        var response = JSON.parse(xhr.responseText);
+                        console.log('Success:', response.data);
+                        const tableBodyHtml = response.data.map((item,
+                            key
+                        ) => {
+                            console.log({
+                                item
+                            })
+                            return `<tr onclick="handleCheckRow(${key})">
+                                <th scope="row">
+                                    ${key + 1 }
+                                </th>
+                                <td>${item.tipe}</td>
+                                <td>${item.label}</td>
+                                <td> <input type="checkbox" aria-label="Checkbox for following text input"
+                                        class="row-list-checkbox" id="${key }">
+                                </td>
+                            </tr>`
+                        });
+                        document.getElementById('row-list-body').innerHTML = tableBodyHtml.join('');
+
+                    } else {
+                        console.error('Error:', xhr.status, xhr.statusText);
+                    }
+                };
+                xhr.onerror = function() {
+                    console.error('Network Error');
+                };
+
+                // Send the request
+                xhr.send();
+            }
+
 
 
             document.getElementById('submit-create-table').addEventListener('click', handleSubmitCreateTable);
