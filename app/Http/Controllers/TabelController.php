@@ -12,6 +12,7 @@ use App\Models\Tabel;
 use App\Models\Rowlabel;
 use App\Models\Subject;
 use App\Models\Turtahun;
+use App\Models\TurTahunGroup;
 use Illuminate\Http\Request;
 
 class TabelController extends Controller
@@ -113,15 +114,17 @@ class TabelController extends Controller
         $daftar_kolom = Column::get();
         $kolom_grup = ColumnGroup::get();
         $subjects = Subject::all();
+        $turtahun_groups = TurTahunGroup::all();
 
-        $row_list = $this->get_rows_by_row_labels(1);
+        // $row_list = $this->get_rows_by_row_labels(1);
 
         return view('tabel.create', [
             'tabel' => $tabel,
             'row_labels' => $rowLabel,
             'daftar_dinas' => $daftar_dinas,
             'daftar_kolom' => $daftar_kolom,
-            'row_list' => $row_list,
+            'turtahun_groups' => $turtahun_groups,
+            // 'row_list' => $row_list,
             'kolom_grup' => $kolom_grup,
             'subjects' => $subjects,
 
@@ -134,21 +137,26 @@ class TabelController extends Controller
     {
         // insert table
         $newTable = Tabel::create($request->table);
+        $periodes = Turtahun::where('type', $request->periode['periode'])->get();
         // generate datacontents
         $data_contents = [];
-        foreach ($request->row["rows_selected"] as $row) {
-            foreach ($request->column["kolom"] as $column) {
-                $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-1";
-                $datavalue = "";
-                array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
+        foreach ($request->rows["rows_selected"] as $row) {
+            foreach ($request->columns["columns"] as $column) {
+                foreach ($periodes as $period) {
+
+                    $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
+                    $datavalue = "";
+                    array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
+                }
             }
         }
         Datacontent::insert($data_contents);
         return response()->json([
-            "column" => $request->column,
+            "column" => $request->columns,
             "periode" => $request->periode,
-            "row" => $request->row,
+            "row" => $request->rows,
             "table" => $request->table,
+            'dat' => $data_contents
         ]);
     }
 

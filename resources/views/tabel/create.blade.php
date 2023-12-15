@@ -10,6 +10,13 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
 
         <style type="text/css">
+            .select2-container--default .select2-selection--single {
+                height: 38px;
+                line-height: 24px;
+                padding-left: 6px;
+
+                /* You can adjust this value as needed */
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -29,7 +36,7 @@
             <b>Detail Tabel</b>
             <div class="form-group">
                 <label for="dinas">Dinas Tabel</label>
-                <select name="dinas" class="form-control">
+                <select name="dinas" class="form-control select2-selection">
                     @foreach ($daftar_dinas as $item)
                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                     @endforeach
@@ -46,7 +53,7 @@
             <div class="form-group">
                 <label for="subjek">Subjek Tabel</label>
 
-                <select name="subjek" class="form-control">
+                <select name="subjek" class="form-control select2 select2-selection">
                     @foreach ($subjects as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -62,7 +69,7 @@
             <br>
             <div class="form-group">
                 <label for="row-label">Row Label</label>
-                <select name="row-label" class="form-control" onchange="handleRowLabel(this.value)">
+                <select name="row-label" class="form-control select2-selection" id="row-label-select">
                     @foreach ($row_labels as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -70,53 +77,34 @@
             </div>
             <b>Row List</b>
             <hr>
-            <div class="row">
 
-                <button type="button" class="btn btn-primary px-2" onclick="handleSelectAll(true);">Pilih
-                    Semua</button>
-                <button type="button" class="btn btn-secondary px-2" onclick="handleSelectAll(false);">Reset</button>
-            </div>
             <div class="row">
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="bg-info">
                         <tr>
                             <th scope="col">
                                 No.
                             </th>
                             <th scope="col">Tipe</th>
                             <th scope="col">Label</th>
-                            <th scope="col">Pilih ?</th>
+                            <th scope="col"><input type="checkbox" id="select-toggle-row"name="select-toggle-row">
+                                <label for="select-toggle-row"> Pilih Semua</label>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody id="row-list-body">
-                        @foreach ($row_list as $key => $item)
-                            <tr onclick="handleCheckRow({{ $key }})">
-                                <th scope="row">
-                                    {{ $key + 1 }}
-                                </th>
-                                <td>{{ $item->tipe }}</td>
-                                <td>{{ $item->label }}</td>
-                                <td> <input type="checkbox" aria-label="Checkbox for following text input"
-                                        class="row-list-checkbox" id="{{ $key }}">
-                                </td>
-                            </tr>
-                            {{-- <option value="{{ $item->id }}">{{ $item->label }}</option> --}}
-                        @endforeach
+                    <tbody id="row-list-body" class="bg-white">
+
                     </tbody>
                 </table>
-                {{-- <select name="row-list-select" id="row-list-select" class="select2bs4-select form form-select">
-                    @foreach ($row_list as $key => $item)
-                        <option value="{{ $item->id }}">{{ $item->label }}</option>
-                    @endforeach
-                </select> --}}
+
             </div>
             <br>
             <hr>
             <b>Detail Variabel</b>
 
             <div class="form-group">
-                <label for="kolom-grup">Grup Kolom</label>
-                <select name="kolom-grup" class="form-control">
+                <label for="column-group">Grup Kolom</label>
+                <select name="column-group" class="form-control select2-selection" id="column-group-select">
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -125,23 +113,59 @@
 
             <b>Daftar Kolom</b>
             <hr>
-            @foreach ($daftar_kolom as $key => $item)
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="column-list"
-                        id="column-list-{{ $key }}" value="{{ $item->id }}">
-                    <label class="form-check-label" for="column-list-{{ $key }}">{{ $item->label }}</label>
-                </div>
-            @endforeach
+            <table class="table table-hover table-bordered bg-white">
+                <thead class="bg-info">
+                    <tr>
+                        <th scope="col">
+                            No.
+                        </th>
+                        <th scope="col">Tipe</th>
+                        <th scope="col">Label</th>
+                        <th scope="col"><input type="checkbox" id="select-toggle-column" name="select-toggle-column">
+                            <label for="select-toggle-column"> Pilih Semua</label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="column-list-body" class="bg-white">
+
+                </tbody>
+            </table>
+
             <br>
             <div class="form-group">
                 <label for="tahun">Tahun Tabel</label>
-                <input type="text" class="form-control" name="tahun">
+                <select name="tahun" id="tahun" class="form-control select2-selection"></select>
             </div>
 
             <div class="form-group">
-                <label for="periode">Periode Tabel</label>
-                <input type="text" class="form-control" name="periode">
+                <label for="turtahun-group">Jenis Turunan Tahun</label>
+                <select name="turtahun-group" class="form-control select2-selection" id="turtahun-group-select">
+                    @foreach ($turtahun_groups as $item)
+                        <option value="{{ $item->id }}">{{ $item->label }}</option>
+                    @endforeach
+                </select>
             </div>
+
+            <b>Daftar Turunan Tahun</b>
+            <hr>
+            <table class="table table-hover table-bordered bg-white">
+                <thead class="bg-info">
+                    <tr>
+                        <th scope="col">
+                            No.
+                        </th>
+                        <th scope="col">Tipe</th>
+                        <th scope="col">Label</th>
+                        <th scope="col"><input type="checkbox" id="select-toggle-turtahun"
+                                name="select-toggle-turtahun">
+                            <label for="select-toggle-turtahun"> Pilih Semua</label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="turtahun-list-body" class="bg-white">
+
+                </tbody>
+            </table>
 
             <button type="button" id="submit-create-table" class="btn btn-primary">Buat Tabel</button>
         </form>
@@ -157,32 +181,10 @@
             // set initial values
             const form = document.getElementById('table');
 
-            const nomor = document.getElementsByName('nomor')[0];
-            const judul = document.getElementsByName('judul')[0];
-            const dinas = document.getElementsByName('dinas')[0];
-            const subjek = document.getElementsByName('subjek')[0];
-            const unit = document.getElementsByName('unit')[0];
-
-            const row_label = document.getElementsByName('row-label')[0];
-            const row_list = document.getElementsByName('row-list')[0];
-            const kolom = document.getElementsByName('kolom')[0];
-            const tahun = document.getElementsByName('tahun')[0];
-            const periode = document.getElementsByName('periode')[0];
-
-            nomor.value = "R/001";
-            judul.value = "Judul Tabel";
-            dinas.value = "1";
-            subjek.value = "1";
-            unit.value = "Persentase";
-            row_label.value = "1";
-
-            // kolom.value = "Laki-laki";
-            tahun.value = "2023";
-            periode.value = "Januari";
 
             // handle select all
-            function handleSelectAll(isSelected) {
-                var selectedItems = $('.row-list-checkbox').each(function(index, item) {
+            function handleSelectAll(isSelected, elementSelector) {
+                var selectedItems = $(elementSelector).each(function(index, item) {
                     item.checked = isSelected;
                     console.log({
                         checked: item.checked
@@ -214,33 +216,41 @@
                 };
 
                 // prepare rows 
-                let rows_selected = [...document.getElementsByName('row-list')].filter(item => item.checked).map(item =>
+                let rows_selected = [...document.getElementsByClassName('row-list-checkbox')].filter(item => item.checked).map(
+                    item =>
                     item.value);
-                let row = {
+                let rows = {
                     'row_label': document.getElementsByName('row-label')[0].value,
                     'rows_selected': rows_selected
                 };
                 //prepare kolom 
-                let columns_selected = [...document.getElementsByName('column-list')].filter(item => item.checked).map(item =>
-                    item.value);
-                let column = {
-                    'kolom': columns_selected
+                let columns_selected = [...document.getElementsByClassName('column-list-checkbox')].filter(item => item.checked)
+                    .map(
+                        item =>
+                        item.value);
+                let columns = {
+                    'columns_label': document.getElementsByName('column-group')[0].value,
+                    'columns': columns_selected
                 };
 
                 // prepare periode 
                 let periode = {
                     'tahun': document.getElementsByName('tahun')[0].value,
-                    'periode': document.getElementsByName('periode')[0].value,
+                    'periode': document.getElementsByName('turtahun-group')[0].value,
                 }
                 let token = '{{ csrf_token() }}'
 
                 let data = {
                     table,
-                    row,
-                    column,
+                    rows,
+                    columns,
                     periode,
                     _token: '{{ csrf_token() }}',
                 }
+                console.log({
+                    data
+                })
+
 
                 // prepare sending data
 
@@ -267,9 +277,9 @@
                 xhr.send(jsonData);
             }
 
-            function handleRowLabel(id_rowLabels) {
+            function handleLabel(url, nameLabel, bodyHtmlId) {
                 // Create URL with parameters
-                let url = '{{ route('rows.fetch') }}?id_rowLabels=' + id_rowLabels;
+                // let url = '{{ route('rows.fetch') }}?id_rowLabels=' + id_rowLabels;
 
                 // Create XMLHttpRequest
                 const xhr = new XMLHttpRequest();
@@ -286,18 +296,18 @@
                             console.log({
                                 item
                             })
-                            return `<tr onclick="handleCheckRow(${key})">
-                                <th scope="row">
+                            return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                                <th scope="row" class="text-right">
                                     ${key + 1 }
                                 </th>
                                 <td>${item.tipe}</td>
                                 <td>${item.label}</td>
                                 <td> <input type="checkbox" aria-label="Checkbox for following text input"
-                                        class="row-list-checkbox" id="${key }">
+                                        class="${nameLabel}-list-checkbox" id="${nameLabel}-${key }" value="${item.id}">
                                 </td>
                             </tr>`
                         });
-                        document.getElementById('row-list-body').innerHTML = tableBodyHtml.join('');
+                        document.getElementById(bodyHtmlId).innerHTML = tableBodyHtml.join('');
 
                     } else {
                         console.error('Error:', xhr.status, xhr.statusText);
@@ -314,6 +324,56 @@
 
 
             document.getElementById('submit-create-table').addEventListener('click', handleSubmitCreateTable);
+
+            $(document).ready(function() {
+
+                $('.select2-selection').select2({});
+                $('#row-label-select').on('select2:select', () => {
+                    let idRowLabel = document.getElementById('row-label-select').value;
+                    let rowLabelUrl = `{{ route('rows.fetch') }}?id_rowLabels=${idRowLabel}`;
+
+                    handleLabel(rowLabelUrl, 'row', 'row-list-body')
+                });
+                $('#column-group-select').on('select2:select', () => {
+                    let idRowLabel = document.getElementById('column-group-select').value;
+                    let rowLabelUrl = `{{ route('column.fetch') }}?id_columnGroups=${idRowLabel}`;
+
+                    handleLabel(rowLabelUrl, 'column', 'column-list-body');
+                });
+                $('#turtahun-group-select').on('select2:select', () => {
+                    let idRowLabel = document.getElementById('turtahun-group-select').value;
+                    let rowLabelUrl = `{{ route('turtahungroups.fetch') }}?id_turtahunGroup=${idRowLabel}`;
+
+                    handleLabel(rowLabelUrl, 'turtahun', 'turtahun-list-body');
+                });
+
+                $('#select-toggle-column').on('click', (event) => {
+                    let isSelected = event.target.checked;
+                    handleSelectAll(isSelected, '.column-list-checkbox');
+                });
+                $('#select-toggle-row').on('click', (event) => {
+                    let isSelected = event.target.checked;
+                    handleSelectAll(isSelected, '.row-list-checkbox');
+                });
+
+                const currentYear = new Date().getFullYear();
+
+                // Populate the select dropdown with years
+                const yearSelect = document.getElementById('tahun');
+
+                for (let year = currentYear; year >= currentYear - 10; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.text = year;
+                    yearSelect.add(option);
+                }
+
+                document.getElementsByName('nomor')[0].value = "000/1";
+                document.getElementsByName('judul')[0].value = "Judul Tabel";
+                document.getElementsByName('unit')[0].value = "Unit asw";
+                $('.select2-selection').trigger('change');
+
+            });
         </script>
     </x-slot>
 </x-niu-layout>

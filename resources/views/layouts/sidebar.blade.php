@@ -106,6 +106,27 @@
                             <p>Kelola Subjek</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ url('column/index') }}"
+                            class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fas fa-bars"></i>
+                            <p>Kelola Kolom</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('rows/index') }}"
+                            class="nav-link {{ Request::is('rows/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fas fa-th-list"></i>
+                            <p>Kelola Baris</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('periods/index') }}"
+                            class="nav-link {{ Request::is('periods/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid far fa-calendar-alt"></i>
+                            <p>Kelola Periode</p>
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <a href="{{ url('fenomena/viewAll') }}"

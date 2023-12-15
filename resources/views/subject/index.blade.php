@@ -28,14 +28,14 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('dinas.create') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('subject.create') }}" class="btn btn-info">Tambah</a>
                 </div>
-                <div class="ml-auto mr-1">
+                {{-- <div class="ml-auto mr-1">
                     <form action="{{ route('dinas.search') }}" method="GET">
                         <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;"
                             placeholder="Cari Dinas" name="search">
                     </form>
-                </div>
+                </div> --}}
             </div>
         </div>
         <table class="table table-hover" id="tabel-dinas">
@@ -55,7 +55,8 @@
                         <td>{{ $item->label }}</td>
                         {{-- <td class="text-center">{{ $din->regions->nama }}</td> --}}
                         <td class="text-center">
-                            <a href="" class="update-pen" {{-- data-subjek="{{ json_encode([
+                            <a href="{{ route('subject.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"
+                                {{-- data-subjek="{{ json_encode([
                                     'id' => $item->id,
                                     'nama' => $item->label,
                                     // 'id_regions' => $din->id_regions,
@@ -65,10 +66,9 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a href="" class="delete-trash" {{-- data-subjek="{{ json_encode([
-                                    'id' => $item->id,
-                                ]) }}"
-                                data-toggle="modal" data-target="#deleteModal"> --}}>
+                            <a href="#"
+                                onclick="handleDeleteSubject('{{ Illuminate\Support\Facades\Crypt::encrypt($item->id) }}');"
+                                class="delete-trash">
                                 <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                             </a>
                         </td>
@@ -84,11 +84,40 @@
     </div>
     {{-- @include('dinas.modal') --}}
     <x-slot name="script">
-        <script src="{{ asset('js/dinas.js') }}"></script>
         <script>
             const tokens = '{{ csrf_token() }}'
             const update_URL = new URL("{{ route('dinas.update') }}")
             const delete_URL = new URL("{{ route('dinas.delete') }}")
+            const handleDeleteSubject = function(encryptedId) {
+                if (confirm('Are you sure you want to delete this subject?')) {
+                    fetch("{{ route('subject.destroy', ['id' => ':id']) }}".replace(':id', encryptedId), {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                '_method': 'DELETE'
+                            })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok.');
+                        })
+                        .then(data => {
+                            // Handle the response data, if needed
+                            console.log(data);
+                            // Redirect to a new location
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                }
+
+            }
         </script>
     </x-slot>
 </x-niu-layout>
