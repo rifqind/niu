@@ -25,5 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RowSeeder::class);
         $this->call(TabelSeeder::class);
         $this->call(TurtahunSeeder::class);
+        $this->call(DatacontentSeeder::class);
+        $this->call(DinasSeeder::class);
+        $this->call(RegionSeeder::class);
+        $this->call(SubjectSeeder::class);
     }
 }

@@ -16,6 +16,30 @@ class RowSeeder extends Seeder
         //
         $rows = [
             [
+                'label' => 'Kecamatan A',
+                'id_rowlabels' => '2'
+            ],
+            [
+                'label' => 'Kecamatan B',
+                'id_rowlabels' => '2'
+            ],
+            [
+                'label' => 'Kecamatan c',
+                'id_rowlabels' => '2'
+            ],
+            [
+                'label' => 'Desa A',
+                'id_rowlabels' => '3'
+            ],
+            [
+                'label' => 'Desa B',
+                'id_rowlabels' => '3'
+            ],
+            [
+                'label' => 'Desa c',
+                'id_rowlabels' => '3'
+            ],
+            [
                 'label' => 'Kab. Bolaang Mongondow',
                 'id_rowlabels' => '1'
             ],
@@ -76,7 +100,7 @@ class RowSeeder extends Seeder
                 'id_rowlabels' => '1'
             ],
         ];
-        foreach($rows as $row){
+        foreach ($rows as $row) {
             Row::create($row);
         }
     }
