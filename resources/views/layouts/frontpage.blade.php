@@ -38,7 +38,10 @@
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #a80606">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item active mx-3">
+                        <a class="nav-link text-white text-bold" href="{{ route('home') }}">Beranda</a>
+                    </li>
+                    <li class="nav-item active mx-3">
                         <a class="nav-link text-white text-bold" href="{{ route('users.login') }}">Masuk</a>
                     </li>
                 </ul>

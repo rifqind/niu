@@ -107,7 +107,24 @@
 
                 <!-- Pie Chart -->
                 <div class="col-xl-8 col-lg-5">
-                    TABEL
+                    <div class="card">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold" style="color:#a80606">
+                                Menampilkan : {{ $counttabels }} tabel</h6>
+                        </div>
+                        <div class="card-body">
+                            @foreach ($tabels as $tabel)
+                                <div class="d-flex flex-column">
+                                    <a href="/view/{{ Illuminate\Support\Facades\Crypt::encrypt($tabel->id) }}" class="text-red">
+                                        <span class="badge badge-pill badge-danger">{{ $tabel->nomor }}</span> -
+                                        {{ $tabel->label }}
+                                    </a>
+                                    <small class="lead" style="font-size: 12px">{{ $tabel->dinas->nama }} | </small>
+                                    <small class="lead" style="font-size: 12px">Terakhir diupdate : {{ $tabel->updated_at }}</small>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -116,9 +133,9 @@
             <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script>
             <script>
                 $(function() {
-                    $('#dinas-select').filterMultiSelect(
-                        {placeholderText : 'Pilih Dinas'}
-                    );
+                    $('#dinas-select').filterMultiSelect({
+                        placeholderText: 'Pilih Dinas'
+                    });
                 });
             </script>
         </x-slot>

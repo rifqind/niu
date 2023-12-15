@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware('guest')->group(function (){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/view/{id}', [HomeController::class, 'show'])->name('home.view');
 });
 
 Route::middleware('auth')->get('/', function () {
