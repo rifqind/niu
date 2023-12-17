@@ -70,6 +70,7 @@
             <div class="form-group">
                 <label for="row-label">Row Label</label>
                 <select name="row-label" class="form-control select2-selection" id="row-label-select">
+                    <option value="">-- Pilih Row Label --</option>
                     @foreach ($row_labels as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -105,6 +106,7 @@
             <div class="form-group">
                 <label for="column-group">Grup Kolom</label>
                 <select name="column-group" class="form-control select2-selection" id="column-group-select">
+                    <option value="">-- Pilih Grup Kolom --</option>
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -326,12 +328,12 @@
             document.getElementById('submit-create-table').addEventListener('click', handleSubmitCreateTable);
 
             $(document).ready(function() {
-
+                
                 $('.select2-selection').select2({});
                 $('#row-label-select').on('select2:select', () => {
                     let idRowLabel = document.getElementById('row-label-select').value;
                     let rowLabelUrl = `{{ route('rows.fetch') }}?id_rowLabels=${idRowLabel}`;
-
+                    
                     handleLabel(rowLabelUrl, 'row', 'row-list-body')
                 });
                 $('#column-group-select').on('select2:select', () => {
@@ -354,6 +356,10 @@
                 $('#select-toggle-row').on('click', (event) => {
                     let isSelected = event.target.checked;
                     handleSelectAll(isSelected, '.row-list-checkbox');
+                });
+                $('#select-toggle-turtahun').on('click', (event) => {
+                    let isSelected = event.target.checked;
+                    handleSelectAll(isSelected, '.turtahun-list-checkbox');
                 });
 
                 const currentYear = new Date().getFullYear();
