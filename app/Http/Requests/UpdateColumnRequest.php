@@ -24,7 +24,7 @@ class UpdateColumnRequest extends FormRequest
     {
         return [
             'id' => 'required|string',
-            'label' => 'required|string|min:5',
+            'label' => 'required|string',
             'id_columns_group' => 'required|integer',
         ];
     }

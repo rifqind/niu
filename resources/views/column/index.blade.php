@@ -41,8 +41,13 @@
             </div>
         </div>
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success temporary-message">
                 {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger temporary-message">
+                {{ session('error') }}
             </div>
         @endif
         <table class="table table-hover" id="tabel-kolom">
@@ -76,11 +81,15 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a href="#"
-                                onclick="handleDeleteColumn('{{ Illuminate\Support\Facades\Crypt::encrypt($item->id) }}');"
-                                class="delete-trash">
-                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
-                            </a>
+                            <form method="POST"
+                                action="{{ route('column.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"
+                                class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn"><i class="fa-solid fa-trash-can"
+                                        style="color: #9a091f;"></i></button>
+                            </form>
+
                         </td>
                     </tr>
                 @endforeach
@@ -128,6 +137,39 @@
                 }
 
             }
+
+            // execute after all contents have been loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                let deleteForms = document.querySelectorAll('.delete-form');
+
+                // Iterate over each form
+                deleteForms.forEach(form => {
+                    // Add a submit event listener to each form
+                    form.addEventListener('submit', function(event) {
+                        // Prevent the default form submission
+                        event.preventDefault();
+
+                        // Show a confirmation dialog
+                        if (confirm('Apakah anda yakin akan menghapus kolom ini?')) {
+                            // If the user confirms, submit the form
+                            form.submit();
+                        }
+                    });
+                });
+                var temporaryMessages = document.querySelectorAll('.temporary-message');
+                temporaryMessages = Array.from(temporaryMessages);
+
+                // Check if the success message element exists
+                if (temporaryMessages) {
+                    // Set a timer to hide the success message after 5 seconds (5000 milliseconds)
+                    temporaryMessages.forEach(element => setTimeout(() => {
+                        element.style.opacity = '0'; // Fade out the message
+                        setTimeout(() => {
+                            return element.style.display = 'none'; // Hide the success message
+                        }, 500);
+                    }, 2000));
+                }
+            });
         </script>
     </x-slot>
 </x-niu-layout>

@@ -83,7 +83,7 @@ class ColumnController extends Controller
             $column->update($validatedColumn);
 
             // Redirect to the index route
-            return redirect()->route('column.index')->with('success', 'Column updated successfully');
+            return redirect()->route('column.index')->with('success', 'Berhasil mengubah detail kolom');
             // return response()->json(['status' => 'success']);
         } catch (\Exception $e) {
             // Log the error (optional)
@@ -101,9 +101,17 @@ class ColumnController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Column $column)
+    public function destroy($id)
     {
-        //
+        $decryptedId = Crypt::decrypt($id);
+        // Find the subject by ID
+        $subject = Column::findOrFail($decryptedId);
+
+        // Delete the subject
+        $subject->delete();
+
+        // Respond with a JSON success message
+        return redirect()->back()->with('error', 'Berhasil menghapus kolom !');
     }
     public function fetch(Request $request)
     {
