@@ -43,26 +43,17 @@
                 <tr>
                     <td class="first-column">No.</td>
                     <td class="text-center">Label</td>
-                    {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center">Edit</td>
                     <td class="text-center">Hapus</td>
                 </tr>
             </thead>
             <tbody>
-                {{ dd($columns) }}
                 @foreach ($columns as $key => $item)
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $item->label }}</td>
-                        {{-- <td class="text-center">{{ $din->regions->nama }}</td> --}}
                         <td class="text-center">
                             <a href="{{ route('column.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"
-                                {{-- data-subjek="{{ json_encode([
-                                    'id' => $item->id,
-                                    'nama' => $item->label,
-                                    // 'id_regions' => $din->id_regions,
-                                ]) }}"
-                                data-toggle="modal" data-target="#updateModal"> --}}>
                                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
                             </a>
                         </td>

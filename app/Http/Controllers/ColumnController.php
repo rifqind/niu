@@ -15,8 +15,8 @@ class ColumnController extends Controller
     public function index()
     {
         // get the resource
-        $columns = Column::join('column_groups', 'columns.id_column_group', 'column_groups.id')->select('columns.id', 'columns.label', 'column_groups.label as tipe')->get();
-
+        // $columns = Column::join('column_groups', 'columns.id_column_group', 'column_groups.id')->select('columns.id', 'columns.label', 'column_groups.label as tipe')->get();
+        $columns = Column::all();
         return view('columns.index', ['columns' => $columns]);
     }
 
@@ -70,10 +70,14 @@ class ColumnController extends Controller
     public function fetch(Request $request)
     {
         $id_columnGroups = $request->query('id_columnGroups');
-        $response_data = Column::join('column_groups', 'columns.id_columns_group', '=', 'column_groups.id')
-            ->where('columns.id_columns_group', $id_columnGroups) // tbd
-            ->select('columns.id', 'columns.label', 'column_groups.label as tipe')
-            ->get();
+        // $response_data = Column::join('column_groups', 'columns.id_columns_group', '=', 'column_groups.id')
+        //     ->where('columns.id_columns_group', $id_columnGroups) // tbd
+        //     ->select('columns.id', 'columns.label', 'column_groups.label as tipe')
+        //     ->get();
+
+        $response_data = Column::where('columns.id_column_group', $id_columnGroups)
+            ->leftJoin('column_groups', 'columns.id_column_group', '=', 'column_groups.id')
+            ->get(['columns.*', 'column_groups.label as tipe']);
         return response()->json(['data' => $response_data, 'status' => 200]);
     }
 }
