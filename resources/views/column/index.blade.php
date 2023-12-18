@@ -22,13 +22,15 @@
     </x-slot>
     <div class="container-fluid">
         <div class="row justify-content-between">
+
             <div class="ml-1 h4 mb-3">
                 Daftar Kolom
             </div>
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('column.create') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('column.create') }}" class="btn btn-info">Tambah Kelompok Kolom</a>
+                    <a href="{{ route('column.create') }}" class="btn btn-info">Tambah Kolom</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">
                     <form action="{{ route('dinas.search') }}" method="GET">
@@ -38,21 +40,28 @@
                 </div> --}}
             </div>
         </div>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <table class="table table-hover" id="tabel-kolom">
             <thead>
                 <tr>
                     <td class="first-column">No.</td>
-                    <td class="text-center">Label</td>
+                    <td class="text-left">Kelompok Variabel</td>
+                    <td class="text-left">Label</td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center">Edit</td>
                     <td class="text-center">Hapus</td>
                 </tr>
             </thead>
             <tbody>
-                {{ dd($columns) }}
+                {{-- {{ dd($columns) }} --}}
                 @foreach ($columns as $key => $item)
                     <tr>
                         <td>{{ $key + 1 }}</td>
+                        <td>{{ $item->tipe }}</td>
                         <td>{{ $item->label }}</td>
                         {{-- <td class="text-center">{{ $din->regions->nama }}</td> --}}
                         <td class="text-center">

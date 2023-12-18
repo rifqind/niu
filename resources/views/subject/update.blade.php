@@ -24,8 +24,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <form id = "SubjectForm" method="POST" class="form-horizontal"
-                    action="{{ route('subject.update', ['id' => Illuminate\Support\Facades\Crypt::encrypt($subject->id)]) }}">
+                <form id = "SubjectForm" method="POST" class="form-horizontal" action="{{ route('subject.update') }}">
                     @csrf
                     @method('PUT') <!-- Add this line to override the form method -->
 
