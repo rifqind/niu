@@ -128,8 +128,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('periods/index') }}"
-                            class="nav-link {{ Request::is('periods/index') ? 'active' : '' }}">
+                        <a href="{{ url('periode/index') }}"
+                            class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid far fa-calendar-alt"></i>
                             <p>Kelola Periode</p>
                         </a>

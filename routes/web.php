@@ -3,6 +3,7 @@
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\ColumnGroupController;
 use App\Http\Controllers\DinasController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RowController;
 use App\Http\Controllers\SubjectController;
@@ -106,6 +107,14 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/column-group/edit/{id}', [ColumnGroupController::class, 'edit'])->name('column_group.edit');
     Route::put('/column-group/update', [ColumnGroupController::class, 'update'])->name('column_group.update');
     Route::delete('column-group/{id}', [ColumnGroupController::class, 'destroy'])->name('column_group.destroy');
+
+    // Periodes
+    Route::get('/periode/index', [PeriodeController::class, 'index'])->name('periode.index');
+    Route::get('/periode/create', [PeriodeController::class, 'create'])->name('periode.create');
+    Route::post('/periode/store', [PeriodeController::class, 'store'])->name('periode.store');
+    Route::get('/periode/edit/{id}', [PeriodeController::class, 'edit'])->name('periode.edit');
+    Route::put('/periode/update', [PeriodeController::class, 'update'])->name('periode.update');
+    Route::delete('periode/{id}', [PeriodeController::class, 'destroy'])->name('periode.destroy');
 
     // turtahun groups
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
