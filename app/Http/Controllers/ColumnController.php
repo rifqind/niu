@@ -27,7 +27,9 @@ class ColumnController extends Controller
      */
     public function create()
     {
-        //
+        $column_groups = ColumnGroup::get();
+
+        return view('column.create', ['column_groups' => $column_groups]);
     }
 
     /**
@@ -35,7 +37,10 @@ class ColumnController extends Controller
      */
     public function store(StoreColumnRequest $request)
     {
-        //
+        $validatedData = $request->validate($request->rules());
+
+        $insertedRow = Column::create($validatedData);
+        return redirect(route('column.index'))->with(['success' => 'Berhasil menambahkan kolom dengan id ' . $insertedRow->id]);
     }
 
     /**
@@ -69,11 +74,7 @@ class ColumnController extends Controller
 
         // return redirect(route('column.index'));
         // Validate the request data
-        $validatedColumn = $request->validate([
-            'id' => 'required|integer',
-            'label' => 'required|string|min:5',
-            'id_columns_group' => 'required|integer',
-        ]);
+        $validatedColumn = $request->validate($request->rules());
 
         try {
             // Find the Column by its ID

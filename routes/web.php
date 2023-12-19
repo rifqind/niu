@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColumnController;
+use App\Http\Controllers\ColumnGroupController;
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RowController;
@@ -96,6 +97,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/column/edit/{id}', [ColumnController::class, 'edit'])->name('column.edit');
     Route::put('/column/update', [ColumnController::class, 'update'])->name('column.update');
     Route::delete('column/{id}', [ColumnController::class, 'destroy'])->name('column.destroy');
+
+    // Column Groups
+    Route::get('/column-group/create', [ColumnGroupController::class, 'create'])->name('column_group.create');
+    Route::post('/column-group/store', [ColumnGroupController::class, 'store'])->name('column_group.store');
 
     // turtahun groups
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');

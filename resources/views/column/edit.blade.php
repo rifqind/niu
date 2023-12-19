@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label for="label">Nama Kolom</label>
                         <input class="form-control mb-3" name="label" value="{{ $column->label }}"
-                            placeholder="Isi Nama Subject" required minlength="5">
+                            placeholder="Isi Nama Subject" required>
                         <input class="form-control mb-3 d-none" name="id"
                             value="{{ Illuminate\Support\Facades\Crypt::encrypt($column->id) }}" readonly>
 

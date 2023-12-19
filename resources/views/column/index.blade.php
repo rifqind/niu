@@ -29,7 +29,7 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('column.create') }}" class="btn btn-info">Tambah Kelompok Kolom</a>
+                    <a href="{{ route('column_group.create') }}" class="btn btn-info">Tambah Kelompok Kolom</a>
                     <a href="{{ route('column.create') }}" class="btn btn-info">Tambah Kolom</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">

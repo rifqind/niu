@@ -23,7 +23,7 @@ class UpdateColumnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|string',
+            'id' => 'required',
             'label' => 'required|string',
             'id_columns_group' => 'required|integer',
         ];
