@@ -107,6 +107,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ url('column-group/index') }}"
+                            class="nav-link {{ Request::is('column-group/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fas fa-bars"></i>
+                            <p>Kelola Kelompok Kolom</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ url('column/index') }}"
                             class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fas fa-bars"></i>

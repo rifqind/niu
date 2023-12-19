@@ -9,6 +9,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TabelController;
 use App\Http\Controllers\TurTahunGroupsController;
 use App\Http\Controllers\UserController;
+use App\Models\ColumnGroup;
 use App\Models\TurTahunGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -99,8 +100,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('column/{id}', [ColumnController::class, 'destroy'])->name('column.destroy');
 
     // Column Groups
+    Route::get('/column-group/index', [ColumnGroupController::class, 'index'])->name('column_group.index');
     Route::get('/column-group/create', [ColumnGroupController::class, 'create'])->name('column_group.create');
     Route::post('/column-group/store', [ColumnGroupController::class, 'store'])->name('column_group.store');
+    Route::get('/column-group/edit/{id}', [ColumnGroupController::class, 'edit'])->name('column_group.edit');
+    Route::put('/column-group/update', [ColumnGroupController::class, 'update'])->name('column_group.update');
+    Route::delete('column-group/{id}', [ColumnGroupController::class, 'destroy'])->name('column_group.destroy');
 
     // turtahun groups
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
