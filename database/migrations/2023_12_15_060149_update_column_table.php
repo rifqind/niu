@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('columns', function (Blueprint $table) {
-            $table->id();
-            $table->string('label');
-            $table->unsignedBigInteger('id_columns_group')->default("1");
+        Schema::table('columns', function (Blueprint $table) {
+            $table->renameColumn('id_columns_group', 'id_column_group');
         });
     }
 
@@ -23,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('columns');
+        //
     }
 };

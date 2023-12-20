@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('columns', function (Blueprint $table) {
+        Schema::create('column_groups', function (Blueprint $table) {
             $table->id();
             $table->string('label');
-            $table->unsignedBigInteger('id_columns_group')->default("1");
         });
     }
 
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('columns');
+        Schema::dropIfExists('column_groups');
     }
 };

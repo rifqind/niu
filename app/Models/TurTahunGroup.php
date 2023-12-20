@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Column extends Model
+class TurTahunGroup extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
-    public $timestamps = false;
 
-    public function columnGroups(){
-        return $this->belongsTo(ColumnGroup::class, 'id_column_group', 'id');
-    }
+    protected $guarded = ['id'];
+    protected $table = 'turtahun_groups';
+    // protected $table = 'column_groups';
+    public $timestamps = false;
 }
