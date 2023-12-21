@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ColumnController;
-use App\Http\Controllers\ColumnController;
+
 use App\Http\Controllers\ColumnGroupController;
 use App\Http\Controllers\DinasController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RowController;
 use App\Http\Controllers\SubjectController;
@@ -54,11 +56,13 @@ Route::get('/tables/index', [TabelController::class, 'index'])->middleware(['aut
 Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('table.update');
+Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
 Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('table.update');
+Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
+Route::delete('tabel/{id}', [TabelController::class, 'destroy'])->name('tabel.destroy');
+
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas

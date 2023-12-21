@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Column;
 use App\Models\ColumnGroup;
-use App\Models\ColumnGroup;
+
 use App\Models\Datacontent;
-use App\Models\Dinas;
-use App\Models\Region;
 use App\Models\Dinas;
 use App\Models\Region;
 use App\Models\Row;
@@ -17,6 +15,7 @@ use App\Models\Subject;
 use App\Models\Turtahun;
 use App\Models\TurTahunGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class TabelController extends Controller
 {
@@ -99,14 +98,6 @@ class TabelController extends Controller
             'tables' => $table_objects,
         ]);
     }
-    public function test()
-    {
-        //
-        $tabel = Tabel::all();
-        return view('tabel.test', [
-            'tabel' => $tabel
-        ]);
-    }
 
     public function getDatacontent(Request $request)
     {
@@ -147,13 +138,7 @@ class TabelController extends Controller
             ->select('rows.id', 'rows.label', 'rowlabels.label as tipe')
             ->get();
     }
-    public function get_rows_by_row_labels($id_rowLabels)
-    {
-        return Row::join('rowlabels', 'rows.id_rowlabels', '=', 'rowlabels.id')
-            ->where('rows.id_rowlabels', $id_rowLabels) // tbd
-            ->select('rows.id', 'rows.label', 'rowlabels.label as tipe')
-            ->get();
-    }
+
     public function create()
     {
         $tabel = Tabel::all();
@@ -178,28 +163,7 @@ class TabelController extends Controller
 
         ]);
     }
-        $tabel = Tabel::all();
-        $rowLabel = RowLabel::get();
-        $daftar_dinas = Dinas::get();
-        $daftar_kolom = Column::get();
-        $kolom_grup = ColumnGroup::get();
-        $subjects = Subject::all();
-        $turtahun_groups = TurTahunGroup::all();
 
-        // $row_list = $this->get_rows_by_row_labels(1);
-
-        return view('tabel.create', [
-            'tabel' => $tabel,
-            'row_labels' => $rowLabel,
-            'daftar_dinas' => $daftar_dinas,
-            'daftar_kolom' => $daftar_kolom,
-            'turtahun_groups' => $turtahun_groups,
-            // 'row_list' => $row_list,
-            'kolom_grup' => $kolom_grup,
-            'subjects' => $subjects,
-
-        ]);
-    }
     /**
      * Store a newly created resource in storage.
      */
@@ -258,10 +222,11 @@ class TabelController extends Controller
      */
     public function show(string $id)
     {
-        $tabel = Tabel::where('id', $id)->first();;
+        $decryptedId = Crypt::decrypt($id);
+        $tabel = Tabel::where('id', $decryptedId)->first();;
 
 
-        $data = Datacontent::where('label', 'LIKE', $id . '-%')->get();
+        $data = Datacontent::where('label', 'LIKE', $decryptedId . '-%')->get();
         $id_rows = [];
         $id_columns = [];
         $tahuns = [];
@@ -310,7 +275,7 @@ class TabelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+
     public function update(Request $request)
     {
         $data = $request->data;
