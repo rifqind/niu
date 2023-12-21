@@ -48,6 +48,13 @@
         <script>
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('dinas.store') }}")
+            document.addEventListener("DOMContentLoaded", function() {
+                document
+                    .getElementById("dinas-save")
+                    .addEventListener("click", function(e) {
+                        saveDinas();
+                    });
+            })
         </script>
     </x-slot>
 </x-niu-layout>

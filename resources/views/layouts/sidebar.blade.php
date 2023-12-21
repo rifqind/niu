@@ -92,46 +92,65 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item {{ Request::is('tables*') ? 'menu-open' : '' }}">
+                        <a href="" class="nav-link {{ Request::is('tables*') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-building"></i>
+                            <p>
+                                Kelola Master
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ url('subject/index') }}"
+                                    class="nav-link {{ Request::is('subject/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-tags"></i>
+                                    <p>Kelola Subjek</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('column-group/index') }}"
+                                    class="nav-link {{ Request::is('column-group/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fas fa-bars"></i>
+                                    <p>Kelola Kelompok Kolom</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('column/index') }}"
+                                    class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fas fa-bars"></i>
+                                    <p>Kelola Kolom</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('rows/index') }}"
+                                    class="nav-link {{ Request::is('rows/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fas fa-th-list"></i>
+                                    <p>Kelola Baris</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('periode/index') }}"
+                                    class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid far fa-calendar-alt"></i>
+                                    <p>Kelola Periode</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('periode-group/index') }}"
+                                    class="nav-link {{ Request::is('periode-group/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid far fa-calendar-alt"></i>
+                                    <p>Kelola Kelompok Periode</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item">
                         <a href="{{ url('user/index') }}"
                             class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-users"></i>
                             <p>Kelola Pengguna</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('subject/index') }}"
-                            class="nav-link {{ Request::is('subject/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-tags"></i>
-                            <p>Kelola Subjek</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('column-group/index') }}"
-                            class="nav-link {{ Request::is('column-group/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fas fa-bars"></i>
-                            <p>Kelola Kelompok Kolom</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('column/index') }}"
-                            class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fas fa-bars"></i>
-                            <p>Kelola Kolom</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('rows/index') }}"
-                            class="nav-link {{ Request::is('rows/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fas fa-th-list"></i>
-                            <p>Kelola Baris</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('periode/index') }}"
-                            class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid far fa-calendar-alt"></i>
-                            <p>Kelola Periode</p>
                         </a>
                     </li>
                 @endif

@@ -168,7 +168,7 @@ class TabelController extends Controller
         $tabel = Tabel::where('id', $id)->first();;
 
 
-        $data = Datacontent::where('label', 'LIKE', $id . '%')->get();
+        $data = Datacontent::where('label', 'LIKE', $id . '-%')->get();
         $id_rows = [];
         $id_columns = [];
         $tahuns = [];

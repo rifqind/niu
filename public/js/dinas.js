@@ -1,5 +1,4 @@
-$("#dinas-save").click(function () {
-    // $('.loader').removeClass('d-none');
+function saveDinas() {
     $.ajax({
         type: "POST",
         url: save_URL.href,
@@ -20,7 +19,7 @@ $("#dinas-save").click(function () {
             alert(data);
         },
     });
-});
+}
 
 function updateTable(dinas) {
     $("#tabel-dinas tbody").empty();
@@ -56,38 +55,7 @@ function updateTable(dinas) {
         );
     });
 }
-
-$(document).on("click", ".update-pen", function (e) {
-    // Your click event handling code here
-    let check = $("#cariDinas").val();
-    if (check != "") {
-        let dinas = $(this).data("dinas");
-        let split_dinas = dinas.split(/\s*,\s*/);
-        let id = split_dinas[0];
-        let nama = split_dinas[1];
-        let id_regions = split_dinas[2];
-        $("#idHidden").val(id);
-        $("#namaModal").val(nama);
-        $("#regionsModal").val(id_regions);
-        $(`#regionsModal option[value='${id_regions}']`).prop("selected", true);
-        $("#regionsModal").trigger("change");
-    } else {
-        e.preventDefault();
-        let dinas = $(this).data("dinas");
-        console.log(dinas);
-        //change value modal
-        $("#idHidden").val(dinas.id);
-        $("#namaModal").val(dinas.nama);
-        $("#regionsModal").val(dinas.id_regions);
-        $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
-            "selected",
-            true
-        );
-        $("#regionsModal").trigger("change");
-    }
-});
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     $("form").submit(function (e) {
         e.preventDefault();
         $(".spinner-border").removeClass("d-none");
@@ -149,19 +117,51 @@ $(document).ready(function () {
             },
         });
     });
-});
+    $(document).on("click", ".delete-trash", function (e) {
+        // Your click event handling code here
+        let check = $("#cariDinas").val();
+        if (check != "") {
+            let dinas = $(this).data("dinas");
+            $("#idHidden").val(dinas);
+        } else {
+            e.preventDefault();
+            let dinas = $(this).data("dinas");
+            console.log(dinas);
+            //change value modal
+            $("#idHidden").val(dinas.id);
+        }
+    });
 
-$(document).on("click", ".delete-trash", function (e) {
-    // Your click event handling code here
-    let check = $("#cariDinas").val();
-    if (check != "") {
-        let dinas = $(this).data("dinas");
-        $("#idHidden").val(dinas);
-    } else {
-        e.preventDefault();
-        let dinas = $(this).data("dinas");
-        console.log(dinas);
-        //change value modal
-        $("#idHidden").val(dinas.id);
-    }
+    $(document).on("click", ".update-pen", function (e) {
+        // Your click event handling code here
+        let check = $("#cariDinas").val();
+        if (check != "") {
+            let dinas = $(this).data("dinas");
+            let split_dinas = dinas.split(/\s*,\s*/);
+            let id = split_dinas[0];
+            let nama = split_dinas[1];
+            let id_regions = split_dinas[2];
+            $("#idHidden").val(id);
+            $("#namaModal").val(nama);
+            $("#regionsModal").val(id_regions);
+            $(`#regionsModal option[value='${id_regions}']`).prop(
+                "selected",
+                true
+            );
+            $("#regionsModal").trigger("change");
+        } else {
+            e.preventDefault();
+            let dinas = $(this).data("dinas");
+            console.log(dinas);
+            //change value modal
+            $("#idHidden").val(dinas.id);
+            $("#namaModal").val(dinas.nama);
+            $("#regionsModal").val(dinas.id_regions);
+            $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
+                "selected",
+                true
+            );
+            $("#regionsModal").trigger("change");
+        }
+    });
 });

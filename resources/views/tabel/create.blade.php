@@ -26,8 +26,8 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body">
-                <p>Buat Tabel</p>
+            <div class="card-body bg-info text-center">
+                <h2>Buat Tabel</h2>
             </div>
         </div>
 
@@ -36,7 +36,8 @@
             <b>Detail Tabel</b>
             <div class="form-group">
                 <label for="dinas">Dinas Tabel</label>
-                <select name="dinas" class="form-control select2-selection">
+                <select name="dinas" class="form-control select2-selection select2bs4">
+                    <option value="">-- Pilih Dinas --</option>
                     @foreach ($daftar_dinas as $item)
                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                     @endforeach
@@ -53,7 +54,8 @@
             <div class="form-group">
                 <label for="subjek">Subjek Tabel</label>
 
-                <select name="subjek" class="form-control select2 select2-selection">
+                <select name="subjek" class="form-control select2 select2-selection select2bs4">
+                    <option value="">-- Pilih Subjek --</option>
                     @foreach ($subjects as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -69,7 +71,8 @@
             <br>
             <div class="form-group">
                 <label for="row-label">Row Label</label>
-                <select name="row-label" class="form-control select2-selection" id="row-label-select">
+                <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select">
+                    <option value="">-- Pilih Row Label --</option>
                     @foreach ($row_labels as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -104,7 +107,8 @@
 
             <div class="form-group">
                 <label for="column-group">Grup Kolom</label>
-                <select name="column-group" class="form-control select2-selection" id="column-group-select">
+                <select name="column-group" class="form-control select2-selection select2bs4" id="column-group-select">
+                    <option value="">-- Pilih Grup Kolom --</option>
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -134,12 +138,14 @@
             <br>
             <div class="form-group">
                 <label for="tahun">Tahun Tabel</label>
-                <select name="tahun" id="tahun" class="form-control select2-selection"></select>
+                <select name="tahun" id="tahun" class="form-control select2-selection select2bs4"></select>
             </div>
 
             <div class="form-group">
                 <label for="turtahun-group">Jenis Turunan Tahun</label>
-                <select name="turtahun-group" class="form-control select2-selection" id="turtahun-group-select">
+                <select name="turtahun-group" class="form-control select2-selection select2bs4"
+                    id="turtahun-group-select">
+                    <option value="">-- Pilih Turunan Tahun / Periode --</option>
                     @foreach ($turtahun_groups as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -167,7 +173,7 @@
                 </tbody>
             </table>
 
-            <button type="button" id="submit-create-table" class="btn btn-primary">Buat Tabel</button>
+            <button type="button" id="submit-create-table" class="btn btn-info">Buat Tabel</button>
         </form>
 
     </div>
@@ -250,7 +256,7 @@
                 console.log({
                     data
                 })
-
+                // return 0;
 
                 // prepare sending data
 
@@ -277,7 +283,7 @@
                 xhr.send(jsonData);
             }
 
-            function handleLabel(url, nameLabel, bodyHtmlId) {
+            function handleLabel(url, nameLabel, bodyHtmlId, ) {
                 // Create URL with parameters
                 // let url = '{{ route('rows.fetch') }}?id_rowLabels=' + id_rowLabels;
 
@@ -323,11 +329,17 @@
 
 
 
-            document.getElementById('submit-create-table').addEventListener('click', handleSubmitCreateTable);
 
-            $(document).ready(function() {
+            document.addEventListener('DOMContentLoaded', function() {
 
-                $('.select2-selection').select2({});
+                document.getElementById('submit-create-table').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    handleSubmitCreateTable();
+
+                });
+
+                // $('.select2bs4').select2();
+
                 $('#row-label-select').on('select2:select', () => {
                     let idRowLabel = document.getElementById('row-label-select').value;
                     let rowLabelUrl = `{{ route('rows.fetch') }}?id_rowLabels=${idRowLabel}`;
@@ -345,6 +357,7 @@
                     let rowLabelUrl = `{{ route('turtahungroups.fetch') }}?id_turtahunGroup=${idRowLabel}`;
 
                     handleLabel(rowLabelUrl, 'turtahun', 'turtahun-list-body');
+
                 });
 
                 $('#select-toggle-column').on('click', (event) => {
@@ -371,7 +384,7 @@
                 document.getElementsByName('nomor')[0].value = "000/1";
                 document.getElementsByName('judul')[0].value = "Judul Tabel";
                 document.getElementsByName('unit')[0].value = "Unit asw";
-                $('.select2-selection').trigger('change');
+                // $('.select2-selection').trigger('change');
 
             });
         </script>

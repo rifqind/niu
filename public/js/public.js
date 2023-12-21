@@ -1,4 +1,4 @@
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     $("#select-tabel").on("change", function () {
         let tabel = $(this).val();
         url_key.searchParams.set("tabel_id", encodeURIComponent(tabel));

@@ -117,6 +117,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('periode/{id}', [PeriodeController::class, 'destroy'])->name('periode.destroy');
 
     // turtahun groups
+    Route::get('/periode-group/index', [TurTahunGroupsController::class, 'index'])->name('periode_group.index');
+    Route::get('/periode-group/create', [TurTahunGroupsController::class, 'create'])->name('periode_group.create');
+    Route::post('/periode-group/store', [TurTahunGroupsController::class, 'store'])->name('periode_group.store');
+    Route::get('/periode-group/edit/{id}', [TurTahunGroupsController::class, 'edit'])->name('periode_group.edit');
+    Route::put('/periode-group/update', [TurTahunGroupsController::class, 'update'])->name('periode_group.update');
+    Route::delete('periode-group/{id}', [TurTahunGroupsController::class, 'destroy'])->name('periode_group.destroy');
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
 });
 require __DIR__ . '/auth.php';

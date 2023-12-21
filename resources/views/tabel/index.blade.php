@@ -69,21 +69,10 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
-            $(function() {
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                })
-            });
         </script>
     </x-slot>
 </x-niu-layout>
