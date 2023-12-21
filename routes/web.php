@@ -22,10 +22,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware('guest')->group(function (){
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/view/{id}', [HomeController::class, 'show'])->name('home.view');
-});
+// Route::middleware('guest')->group(function (){
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.view');
+Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
+// });
 
 Route::middleware('auth')->get('/', function () {
     return view('dashboard');

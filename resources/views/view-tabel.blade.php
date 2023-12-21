@@ -23,31 +23,31 @@
                         <tr>
                             <th rowspan="2" class="text-center align-middle">#</th>
                             <th rowspan="2" class="text-center align-middle">{{ $row_label[0]->label }}</th>
-                            @foreach ($tahuns as $tahun)
-                                <th colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">{{ $tahun }}
-                                </th>
-                            @endforeach
+                            {{-- @foreach ($tahuns as $tahun) --}}
+                            <th colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
+                                {{ $tahun }}
+                            </th>
+                            {{-- @endforeach --}}
                         </tr>
                         {{-- kolom grup var  --}}
                         {{-- kolom var  --}}
                         <tr>
                             @foreach ($turtahuns as $turtahun)
-                                @foreach ($tahuns as $tahun)
+                                {{-- @foreach ($tahuns as $tahun) --}}
                                     @foreach ($columns as $index => $column)
                                         <th class="text-center">{{ $column->label }}</th class="text-center">
                                     @endforeach
-                                @endforeach
+                                {{-- @endforeach --}}
                             @endforeach
-        
+
                         </tr>
                     </thead>
-        
                     <tbody>
                         @foreach ($rows as $key => $row)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $row->label }}</td>
-                                @foreach ($tahuns as $tahun)
+                                {{-- @foreach ($tahuns as $tahun) --}}
                                     @foreach ($turtahuns as $turtahun)
                                         @foreach ($columns as $column)
                                             <td class="text-right"
@@ -55,7 +55,7 @@
                                             </td>
                                         @endforeach
                                     @endforeach
-                                @endforeach
+                                {{-- @endforeach --}}
                             </tr>
                         @endforeach
                     </tbody>
