@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Column;
 use App\Models\ColumnGroup;
+use App\Models\ColumnGroup;
 use App\Models\Datacontent;
+use App\Models\Dinas;
+use App\Models\Region;
 use App\Models\Dinas;
 use App\Models\Region;
 use App\Models\Row;
@@ -21,6 +24,44 @@ class TabelController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+    {
+        //
+        $tables = Tabel::all();
+        $table_objects = [];
+        $daftar_region = Region::get();
+        foreach ($tables as $table) {
+            $tabels = Tabel::where('id', $table->id)->get();
+            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
+
+            $id_rows = [];
+            $id_columns = [];
+            foreach ($data as $dat) {
+                $split = explode("-", $dat->label);
+                array_push($id_rows, $split[1]);
+                array_push($id_columns, $split[2]);
+                $tahun = $split[3];
+                $turtahuns = $split[4];
+            }
+            $rows = Row::whereIn('id', $id_rows)->get();
+            $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+            $columns = Column::whereIn('id', $id_columns)->get();
+            array_push($table_objects, [
+                'datacontents' => $data,
+                'tabels' => $tabels,
+                'rows' => $rows,
+                'row_label' => $rowLabel,
+                'columns' => $columns,
+                'tahun' => $tahun,
+                'turtahuns' => $turtahuns,
+            ]);
+        }
+
+
+        return view('tabel.index', [
+            'tables' => $table_objects,
+        ]);
+    }
+    public function test()
     {
         //
         $tables = Tabel::all();
@@ -106,8 +147,37 @@ class TabelController extends Controller
             ->select('rows.id', 'rows.label', 'rowlabels.label as tipe')
             ->get();
     }
+    public function get_rows_by_row_labels($id_rowLabels)
+    {
+        return Row::join('rowlabels', 'rows.id_rowlabels', '=', 'rowlabels.id')
+            ->where('rows.id_rowlabels', $id_rowLabels) // tbd
+            ->select('rows.id', 'rows.label', 'rowlabels.label as tipe')
+            ->get();
+    }
     public function create()
     {
+        $tabel = Tabel::all();
+        $rowLabel = RowLabel::get();
+        $daftar_dinas = Dinas::get();
+        $daftar_kolom = Column::get();
+        $kolom_grup = ColumnGroup::get();
+        $subjects = Subject::all();
+        $turtahun_groups = TurTahunGroup::all();
+
+        // $row_list = $this->get_rows_by_row_labels(1);
+
+        return view('tabel.create', [
+            'tabel' => $tabel,
+            'row_labels' => $rowLabel,
+            'daftar_dinas' => $daftar_dinas,
+            'daftar_kolom' => $daftar_kolom,
+            'turtahun_groups' => $turtahun_groups,
+            // 'row_list' => $row_list,
+            'kolom_grup' => $kolom_grup,
+            'subjects' => $subjects,
+
+        ]);
+    }
         $tabel = Tabel::all();
         $rowLabel = RowLabel::get();
         $daftar_dinas = Dinas::get();
@@ -135,6 +205,29 @@ class TabelController extends Controller
      */
     public function store(Request $request)
     {
+        // insert table
+        $newTable = Tabel::create($request->table);
+        $periodes = Turtahun::where('type', $request->periode['periode'])->get();
+        // generate datacontents
+        $data_contents = [];
+        foreach ($request->rows["rows_selected"] as $row) {
+            foreach ($request->columns["columns"] as $column) {
+                foreach ($periodes as $period) {
+
+                    $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
+                    $datavalue = "";
+                    array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
+                }
+            }
+        }
+        Datacontent::insert($data_contents);
+        return response()->json([
+            "column" => $request->columns,
+            "periode" => $request->periode,
+            "row" => $request->rows,
+            "table" => $request->table,
+            'dat' => $data_contents
+        ]);
         // insert table
         $newTable = Tabel::create($request->table);
         $periodes = Turtahun::where('type', $request->periode['periode'])->get();
@@ -218,7 +311,17 @@ class TabelController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
+    public function update(Request $request)
     {
+        $data = $request->data;
+
+
+        // Update records in a single query
+        foreach ($data as $item) {
+
+            Datacontent::where('id', $item['id'])->update($item);
+        }
+        return response()->json($data);
         $data = $request->data;
 
 

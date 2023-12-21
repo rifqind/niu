@@ -20,6 +20,9 @@ class ColumnController extends Controller
         $columns = Column::join('column_groups', 'columns.id_columns_group', 'column_groups.id')->select('columns.id', 'columns.label', 'column_groups.label as tipe')->get();
 
         return view('column.index', ['columns' => $columns]);
+        // $columns = Column::join('column_groups', 'columns.id_column_group', 'column_groups.id')->select('columns.id', 'columns.label', 'column_groups.label as tipe')->get();
+        $columns = Column::all();
+        return view('columns.index', ['columns' => $columns]);
     }
 
     /**
@@ -30,6 +33,7 @@ class ColumnController extends Controller
         $column_groups = ColumnGroup::get();
 
         return view('column.create', ['column_groups' => $column_groups]);
+        //
     }
 
     /**
@@ -41,6 +45,7 @@ class ColumnController extends Controller
 
         $insertedRow = Column::create($validatedData);
         return redirect(route('column.index'))->with(['success' => 'Berhasil menambahkan kolom dengan id ' . $insertedRow->id]);
+        //
     }
 
     /**
@@ -64,6 +69,7 @@ class ColumnController extends Controller
 
         return view('column.edit', ['column' => $column, 'column_groups' => $column_groups, 'decrypted_id' => $decryptedId]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,6 +105,7 @@ class ColumnController extends Controller
         }
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
@@ -114,6 +121,7 @@ class ColumnController extends Controller
         // Respond with a JSON success message
         return redirect()->back()->with('error', 'Berhasil menghapus kolom !');
     }
+
     public function fetch(Request $request)
     {
         $id_columnGroups = $request->query('id_columnGroups');
@@ -121,6 +129,14 @@ class ColumnController extends Controller
             ->where('columns.id_columns_group', $id_columnGroups) // tbd
             ->select('columns.id', 'columns.label', 'column_groups.label as tipe')
             ->get();
+        // $response_data = Column::join('column_groups', 'columns.id_columns_group', '=', 'column_groups.id')
+        //     ->where('columns.id_columns_group', $id_columnGroups) // tbd
+        //     ->select('columns.id', 'columns.label', 'column_groups.label as tipe')
+        //     ->get();
+
+        $response_data = Column::where('columns.id_column_group', $id_columnGroups)
+            ->leftJoin('column_groups', 'columns.id_column_group', '=', 'column_groups.id')
+            ->get(['columns.*', 'column_groups.label as tipe']);
         return response()->json(['data' => $response_data, 'status' => 200]);
     }
 }

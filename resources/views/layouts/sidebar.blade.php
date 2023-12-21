@@ -163,14 +163,13 @@
                 </li>
                 @if (auth()->user()->satker_id == 1)
                     <li class="nav-item">
-                        <a href="{{ url('fenomena/monitoring') }}"
-                            class="nav-link {{ Request::is('fenomena/monitoring') ? 'active' : '' }}">
-                            <i class="far fa-star-half nav-icon"></i>
-                            <p>Monitoring Fenomena</p>
+                        <a href="{{ url('periods/index') }}"
+                            class="nav-link {{ Request::is('periods/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid far fa-calendar-alt"></i>
+                            <p>Kelola Periode</p>
                         </a>
                     </li>
                 @endif
-
                 @can('admin')
                     <li class="nav-header">PENGATURAN</li>
                     <li class="nav-item">

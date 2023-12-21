@@ -23,7 +23,7 @@
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js'])
 </head>
 
 <body class="hold-transition layout-fixed">
@@ -35,55 +35,39 @@
             </div>
         </div>
         <!-- Navbar -->
-        @include('layouts.modal')
-
-        @include('layouts.navbar')
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #a80606">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active mx-3">
+                        <a class="nav-link text-white text-bold" href="{{ route('home') }}">Beranda</a>
+                    </li>
+                    <li class="nav-item active mx-3">
+                        <a class="nav-link text-white text-bold" href="{{ route('users.login') }}">Masuk</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('layouts.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>
-                            </h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                {{ $breadcrumb }}
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.container-fluid -->
-            </section>
-
+        <div class="content-wrapper ml-0">
             <!-- Main content -->
             <section class="content">
-
-                {{-- <div class="loader d-none">
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-success"></div>
-                </div> --}}
-
-                <div class="container-fluid">
-                    {{ $slot }}
-                </div>
-
+                {{ $slot }}
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-
-        @include('layouts.footer')
+        <footer class="main-footer ml-0">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 3.2.0
+            </div>
+            <div class="text-center">
+                <strong>Copyright &copy; 2023 <a href="https://sulut.bps.go.id">BPS Provinsi Sulawesi Utara</a></strong>
+            </div>
+        </footer>
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -94,11 +78,27 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-
+    <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
+    <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        $(function() {
             //Initialize Select2 Elements
+            $('.select2').select2()
 
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+            })
+            $('.select-multiple').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                multiple: true,
+            })
         });
     </script>
     {{ $script }}

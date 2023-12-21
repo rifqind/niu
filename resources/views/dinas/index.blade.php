@@ -55,11 +55,7 @@
                         <td class="text-center">{{ $din->regions->nama }}</td>
                         <td class="text-center">
                             <a href="" class="update-pen"
-                                data-dinas="{{ json_encode([
-                                    'id' => $din->id,
-                                    'nama' => $din->nama,
-                                    'id_regions' => $din->id_regions,
-                                ]) }}"
+                            data-dinas="{{ $din->id . ";" . $din->nama . ";" . $din->id_regions}}"
                                 data-toggle="modal" data-target="#updateModal">
                                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
                             </a>
@@ -77,11 +73,7 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="text-center">
-            <div class="spinner-border d-none" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
+        
     </div>
     @include('dinas.modal')
     <x-slot name="script">
@@ -90,6 +82,7 @@
             const tokens = '{{ csrf_token() }}'
             const update_URL = new URL("{{ route('dinas.update') }}")
             const delete_URL = new URL("{{ route('dinas.delete') }}")
+            const this_URL = window.location.href
         </script>
     </x-slot>
 </x-niu-layout>

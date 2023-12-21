@@ -45,6 +45,15 @@ class UserController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $id_regions = Region::getRegionId();
+        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
+        return view('user.create', [
+            'dinas' => $dinas,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -52,11 +61,11 @@ class UserController extends Controller
     {
         //
         $request->validate([
-            'username' => ['required', 'string', 'unique:' . User::class],
+            'username' => ['required', 'string', 'lowercase', 'unique:' . User::class],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'noHp' => ['required', 'string', 'max:13']
+            'noHp' => ['required', 'string', 'max:13', 'min:12']
         ]);
         // dd($request->username);
         $user = User::create([
@@ -72,6 +81,32 @@ class UserController extends Controller
             'user' => $user
         ]);
         // return redirect('users.login');
+    }
+
+    public function addUser(Request $request)
+    {
+        $request->validate([
+            'username' => ['required', 'string', 'unique:' . User::class],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string'],
+            'noHp' => ['required', 'string', 'max:13']
+        ]);
+        // dd($request->username);
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'noHp' => $request->noHp,
+            'role' => $request->role,
+            'id_dinas' => $request->id_dinas,
+        ]);
+        return response()->json([
+            'message' => 'Berhasil',
+            'user' => $user
+        ]);
     }
 
     public function search(Request $request)
