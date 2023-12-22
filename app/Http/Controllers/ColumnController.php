@@ -134,8 +134,8 @@ class ColumnController extends Controller
         //     ->select('columns.id', 'columns.label', 'column_groups.label as tipe')
         //     ->get();
 
-        $response_data = Column::where('columns.id_column_group', $id_columnGroups)
-            ->leftJoin('column_groups', 'columns.id_column_group', '=', 'column_groups.id')
+        $response_data = Column::where('columns.id_columns_group', $id_columnGroups)
+            ->leftJoin('column_groups', 'columns.id_columns_group', '=', 'column_groups.id')
             ->get(['columns.*', 'column_groups.label as tipe']);
         return response()->json(['data' => $response_data, 'status' => 200]);
     }

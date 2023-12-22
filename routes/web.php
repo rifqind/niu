@@ -51,16 +51,16 @@ Route::middleware('auth')->group(function () {
 
 //tabel
 Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tables/index', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tables/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
-Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
-Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
-Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
-Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
-Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
+Route::get('/tabel/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
+Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
+Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
+Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+Route::post('/tabel/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
+Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
+Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
+Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->middleware(['auth', 'verified'])->name('tabel.edit');
+
 Route::delete('tabel/{id}', [TabelController::class, 'destroy'])->name('tabel.destroy');
 
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');

@@ -25,11 +25,17 @@ class TabelController extends Controller
     public function index()
     {
         //
-        $tables = Tabel::all();
+        $tables = Tabel::join('statustables', 'statustables.id_tabel', 'tabels.id')
+            ->select('tabels.*', 'statustables.tahun', 'statustables.status')
+            ->get();
         $table_objects = [];
         $daftar_region = Region::get();
         foreach ($tables as $table) {
-            $tabels = Tabel::where('id', $table->id)->get();
+            $tabels = Tabel::where('tabels.id', $table->id)
+                ->join('statustables AS s', 's.id_tabel', '=', 'tabels.id')
+                ->join('status_desc as sdesc', 'sdesc.id', '=', 's.status')
+                ->select('tabels.*', 's.tahun', 'sdesc.label as status')
+                ->get();
             $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
 
             $id_rows = [];
@@ -269,7 +275,47 @@ class TabelController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $decryptedId = Crypt::decrypt($id);
+        $tabel = Tabel::where('id', $decryptedId)->first();
+        // search for id row label
+        $data_contents = DataContent::where('label', 'like', $decryptedId . '-%')->first();
+        $splittedData = explode("-", $data_contents->label);
+        $id_row = $splittedData[1];
+
+        // search for id column group
+        $id_column = $splittedData[2];
+
+        //search for turtahun
+        $id_turtahun = $splittedData[4];
+
+
+
+        $rowLabel = RowLabel::get();
+        $row_label = Rowlabel::where('id', $id_row)->first();
+        $daftar_dinas = Dinas::get();
+        $daftar_kolom = Column::get();
+        $kolom_grup = ColumnGroup::get();
+        $column = Column::where('id', $id_column)->first();
+        $subjects = Subject::all();
+        $turtahun_groups = TurTahunGroup::all();
+        $turtahun = Turtahun::where('id', $id_turtahun)->first();
+
+        // $row_list = $this->get_rows_by_row_labels(1);
+
+        return view('tabel.edit', [
+            'tabel' => $tabel,
+            'row_labels' => $rowLabel,
+            'row_label' => $row_label,
+            'daftar_dinas' => $daftar_dinas,
+            'daftar_kolom' => $daftar_kolom,
+            'column' => $column,
+            'turtahun_groups' => $turtahun_groups,
+            'turtahun' => $turtahun,
+            // 'row_list' => $row_list,
+            'kolom_grup' => $kolom_grup,
+            'subjects' => $subjects,
+
+        ]);
     }
 
     /**

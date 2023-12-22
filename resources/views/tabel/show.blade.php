@@ -26,6 +26,7 @@
         </button>
     </div>
     <div class="container">
+
         <div class="card">
             <div class="card-body bg-info">
                 <h2>{{ $tabel->label }}</h2>
@@ -33,7 +34,6 @@
         </div>
 
         </select>
-        {{-- <hr> --}}
         <table class="table table-bordered table-hover">
             <thead class="bg-info">
                 {{-- kolom tahun --}}
@@ -87,6 +87,7 @@
             </tbody>
             <tfoot></tfoot>
         </table>
+        {{-- <hr> --}}
         <div class="container">
             <div class="row">
                 <div class="col text-left">

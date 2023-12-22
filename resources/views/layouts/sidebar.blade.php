@@ -73,7 +73,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ url('tables/index') }}"
+                                <a href="{{ route('tabel.index') }}"
                                     class="nav-link {{ Request::is('tables/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-list-ol"></i>
                                     <p>
@@ -82,7 +82,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('tables/create') }}"
+                                <a href="{{ route('tabel.create') }}"
                                     class="nav-link {{ Request::is('tables/create') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-plus"></i>
                                     <p>

@@ -33,16 +33,16 @@
         </div>
         <table id="tabel" class="table table-bordered table-hover">
             <thead id="header-tabel" class="bg-info">
-                <tr>
-                    <td>#</td>
-                    <td>Nama Tabel</td>
-                    <td>Nama Row</td>
-                    <td>Daftar Kolom</td>
-                    <td>Tahun</td>
-                    <td>Status Pengisian</td>
-                    <td>Cek / Ubah Isian</td>
-                    <td>Ubah Struktur</td>
-                    <td>Hapus</td>
+                <tr scope="col">
+                    <td class="align-middle">#</td>
+                    <td class="align-middle">Nama Tabel</td>
+                    <td class="align-middle">Nama Row</td>
+                    <td class="align-middle">Daftar Kolom</td>
+                    <td class="align-middle">Tahun</td>
+                    <td class="align-middle">Status Pengisian</td>
+                    <td class="align-middle">Cek / Ubah Isian</td>
+                    <td class="align-middle">Ubah Struktur</td>
+                    <td class="align-middle">Hapus</td>
                 </tr>
             </thead>
             <tbody id="body-tabel" class="bg-white">
@@ -58,9 +58,8 @@
                                 </span>
                             @endforeach
                         </td>
-                        <td><span class="badge badge-info">2023</span><a href="#" class="badge badge-info"><i
-                                    class="fas fa-plus"></i>Tambah Tahun</a></td>
-                        <td>...</td>
+                        <td><span class="badge badge-info">{{ $tab['tabels'][0]->tahun }}</span></td>
+                        <td>{{ $tab['tabels'][0]->status }}</td>
                         <td>
                             {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
                             <a
@@ -70,7 +69,7 @@
                         </td>
                         <td>
                             <a
-                                href="{{ route('tabel.update', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['tabels'][0]->id)]) }}"><i
+                                href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['tabels'][0]->id)]) }}"><i
                                     class="fas fa-cog text-info"></i></a>
 
                             {{-- <a href="/tables/edit/{{ $tab['tabels'][0]->id }}">Ubah</a> --}}
@@ -100,6 +99,9 @@
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log({{ Js::from($tables) }});
+            })
         </script>
     </x-slot>
 </x-niu-layout>
