@@ -10,7 +10,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-xl-12 col-lg-7 p-0">
-                <div class="card shadow mb-4 bg-gradient-primary">
+                <div class="card shadow mb-4 custom-card">
                     <!-- Card Body -->
                     <div class="card-body d-flex align-items-start flex-column">
                         <div class=" mb-auto p-2"></div>
@@ -60,7 +60,8 @@
                                         <div class="row my-2" style="min-width: 50vw">
                                             <input type="checkbox" id="{{ 'dinas-' . $region->id }}" class="ml-3"
                                                 name="wilayah[]" value="{{ $region->id }}">
-                                            <div class="ml-3 mb-0" for="{{ 'dinas-' . $region->id }}">
+                                            <div class="ml-3 mb-0 click-to-check"
+                                                data-target="{{ 'dinas-' . $region->id }}">
                                                 {{ $region->nama }}
                                             </div>
                                         </div>
@@ -101,7 +102,8 @@
                                         <div class="row my-2" style="min-width: 50vw">
                                             <input type="checkbox" id="{{ 'subject-' . $subject->id }}" class="ml-3"
                                                 name="subject[]" value="{{ $subject->id }}">
-                                            <div class="ml-3 mb-0" for="{{ 'subject-' . $subject->id }}">
+                                            <div class="ml-3 mb-0 click-to-check"
+                                                data-target="{{ 'subject-' . $subject->id }}">
                                                 {{ $subject->label }}
                                             </div>
                                         </div>
@@ -109,10 +111,17 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" name="searchData" placeholder="Cari Kata Kunci"
-                            class="form-control shadow mb-3">
-                        <div class="row pr-3 pb-2">
-                            <button type="submit" class="btn btn-primary ml-auto">Submit</button>
+
+                        <div class="d-flex">
+                            <input type="text" name="searchData" placeholder="Cari dengan Kata Kunci"
+                                class="form-control mb-3 mr-2">
+                            {{-- <div class="row pr-3 pb-2"> --}}
+                                <button type="submit" class="btn ml-auto mb-3" style="background-color:#a80606">
+                                    <div class="text-white">
+                                        <i class="fa-brands fa-searchengin"></i> Cari
+                                    </div>
+                                </button>
+                            {{-- </div> --}}
                         </div>
                     </form>
                 </div>
