@@ -5,6 +5,7 @@ $(document).ready(function () {
             "#search-tabel :input:not(#dinas\\[\\]--1-chbx)"
         ).serialize();
         $.ajax({
+
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
             },
@@ -13,6 +14,7 @@ $(document).ready(function () {
                     $("#spinner-border").addClass("d-none");
                 },320);
              },
+
             url: $(this).attr("action"),
             type: "GET",
             data: datas,
