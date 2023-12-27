@@ -19,15 +19,25 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body">
-                <p>Daftar Tabel</p>
+            <div class="card-body bg-info">
+                <h1 class="text-center">Daftar Tabel</h1>
             </div>
         </div>
         <hr>
 
         <div class="row mb-2">
+            @if (session('success'))
+                <div class="alert alert-success temporary-message">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger temporary-message">
+                    {{ session('error') }}
+                </div>
+            @endif
             <div class="col-auto ml-auto">
-
+                <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Tambah Tahun</a>
                 <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Buat Tabel</a>
             </div>
         </div>
@@ -39,6 +49,7 @@
                     <td class="align-middle">Nama Row</td>
                     <td class="align-middle">Daftar Kolom</td>
                     <td class="align-middle">Tahun</td>
+                    <td class="align-middle">Tambah Tahun</td>
                     <td class="align-middle">Status Pengisian</td>
                     <td class="align-middle">Cek / Ubah Isian</td>
                     <td class="align-middle">Ubah Struktur</td>
@@ -49,8 +60,8 @@
                 @foreach ($tables as $index => $tab)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $tab['tabels'][0]->label }}</td>
-                        <td>{{ $tab['row_label'][0]->label }}</td>
+                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">
@@ -58,29 +69,41 @@
                                 </span>
                             @endforeach
                         </td>
-                        <td><span class="badge badge-info">{{ $tab['tabels'][0]->tahun }}</span></td>
-                        <td>{{ $tab['tabels'][0]->status }}</td>
+                        <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
+                        <td class="text-center"><a
+                                href="{{ route('tabel.copy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
+                                    class="fas fa-plus-circle text-info"></i></a></td>
+                        <td>{{ $tab['status'] }}</td>
                         <td>
                             {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
                             <a
-                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['tabels'][0]->id)]) }}">
+                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}">
                                 <i class="fas fa-eye text-info"></i>
                             </a>
                         </td>
                         <td>
                             <a
-                                href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['tabels'][0]->id)]) }}"><i
+                                href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-cog text-info"></i></a>
 
-                            {{-- <a href="/tables/edit/{{ $tab['tabels'][0]->id }}">Ubah</a> --}}
+                            {{-- <a href="/tables/edit/{{ $tab['id'] }}">Ubah</a> --}}
                         </td>
-                        <td>
-                            <a
-                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['tabels'][0]->id)]) }}"><i
-                                    class="fas fa-trash text-info"></i></a>
-
-                            {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
+                        {{-- <td> --}}
+                        {{-- <a
+                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
+                                    class="fas fa-trash text-info"></i></a> --}}
+                        <td class="text-center">
+                            <form id="delete-table-form" method="POST"
+                                action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <a href="#" onclick="handleDeleteTable();" class="delete-trash">
+                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                </a>
+                            </form>
                         </td>
+                        {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
+                        {{-- </td> --}}
 
                         </td>
 
@@ -99,6 +122,13 @@
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
+            const handleDeleteTable = function(encryptedId) {
+                if (confirm('Are you sure you want to delete this subject?')) {
+                    const form = document.getElementById('delete-table-form');
+                    form.submit();
+                }
+
+            }
             document.addEventListener('DOMContentLoaded', function() {
                 console.log({{ Js::from($tables) }});
             })

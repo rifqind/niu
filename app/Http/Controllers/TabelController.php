@@ -11,6 +11,7 @@ use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
 use App\Models\Rowlabel;
+use App\Models\Statustables;
 use App\Models\Subject;
 use App\Models\Turtahun;
 use App\Models\TurTahunGroup;
@@ -25,17 +26,19 @@ class TabelController extends Controller
     public function index()
     {
         //
-        $tables = Tabel::join('statustables', 'statustables.id_tabel', 'tabels.id')
-            ->select('tabels.*', 'statustables.tahun', 'statustables.status')
+        $tables = Statustables::join('tabels', 'statustables.id_tabel', 'tabels.id')
+            ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+            ->select('tabels.*', 'statustables.tahun', 'sdesc.label as status', 'statustables.id as id_statustables')
+
             ->get();
         $table_objects = [];
         $daftar_region = Region::get();
         foreach ($tables as $table) {
-            $tabels = Tabel::where('tabels.id', $table->id)
-                ->join('statustables AS s', 's.id_tabel', '=', 'tabels.id')
-                ->join('status_desc as sdesc', 'sdesc.id', '=', 's.status')
-                ->select('tabels.*', 's.tahun', 'sdesc.label as status')
-                ->get();
+            // $tabels = Statustables::where('id_tabel', $table->id)
+            //     ->join('tabels AS t', 'statustables.id_tabel', '=', 't.id')
+            //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+            //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
+            //     ->get();
             $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
 
             $id_rows = [];
@@ -48,22 +51,32 @@ class TabelController extends Controller
                 $turtahuns = $split[4];
             }
             $rows = Row::whereIn('id', $id_rows)->get();
-            $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+            try {
+                //code...
+                $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+            } catch (\Exception $e) {
+                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id));
+            }
             $columns = Column::whereIn('id', $id_columns)->get();
             array_push($table_objects, [
                 'datacontents' => $data,
-                'tabels' => $tabels,
+                'label' => $table->label,
+                'id' => $table->id,
                 'rows' => $rows,
                 'row_label' => $rowLabel,
                 'columns' => $columns,
-                'tahun' => $tahun,
+                'tahun' => $table->tahun,
                 'turtahuns' => $turtahuns,
+                'status' => $table->status,
+                'id_statustables' => $table->id_statustables,
             ]);
         }
 
+        // dd($tables);
 
         return view('tabel.index', [
             'tables' => $table_objects,
+
         ]);
     }
     public function test()
@@ -222,6 +235,72 @@ class TabelController extends Controller
             'dat' => $data_contents
         ]);
     }
+    public function copy($id)
+    {
+        $decryptedId = Crypt::decrypt($id);
+        $tabel = Tabel::where('id', $decryptedId)->firstOrFail();
+
+        // $rowLabel = RowLabel::get();
+        // $daftar_dinas = Dinas::get();
+        // $daftar_kolom = Column::get();
+        // $kolom_grup = ColumnGroup::get();
+        // $subjects = Subject::all();
+        // $turtahun_groups = TurTahunGroup::all();
+
+        // $row_list = $this->get_rows_by_row_labels(1);
+
+        return view('tabel.copy', [
+            'table' => $tabel,
+            'id' => $id,
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeCopy(Request $request, $id)
+    {
+        $decryptedId = Crypt::decrypt($id);
+        $tabel = Tabel::where('id', $decryptedId)->first();
+        if (!$tabel) {
+            return back()->with('error', 'Tabel tidak dapat Ditemukan !');
+        }
+        // cek if year already exists
+        $tabelStatus = Statustables::where('id_tabel', $decryptedId)
+            ->where('tahun', $request->tahun)
+            ->first();
+        if ($tabelStatus) {
+            return back()->with('error', 'Tabel dengan tahun yang sama sudah dibuat !' . $request->tahun);
+        }
+
+        // get first year entry
+        $firstStatus = Statustables::where('id_tabel', $decryptedId)
+            ->first();
+        // get data contents by tahun and id
+        $pattern = $decryptedId . '-%-' . $firstStatus->tahun . '-%';
+        $dataContents = Datacontent::where('label', 'like', $pattern)->get();
+        $newDataContents = [];
+        foreach ($dataContents as $record) {
+
+            $splittedData = explode('-', $record->label);
+            $splittedData[3] = $request->tahun;
+            $joinedData = implode('-', $splittedData);
+            array_push($newDataContents, ['label' => $joinedData, 'value' => '']);
+        }
+        // add new record in statustabel 
+        try {
+            $newStatus = Statustables::create([
+                'id_tabel' => $decryptedId,
+                'tahun' => $request->tahun,
+                'status' => '1'
+            ]);
+            Datacontent::insert($newDataContents);
+            return redirect(route('tabel.index'))->with('success', 'Berhasil Menyalin Tabel !');
+        } catch (\Exception $e) {
+
+            return back()->with('error', $e->getMessage());
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -347,8 +426,31 @@ class TabelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id_status)
     {
-        //
+        $decryptedId = Crypt::decrypt($id_status);
+
+        try {
+            // cek apakah ada tabel statusnya
+            $statusTabel = Statustables::where('id', $decryptedId)->first();
+            $tahun = $statusTabel->tahun;
+            $id_tabel = $statusTabel->id_tabel;
+
+
+            // hapus tabel status
+            $statusTabel->delete();
+
+            // query datacontent
+            $pattern = $id_tabel . '-%-' . $tahun . '-%';
+            $dataContents = Datacontent::where('label', 'like', $pattern);
+
+            // hapus datacontent
+            $dataContents->delete();
+            // return sukses
+            return redirect(route('tabel.index'))->with('success', 'Berhasil menghapus Tabel !');
+        } catch (\Exception $e) {
+            return response()->json(['status' => $e->getMessage()]);
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

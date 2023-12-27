@@ -59,9 +59,14 @@ Route::post('/tabel/update', [TabelController::class, 'update'])->middleware(['a
 Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+
+Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->middleware(['auth', 'verified'])->name('tabel.copy');
+Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->middleware(['auth', 'verified'])->name('tabel.storeCopy');
+// Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
+
 Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->middleware(['auth', 'verified'])->name('tabel.edit');
 
-Route::delete('tabel/{id}', [TabelController::class, 'destroy'])->name('tabel.destroy');
+Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
 
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
