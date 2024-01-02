@@ -1,7 +1,7 @@
 <x-niu-layout>
     <x-slot name="title">
         {{-- {{ __('Test') }} --}}
-        {{ $tabel->label }}
+        {{ $tabel->judul_tabel }}
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -25,11 +25,11 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="container">
+    <div class="container-fluid">
 
         <div class="card">
             <div class="card-body bg-info">
-                <h2>{{ $tabel->label }}</h2>
+                <h2>{{ $tabel->judul_tabel }}</h2>
             </div>
         </div>
 
@@ -48,7 +48,7 @@
                 <tr>
                     @foreach ($tahuns as $tahun)
                         @foreach ($turtahuns as $turtahun)
-                            <td colspan="2" class="text-center">{{ $turtahun->label }}</td>
+                            <td colspan="{{ sizeof($columns) }}" class="text-center">{{ $turtahun->label }}</td>
                         @endforeach
                     @endforeach
                 </tr>
@@ -77,7 +77,7 @@
                                 @foreach ($columns as $column)
                                     <td><input type="text" class="form-control input-field text-right"
                                             data-id-content=""
-                                            id={{ $tabel->id . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                            id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                     </td>
                                 @endforeach
                             @endforeach
@@ -121,7 +121,6 @@
 
                 });
             });
-
             const handleSaveTable = function(element, buttonInitialText) {
                 element.disabled = true;
 
@@ -145,7 +144,7 @@
 
                 const xhr = new XMLHttpRequest();
 
-                xhr.open('POST', "{{ route('tabel.update') }}", true);
+                xhr.open('PUT', "{{ route('tabel.update_content', $encryptedId) }}", true);
 
                 xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -171,6 +170,7 @@
                 xhr.send(jsonData);
 
             };
+
 
             // Show the success alert
             function showSuccessAlert() {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateTabelRequest;
 use App\Models\Column;
 use App\Models\ColumnGroup;
 
@@ -75,6 +76,67 @@ class TabelController extends Controller
         // dd($tables);
 
         return view('tabel.index', [
+            'tables' => $table_objects,
+
+        ]);
+    }
+    public function master()
+    {
+        //
+        $tables = Tabel::get();
+        // return response()->json(array('data' => $tables));
+        $table_objects = [];
+        $daftar_region = Region::get();
+        foreach ($tables as $table) {
+            // $tabels = Statustables::where('id_tabel', $table->id)
+            //     ->join('tabels AS t', 'statustables.id_tabel', '=', 't.id')
+            //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+            //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
+            //     ->get();
+            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
+
+            $id_rows = [];
+            $tahunObjects = Statustables::where('id_tabel', $table->id)->select('tahun')->distinct()->get();
+
+            $tahuns = $tahunObjects->pluck('tahun')->toArray();
+            $id_columns = [];
+            foreach ($data as $dat) {
+                $split = explode("-", $dat->label);
+                array_push($id_rows, $split[1]);
+                array_push($id_columns, $split[2]);
+                // $tahun = $split[3];
+
+                // if (!in_array($tahun, $tahuns)) {
+                //     $tahuns[] = $tahun;
+                // }
+                $turtahuns = $split[4];
+            }
+            $rows = Row::whereIn('id', $id_rows)->get();
+            try {
+                //code...
+                $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+            } catch (\Exception $e) {
+                // return response()->json(array('data' => $tables));
+                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'data' => $data));
+            }
+            $columns = Column::whereIn('id', $id_columns)->get();
+            array_push($table_objects, [
+                'datacontents' => $data,
+                'label' => $table->label,
+                'id' => $table->id,
+                'rows' => $rows,
+                'row_label' => $rowLabel,
+                'columns' => $columns,
+                'tahuns' => $tahuns,
+                'turtahuns' => $turtahuns,
+                'status' => $table->status,
+                'id_statustables' => $table->id_statustables,
+            ]);
+        }
+
+        // dd($tables);
+
+        return view('tabel.master', [
             'tables' => $table_objects,
 
         ]);
@@ -227,6 +289,13 @@ class TabelController extends Controller
             }
         }
         Datacontent::insert($data_contents);
+        Statustables::create(
+            [
+                'id_tabel' => $newTable->id,
+                'tahun' => $request->periode['tahun'],
+                'status' => 1
+            ]
+        );
         return response()->json([
             "column" => $request->columns,
             "periode" => $request->periode,
@@ -295,7 +364,7 @@ class TabelController extends Controller
                 'status' => '1'
             ]);
             Datacontent::insert($newDataContents);
-            return redirect(route('tabel.index'))->with('success', 'Berhasil Menyalin Tabel !');
+            return redirect(route('tabel.master'))->with('success', 'Berhasil Menyalin Tabel !');
         } catch (\Exception $e) {
 
             return back()->with('error', $e->getMessage());
@@ -308,10 +377,22 @@ class TabelController extends Controller
     public function show(string $id)
     {
         $decryptedId = Crypt::decrypt($id);
-        $tabel = Tabel::where('id', $decryptedId)->first();;
+        // $tabel = Tabel::where('id', $decryptedId)->first();
+        // $statusTabel = Statustables::join('tabels AS t','t.id','statustables.id_tabel')
+        // ->select('statustables')
+        $statusTabel = Statustables::join('tabels as t', 'statustables.id_tabel', 't.id')
+            ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+            ->select('t.id as id_tabel', 't.label as judul_tabel', 'statustables.tahun', 'sdesc.label as status', 'statustables.id as id_statustables')
+            ->where('statustables.id', $decryptedId)->first();
 
 
-        $data = Datacontent::where('label', 'LIKE', $decryptedId . '-%')->get();
+        $id_tabel = $statusTabel->id_tabel;
+        $tahun = $statusTabel->tahun;
+
+        $pattern = $id_tabel . '-%-' . $tahun . '-%';
+
+        $data = Datacontent::where('label', 'LIKE', $pattern)->get();
+        // return response()->json(['data' => $data, 'pattern' => $pattern, 'id_status' => $decryptedId]);
         $id_rows = [];
         $id_columns = [];
         $tahuns = [];
@@ -336,16 +417,17 @@ class TabelController extends Controller
         $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
 
 
-
+        // return response()->json(array('rows' => $tahuns));
         return view('tabel.show', [
             'datacontents' => $data,
             // 'tabels' => $tabels,
+            'encryptedId' => $id,
             'tahuns' => $tahuns,
             'rows' => $rows,
             'row_label' => $rowLabel,
             'columns' => $columns,
             'turtahuns' => $turtahuns,
-            'tabel' => $tabel
+            'tabel' => $statusTabel
         ]);
     }
 
@@ -369,29 +451,30 @@ class TabelController extends Controller
 
 
 
-        $rowLabel = RowLabel::get();
-        $row_label = Rowlabel::where('id', $id_row)->first();
+        // $rowLabel = RowLabel::get();
+        // $row_label = Rowlabel::where('id', $id_row)->first();
         $daftar_dinas = Dinas::get();
-        $daftar_kolom = Column::get();
-        $kolom_grup = ColumnGroup::get();
-        $column = Column::where('id', $id_column)->first();
+        // $daftar_kolom = Column::get();
+        // $kolom_grup = ColumnGroup::get();
+        // $column = Column::where('id', $id_column)->first();
         $subjects = Subject::all();
-        $turtahun_groups = TurTahunGroup::all();
-        $turtahun = Turtahun::where('id', $id_turtahun)->first();
+        // $turtahun_groups = TurTahunGroup::all();
+        // $turtahun = Turtahun::where('id', $id_turtahun)->first();
 
         // $row_list = $this->get_rows_by_row_labels(1);
 
         return view('tabel.edit', [
             'tabel' => $tabel,
-            'row_labels' => $rowLabel,
-            'row_label' => $row_label,
+            'encryptedId' => $id,
+            // 'row_labels' => $rowLabel,
+            // 'row_label' => $row_label,
             'daftar_dinas' => $daftar_dinas,
-            'daftar_kolom' => $daftar_kolom,
-            'column' => $column,
-            'turtahun_groups' => $turtahun_groups,
-            'turtahun' => $turtahun,
-            // 'row_list' => $row_list,
-            'kolom_grup' => $kolom_grup,
+            // 'daftar_kolom' => $daftar_kolom,
+            // 'column' => $column,
+            // 'turtahun_groups' => $turtahun_groups,
+            // 'turtahun' => $turtahun,
+            // // 'row_list' => $row_list,
+            // 'kolom_grup' => $kolom_grup,
             'subjects' => $subjects,
 
         ]);
@@ -401,7 +484,49 @@ class TabelController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request)
+    public function update(StoreUpdateTabelRequest $request, $id)
+    {
+        try {
+            $data = $request->validated();
+            $decryptedId = Crypt::decrypt($id);
+            $dataUpdate = [
+                'id_dinas' => $data['dinas'],
+                'nomor' => $data['nomor'],
+                'label' => $data['judul'],
+                'id_subjek' => $data['subject'],
+                'unit' => $data['unit'],
+            ];
+
+
+            $tabel = Tabel::findOrFail($decryptedId);
+            $tabel->update($dataUpdate);
+
+
+            return redirect(route('tabel.master'))->with('success', 'Berhasil menyimpan perubahan !');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+
+
+        // Update records in a single query
+        foreach ($data as $item) {
+
+            Datacontent::where('id', $item['id'])->update($item);
+        }
+        return response()->json($data);
+        $data = $request->data;
+
+
+        // Update records in a single query
+        foreach ($data as $item) {
+
+            Datacontent::where('id', $item['id'])->update($item);
+        }
+        return response()->json($data);
+    }
+
+    public function update_content(Request $request)
     {
         $data = $request->data;
 

@@ -20,7 +20,7 @@
     <div class="container">
         <div class="card">
             <div class="card-body bg-info">
-                <h1 class="text-center">Daftar Tabel</h1>
+                <h1 class="text-center">Master Tabel</h1>
             </div>
         </div>
         <hr>
@@ -36,6 +36,10 @@
                     {{ session('error') }}
                 </div>
             @endif
+            <div class="col-auto ml-auto">
+                <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Tambah Tahun</a>
+                <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Buat Tabel</a>
+            </div>
         </div>
         <table id="tabel" class="table table-bordered table-hover">
             <thead id="header-tabel" class="bg-info">
@@ -44,11 +48,11 @@
                     <td class="align-middle">Nama Tabel</td>
                     <td class="align-middle">Nama Row</td>
                     <td class="align-middle">Daftar Kolom</td>
-                    <td class="align-middle">Tahun</td>
-
-                    <td class="align-middle">Status Pengisian</td>
-                    <td class="align-middle">Cek / Ubah Isian</td>
-
+                    <td class="align-middle"> Daftar Tahun</td>
+                    <td class="align-middle">Tambah Tahun</td>
+                    {{-- <td class="align-middle">Status Pengisian</td> --}}
+                    {{-- <td class="align-middle">Cek / Ubah Isian</td> --}}
+                    <td class="align-middle">Ubah Struktur</td>
                     <td class="align-middle">Hapus</td>
                 </tr>
             </thead>
@@ -57,7 +61,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
-                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['row_label'][0]['label'] }}</td> // tbbd
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">
@@ -65,17 +69,26 @@
                                 </span>
                             @endforeach
                         </td>
-                        <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
-
-                        <td>{{ $tab['status'] }}</td>
                         <td>
-                            {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
-                            <a
-                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
-                                <i class="fas fa-eye text-info"></i>
-                            </a>
+                            @foreach ($tab['tahuns'] as $tahun)
+                                <span class="badge badge-info">
+                                    {{ $tahun }}
+                                </span>
+                            @endforeach
+                            </span>
                         </td>
+                        <td class="text-center"><a
+                                href="{{ route('tabel.copy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
+                                    class="fas fa-plus-circle text-info"></i></a></td>
 
+
+                        <td>
+                            <a
+                                href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
+                                    class="fas fa-cog text-info"></i></a>
+
+                            {{-- <a href="/tables/edit/{{ $tab['id'] }}">Ubah</a> --}}
+                        </td>
                         {{-- <td> --}}
                         {{-- <a
                                 href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i

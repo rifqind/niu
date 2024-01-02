@@ -72,6 +72,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
                             <li class="nav-item">
                                 <a href="{{ route('tabel.index') }}"
                                     class="nav-link {{ Request::is('tables/index') ? 'active' : '' }}">
@@ -102,45 +103,54 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
+                                <a href="{{ route('tabel.master') }}"
+                                    class="nav-link {{ Request::is('tables/master') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>
+                                        Tabel
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ url('subject/index') }}"
                                     class="nav-link {{ Request::is('subject/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-tags"></i>
-                                    <p>Kelola Subjek</p>
+                                    <p> Subjek</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('column-group/index') }}"
                                     class="nav-link {{ Request::is('column-group/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fas fa-bars"></i>
-                                    <p>Kelola Kelompok Kolom</p>
+                                    <p> Kelompok Kolom</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('column/index') }}"
                                     class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fas fa-bars"></i>
-                                    <p>Kelola Kolom</p>
+                                    <p> Kolom</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('rows/index') }}"
                                     class="nav-link {{ Request::is('rows/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fas fa-th-list"></i>
-                                    <p>Kelola Baris</p>
+                                    <p> Baris</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('periode/index') }}"
                                     class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid far fa-calendar-alt"></i>
-                                    <p>Kelola Periode</p>
+                                    <p> Periode</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('periode-group/index') }}"
                                     class="nav-link {{ Request::is('periode-group/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid far fa-calendar-alt"></i>
-                                    <p>Kelola Kelompok Periode</p>
+                                    <p> Kelompok Periode</p>
                                 </a>
                             </li>
                         </ul>

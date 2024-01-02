@@ -50,12 +50,14 @@ Route::middleware('auth')->group(function () {
 
 
 //tabel
-Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
+
+Route::get('/tabel/master', [TabelController::class, 'master'])->middleware(['auth', 'verified'])->name('tabel.master');
 Route::get('/tabel/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
 Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
+Route::put('/tabel/update-content/{id}', [TabelController::class, 'update_content'])->middleware(['auth', 'verified'])->name('tabel.update_content');
 Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tabel/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
+Route::put('/tabel/update/{id}', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
 Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
