@@ -7,60 +7,133 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script></script>
         <style type="text/css">
+            #komponen {
+                table-layout: fixed;
+                width: 400px;
+                /* display: inline-block; */
+                background: #f9fafc;
+                border-right: 1px solid #e6eaf0;
+                vertical-align: top;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            #komponen td:first-child {
+                width: 4vh;
+            }
+
+            #komponen thead,
+            #rekon-view thead {
+                /* min-height: 200px; */
+                /* height: 200px; */
+                vertical-align: middle;
+                padding: .1rem;
+                /* white-space: nowrap; */
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            #rekon-view tbody tr td {
+                /* padding-right: 1rem; */
+                min-width: 180px;
+            }
+
+            #komponen tbody tr td,
+            #rekon-view tbody tr td{
+                /* height: 20px; */
+                height: 40px;
+                padding: 0;
+                /* text-align: left; */
+                /* display: flex; */
+                /* align-content: center; */
+                /* align-items: center; */
+            }
+
+            .table-data-wrapper {
+                /* display: inline-block; */
+                overflow-x: auto;
+                vertical-align: top;
+                width: calc(100% - 400px);
+            }
+
+            .table-data-wrapper table {
+                border-left: 0;
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
 
-    <div class="container">
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5>{{ $tabel->label }}</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="text-white" style="background-color: #028090">
-                        {{-- kolom tahun --}}
-                        <tr>
-                            <th rowspan="2" class="text-center align-middle">#</th>
-                            <th rowspan="2" class="text-center align-middle">{{ $row_label[0]->label }}</th>
-                            {{-- @foreach ($tahuns as $tahun) --}}
-                            <th colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
-                                {{ $tahun }}
-                            </th>
-                            {{-- @endforeach --}}
-                        </tr>
-                        {{-- kolom grup var  --}}
-                        {{-- kolom var  --}}
-                        <tr>
-                            @foreach ($turtahuns as $turtahun)
-                                {{-- @foreach ($tahuns as $tahun) --}}
-                                    @foreach ($columns as $index => $column)
-                                        <th class="text-center">{{ $column->label }}</th class="text-center">
-                                    @endforeach
-                                {{-- @endforeach --}}
-                            @endforeach
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($rows as $key => $row)
+    <div class="container-fluid" style="padding-left: 2vw; padding-right: 2vw;">
+        <div class="table-container">
+            <div class="row mt-5">
+                <div class="overflow-x-scroll">
+                    <table class="table table-bordered" id="komponen">
+                        <thead class="text-bold text-white" style="background-color: #40476d">
                             <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $row->label }}</td>
-                                {{-- @foreach ($tahuns as $tahun) --}}
+                                <td rowspan="3" class="align-middle">#</td>
+                                <td rowspan="3" class="align-middle">{{ $row_label[0]->label }}</td>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: white">
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    <td class="align-middle pl-2">{{ $key + 1 }}</td>
+                                    <td class="align-middle pl-2">{{ $row->label }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-data-wrapper">
+                    <table class="table table-bordered" id="rekon-view">
+                        <thead class="text-bold text-white" style="background-color: #40476d">
+                            {{-- <tr>
+                                @foreach ($tahuns as $tahun)
+                                    <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
+                                        {{ $tahun }}
+                                    </td>
+                                @endforeach
+                            </tr> --}}
+                            <tr>
+                                @foreach ($tahuns as $tahun)
                                     @foreach ($turtahuns as $turtahun)
-                                        @foreach ($columns as $column)
-                                            <td class="text-right"
-                                                id={{ $tabel->id . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
-                                            </td>
+                                        <td colspan="{{ sizeof($columns) }}" class="text-center">
+                                            {{ $turtahun->label }}
+                                        </td>
+                                    @endforeach
+                                @endforeach
+                            </tr>
+                            {{-- kolom grup var  --}}
+                            {{-- kolom var  --}}
+
+                            <tr>
+                                @foreach ($turtahuns as $turtahun)
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($columns as $index => $column)
+                                            <td class="text-center">{{ $column->label }}</td>
                                         @endforeach
                                     @endforeach
-                                {{-- @endforeach --}}
+                                @endforeach
                             </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot></tfoot>
-                </table>
+                        </thead>
+                        <tbody style="background-color: white">
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($turtahuns as $turtahun)
+                                            @foreach ($columns as $column)
+                                                <td class="text-center align-middle"
+                                                    id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                                </td>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -75,54 +148,6 @@
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // get data from the form
 
-            const handleSaveTable = function() {
-                let inputField = Array.from(document.querySelectorAll('.input-field'));
-                let inputValues = inputField.map(element => ({
-                    // get the Id and value of the element 
-                    'id': element.dataset.idContent,
-                    'label': element.id,
-                    'value': element.value
-
-                    // assign it to the arrays
-
-                }));
-                let token = '{{ csrf_token() }}'
-                let data_json = ({
-                    'data': inputValues,
-                    _token: token,
-                });
-
-                const xhr = new XMLHttpRequest();
-
-
-                xhr.setRequestHeader('Content-Type', 'application/json');
-
-                let jsonData = JSON.stringify(data_json);
-
-                xhr.onload = function() {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        var response = JSON.parse(xhr.responseText);
-                        console.log('Success:', response);
-                    } else {
-                        console.error('Error:', xhr.status, xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('Network Error');
-                };
-                xhr.send(jsonData);
-
-            };
-            $(function() {
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                })
-            });
             const dataContents = {{ Js::from($datacontents) }};
             dataContents.map((content) => {
                 contentSplitted = content.label.split("-");
@@ -144,6 +169,10 @@
                 document.getElementById(inputId).innerHTML = content.value;
                 // document.getElementById(inputId).dataset.idContent = content.id;
             });
+            $(document).ready(function() {
+                var rekonViewTheadHeight = $('#rekon-view thead').height();
+                $('#komponen thead').height(rekonViewTheadHeight);
+            })
         </script>
     </x-slot>
 </x-front-layout>

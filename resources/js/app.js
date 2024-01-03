@@ -26,6 +26,13 @@ window.Alpine = Alpine;
 Alpine.start();
 select2();
 
+// import filterMultiSelect from "filterMultiSelect";
+
+// import filterMultiSelect from "../../public/js/filter-multi-select-bundle.min.js";
+
+// Importing filter-multi-select-bundle.min.js with any chosen name
+// import * as myFilterModule from "../../public/js/filter-multi-select-bundle.min.js";
+
 // Import your custom scripts here
 
 // Initialize any code that relies on jQuery after the document is ready

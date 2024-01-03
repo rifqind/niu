@@ -20,7 +20,9 @@
 }
 
 body {
-    font-family: "Segoe UI";
+    /* font-family: "Segoe UI"; */
+    /* font-family: 'Georgia', serif; */
+    font-family: 'Poppins', sans-serif;
 }
 
 .overlay {

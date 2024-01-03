@@ -8,9 +8,8 @@
     <link rel="icon" href="{{ url('') }}/dist/img/karlota-logo.png">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins"> --}}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url('') }}/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
@@ -23,10 +22,10 @@
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js'])
+    @vite(['resources/css/app.css'])
 </head>
 
-<body class="hold-transition layout-fixed">
+<body class="hold-transition">
     <!-- Site wrapper -->
     <div class="wrapper">
         <div class="text-center overlay d-none" id="spinner-border">

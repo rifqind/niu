@@ -1,10 +1,8 @@
 <x-front-layout>
     <x-slot name="title">
+        Home
     </x-slot>
     <x-slot name="head">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="{{ asset('css/filter_multi_select.css') }}">
     </x-slot>
     <div class="container mt-4">
@@ -128,7 +126,7 @@
 
                 <!-- Pie Chart -->
                 <div class="col-xl-8 col-lg-5">
-                    <div class="card" id="tabel-list">
+                    <div class="card shadow" id="tabel-list">
                         @include('tabel-list')
                     </div>
                 </div>
