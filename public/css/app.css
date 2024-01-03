@@ -25,6 +25,10 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #40476d !important;
+}
+
 .overlay {
     position: fixed;
     top: 0;

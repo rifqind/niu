@@ -25,6 +25,13 @@
                     </a>
                 </li>
                 @if (auth()->user()->role === 'admin')
+                    <li class="nav-item">
+                        <a href="{{ url('user/index') }}"
+                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-users"></i>
+                            <p>Kelola Pengguna</p>
+                        </a>
+                    </li>
                     <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
                         <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-building"></i>
@@ -53,13 +60,6 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('user/index') }}"
-                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-users"></i>
-                            <p>Kelola Pengguna</p>
-                        </a>
                     </li>
                     {{-- @endif --}}
                     {{-- @if (auth()->user()->role === 'admin') --}}
@@ -155,22 +155,7 @@
                             </li>
                         </ul>
                     </li>
-
-                    <li class="nav-item">
-                        <a href="{{ url('user/index') }}"
-                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-users"></i>
-                            <p>Kelola Pengguna</p>
-                        </a>
-                    </li>
                 @endif
-                <li class="nav-item">
-                    <a href="{{ url('fenomena/viewAll') }}"
-                        class="nav-link {{ Request::is('fenomena/viewAll') ? 'active' : '' }}">
-                        <i class="far fa-star nav-icon"></i>
-                        <p>Lihat Fenomena</p>
-                    </a>
-                </li>
                 @if (auth()->user()->satker_id == 1)
                     <li class="nav-item">
                         <a href="{{ url('periods/index') }}"
