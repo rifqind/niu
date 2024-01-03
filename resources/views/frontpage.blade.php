@@ -116,11 +116,11 @@
                             <input type="text" name="searchData" placeholder="Cari dengan Kata Kunci"
                                 class="form-control mb-3 mr-2">
                             {{-- <div class="row pr-3 pb-2"> --}}
-                                <button type="submit" class="btn ml-auto mb-3" style="background-color:#a80606">
-                                    <div class="text-white">
-                                        <i class="fa-brands fa-searchengin"></i> Cari
-                                    </div>
-                                </button>
+                            <button type="submit" class="btn ml-auto mb-3" style="background-color:#a80606">
+                                <div class="text-white">
+                                    <i class="fa-brands fa-searchengin"></i> Cari
+                                </div>
+                            </button>
                             {{-- </div> --}}
                         </div>
                     </form>
@@ -137,16 +137,18 @@
 
         <x-slot name="script">
             {{-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> --}}
-            <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script>
+            {{-- <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script> --}}
             <script src="{{ asset('js/home.js') }}"></script>
             <script>
-                $(function() {
-                    $('#dinas-select').filterMultiSelect({
-                        placeholderText: 'Pilih Dinas'
-                    });
-                    $('#tahun-select').filterMultiSelect({
-                        placeholderText: 'Pilih Tahun'
-                    });
+                document.addEventListener('DOMContentLoaded', function() {
+                    // alert('asu')
+                    // $('#dinas-select').filterMultiSelect({
+                    //     placeholderText: 'Pilih Dinas'
+                    // });
+                    // $('#tahun-select').filterMultiSelect({
+                    //     placeholderText: 'Pilih Tahun'
+                    // });
+                    // $('body').addClass('bg-info')
                 });
             </script>
         </x-slot>

@@ -1,7 +1,10 @@
 // Import jQuery
 import jQuery from "jquery";
 
-window.$ = window.jQuery = jQuery;
+window.$ = window.jQuery = jQuery.noConflict(true);
+
+// import $ from "jquery";
+// window.$ = window.jQuery = $;
 
 // Import Bootstrap's JavaScript
 import "bootstrap";
@@ -26,10 +29,13 @@ window.Alpine = Alpine;
 Alpine.start();
 select2();
 
+import FilterMultiSelect from "./filter-multi-select-bundle.min.js";
+FilterMultiSelect($);
 // Import your custom scripts here
 
 // Initialize any code that relies on jQuery after the document is ready
 document.addEventListener("DOMContentLoaded", function () {
+    console.log($);
     $(".select2").select2();
 
     //Initialize Select2 Elements
@@ -41,5 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
         theme: "bootstrap4",
         width: "100%",
         multiple: true,
+    });
+    $("#dinas-select").filterMultiSelect({
+        placeholderText: "Pilih Dinas",
+    });
+    $("#tahun-select").filterMultiSelect({
+        placeholderText: "Pilih Tahun",
     });
 });
