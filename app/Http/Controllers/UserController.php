@@ -20,9 +20,10 @@ class UserController extends Controller
         //
         $number = 1;
         $id_regions = Region::getRegionId();
-        $users = User::orderBy('name')
+        $users = User::orderBy('dinas.nama')
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
-            ->whereIn('dinas.id_regions', $id_regions)->get(['users.*']);
+            ->whereIn('dinas.id_regions', $id_regions)->
+            get(['users.*']);
         foreach ($users as $user) {
             $user->number = $number;
             $number++;
@@ -116,6 +117,7 @@ class UserController extends Controller
         $users = User::when($searchQuery, function ($query) use ($searchQuery) {
             return $query
                 ->where('users.name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('users.username', 'like', '%' . $searchQuery . '%')
                 ->orWhere('dinas.nama', 'like', '%' . $searchQuery . '%')
                 ->orWhere('regions.nama', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.role', 'like', '%' . $searchQuery . '%')

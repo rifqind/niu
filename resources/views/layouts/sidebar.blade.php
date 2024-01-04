@@ -63,8 +63,8 @@
                     </li>
                     {{-- @endif --}}
                     {{-- @if (auth()->user()->role === 'admin') --}}
-                    <li class="nav-item {{ Request::is('tables*') ? 'menu-open' : '' }}">
-                        <a href="" class="nav-link {{ Request::is('tables*') ? 'active' : '' }}">
+                    <li class="nav-item {{ Request::is('tabel*') ? 'menu-open' : '' }}">
+                        <a href="" class="nav-link {{ Request::is('tabel*') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-building"></i>
                             <p>
                                 Kelola Tabel
@@ -75,7 +75,7 @@
 
                             <li class="nav-item">
                                 <a href="{{ route('tabel.index') }}"
-                                    class="nav-link {{ Request::is('tables/index') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::is('tabel/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-list-ol"></i>
                                     <p>
                                         Daftar Tabel
@@ -84,7 +84,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('tabel.create') }}"
-                                    class="nav-link {{ Request::is('tables/create') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::is('tabel/create') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-plus"></i>
                                     <p>
                                         Tambah Tabel
@@ -93,8 +93,36 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item {{ Request::is('tables*') ? 'menu-open' : '' }}">
-                        <a href="" class="nav-link {{ Request::is('tables*') ? 'active' : '' }}">
+                    {{-- <li class="nav-item {{ Request::is('tabel*') ? 'menu-open' : '' }}"> --}}
+                    <li
+                        class="nav-item {{ collect([
+                            'tabel/master',
+                            'subject*',
+                            'column-group*',
+                            'column*',
+                            'rows*',
+                            'periode*',
+                            'periode-group*',
+                        ])->contains(function ($pattern) {
+                            return Str::is($pattern, request()->path());
+                        })
+                            ? 'menu-open'
+                            : '' }}
+                    ">
+                        <a href=""
+                            class="nav-link {{ collect([
+                                'tabel/master',
+                                'subject*',
+                                'column-group*',
+                                'column*',
+                                'rows*',
+                                'periode*',
+                                'periode-group*',
+                            ])->contains(function ($pattern) {
+                                return Str::is($pattern, request()->path());
+                            })
+                                ? 'active'
+                                : '' }}">
                             <i class="nav-icon fa-solid fa-building"></i>
                             <p>
                                 Kelola Master
@@ -104,7 +132,7 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ route('tabel.master') }}"
-                                    class="nav-link {{ Request::is('tables/master') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::is('tabel/master') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-table"></i>
                                     <p>
                                         Tabel

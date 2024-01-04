@@ -30,9 +30,9 @@ Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.vi
 Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
 // });
 
-Route::middleware('auth')->get('/', function () {
-    return view('dashboard');
-});
+// Route::middleware('auth')->get('/', function () {
+//     return view('dashboard');
+// });
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
 Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//Home
+Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified']);
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
 //tabel

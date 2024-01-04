@@ -203,6 +203,39 @@ class HomeController extends Controller
         //
     }
 
+    public function dashboard(){
+        $myDinas = auth()->user()->id_dinas;
+        $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
+        
+        #status 1
+        $newTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 1)->count();
+
+        #status 2
+        $entriTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 2)->count();
+        
+        #status 3
+        $verifyTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 3)->count();
+
+        #status 4
+        $repairTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 4)->count();
+        
+        #status 5
+        $finalTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 5)->count();
+
+        #total tabel
+        $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
+
+        return view('dashboard', [
+            'newTabels' => $newTabels,
+            'entriTabels' => $entriTabels,
+            'verifyTabels' => $verifyTabels,
+            'repairTabels' => $repairTabels,
+            'finalTabels' => $finalTabels,
+            'totalTabels' => $totalTabels,
+        ]);
+
+    }
+
     public function getDatacontent(Request $request)
     {
         $tabel_id = $request->query('tabel_id');

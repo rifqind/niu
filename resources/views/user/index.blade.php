@@ -45,8 +45,8 @@
             <tr>
                 <td class="first-column">No.</td>
                 <td class="text-center">Username</td>
-                <td class="text-center">Nama</td>
-                <td class="text-center">Nama Instansi</td>
+                <td class="text-center" style="width: 15%">Nama</td>
+                <td class="text-center" style="width: 30%">Nama Instansi</td>
                 <td class="text-center">Wilayah Kerja</td>
                 <td class="text-center">No. HP</td>
                 <td class="text-center">Peran</td>
