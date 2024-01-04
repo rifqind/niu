@@ -2,6 +2,7 @@
 import jQuery from "jquery";
 
 window.$ = window.jQuery = jQuery.noConflict(true);
+var formCreateTable = {};
 
 // import $ from "jquery";
 // window.$ = window.jQuery = $;
@@ -35,7 +36,7 @@ FilterMultiSelect($);
 
 // Initialize any code that relies on jQuery after the document is ready
 document.addEventListener("DOMContentLoaded", function () {
-    console.log($);
+    // console.log($);
     $(".select2").select2();
 
     //Initialize Select2 Elements
@@ -48,10 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
         width: "100%",
         multiple: true,
     });
-    $("#dinas-select").filterMultiSelect({
-        placeholderText: "Pilih Dinas",
-    });
-    $("#tahun-select").filterMultiSelect({
-        placeholderText: "Pilih Tahun",
-    });
+    // $("#dinas-select").filterMultiSelect({
+    //     placeholderText: "Pilih Dinas",
+    // });
+    // $("#tahun-select").filterMultiSelect({
+    //     placeholderText: "Pilih Tahun",
+    // });
 });
