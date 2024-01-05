@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //Initialize Select2 Elements
     $(".select2bs4").select2({
         theme: "bootstrap4",
-        width: "100%",
+        // width: "100%",
     });
     $(".select2bs4-select").select2({
         theme: "bootstrap4",

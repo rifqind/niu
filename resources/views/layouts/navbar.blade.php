@@ -14,7 +14,7 @@
                 {{ Auth::user()->name }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user mx-1"></i> Profile</a>
+                <a class="dropdown-item" href="{{ route('users.edit') }}"><i class="fas fa-user mx-1"></i> Profile</a>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

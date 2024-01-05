@@ -1,43 +1,3 @@
-$("#storeUser").click(function (e) {
-    e.preventDefault();
-    // $('.loader').removeClass('d-none');
-    var users = $("#formUser").serialize();
-    console.log(users);
-    $.ajax({
-        type: "POST",
-        url: store_URL.href,
-        data: users,
-
-        success: function (data) {
-            // window.history.back();
-            window.location.href = index_URL.href;
-        },
-    });
-});
-
-$("#createUsers").submit(function (e) {
-    e.preventDefault();
-    // $('.loader').removeClass('d-none');
-    var users = $("#createUsers").serialize();
-    $("#spinner-border").removeClass("d-none");
-    $.ajax({
-        type: "POST",
-        url: add_URL.href,
-        data: users,
-        success: function (data) {
-            // window.history.back();
-            $("#spinner-border").addClass("d-none");
-            window.location.href = this_URL.href;
-        },
-        error: function (data) {
-            $("#spinner-border").addClass("d-none");
-            // alert(errorThrown);
-            console.log(data.responseJSON.errors);
-            reportField(data.responseJSON.errors);
-        },
-    });
-});
-
 function reportField(errors) {
     errorCheck = [
         "username",
@@ -120,8 +80,8 @@ function changeRoles() {
             }
         });
 }
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
+    // $(document).ready(function() {
     changeRoles();
     $("#formSearch").submit(function (e) {
         // console.log("asu");
@@ -179,6 +139,76 @@ $(document).ready(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(errorThrown);
+            },
+        });
+    });
+    $("#changePassword").on("click", function (e) {
+        e.preventDefault();
+        console.log("asu");
+        $("#card-password").removeClass("d-none");
+    });
+    $("#storeUser").click(function (e) {
+        e.preventDefault();
+        // $('.loader').removeClass('d-none');
+        var users = $("#formUser").serialize();
+        console.log(users);
+        $.ajax({
+            type: "POST",
+            url: store_URL.href,
+            data: users,
+
+            success: function (data) {
+                // window.history.back();
+                window.location.href = index_URL.href;
+            },
+        });
+    });
+
+    $("#createUsers").submit(function (e) {
+        e.preventDefault();
+        // $('.loader').removeClass('d-none');
+        var users = $("#createUsers").serialize();
+        $("#spinner-border").removeClass("d-none");
+        $.ajax({
+            type: "POST",
+            url: add_URL.href,
+            data: users,
+            success: function (data) {
+                // window.history.back();
+                $("#spinner-border").addClass("d-none");
+                window.location.href = this_URL.href;
+            },
+            error: function (data) {
+                $("#spinner-border").addClass("d-none");
+                // alert(errorThrown);
+                console.log(data.responseJSON.errors);
+                reportField(data.responseJSON.errors);
+            },
+        });
+    });
+
+    $("#editButton").on("click", function (e) {
+        e.preventDefault();
+        var users = $("#form-edit").serialize();
+        // console.log(users);
+        $.ajax({
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
+            type: "POST",
+            url: edit_URL.href,
+            data: users,
+            success: function (data) {
+                console.log(data);
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
             },
         });
     });

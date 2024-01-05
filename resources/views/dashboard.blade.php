@@ -13,8 +13,8 @@
 
     </x-slot>
     <div class="row d-flex justify-content-start">
-        <div class="card mr-3" style="width: 48.5%;">
-            <div class="card-body" style="border-left:4px solid #7286a0;">
+        <div class="card col-xl-6 col-l-6 col-md-12 col-sm-12" style="border-left:4px solid #7286a0;">
+            <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-bold mb-2" style="color:#7286a0;">TOTAL TABEL</div>
@@ -25,8 +25,8 @@
                 </div>
             </div>
         </div>
-        <div class="card mr-3" style="width: 48.5%;">
-            <div class="card-body" style="border-left:4px solid green;">
+        <div class="card col-xl-6 col-l-6 col-md-12 col-sm-12" style="border-left:4px solid green;">
+            <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-bold mb-2" style="color:green;">RILIS</div>
@@ -39,8 +39,8 @@
         </div>
     </div>
     <div class="row d-flex justify-content-start">
-        <div class="card mr-3" style="width: 32%;">
-            <div class="card-body" style="border-left:4px solid #03254e;">
+        <div class="card col-xl-4 col-l-4 col-md-12 col-sm-12" style="width: 32%; border-left:4px solid #03254e;">
+            <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-bold mb-2" style="color:#03254e;">DALAM PROSES ENTRI</div>
@@ -51,8 +51,8 @@
                 </div>
             </div>
         </div>
-        <div class="card mr-3" style="width: 32%;">
-            <div class="card-body" style="border-left:4px solid #f18f01;">
+        <div class="card col-xl-4 col-l-4 col-md-12 col-sm-12" style="width: 32%; border-left:4px solid #f18f01;">
+            <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-bold mb-2" style="color:#f18f01;">DIPERIKSA</div>
@@ -63,8 +63,8 @@
                 </div>
             </div>
         </div>
-        <div class="card mr-3" style="width: 32%;">
-            <div class="card-body" style="border-left:4px solid red;">
+        <div class="card col-xl-4 col-l-4 col-md-12 col-sm-12" style="width: 32%; border-left:4px solid red;">
+            <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-bold mb-2" style="color:red;">PERLU PERBAIKAN</div>
@@ -77,7 +77,7 @@
         </div>
     </div>
     <div class="row ">
-        <div class="p-0 mr-3" style="width: 73%">
+        <div class="p-0 mr-1 col-9" style="">
             <div class="card mr-3" style="width: 100%;" id="percentage-progress">
                 <div class="card-header text-center text-bold">
                     PERSENTASE PROGRES PENGERJAAN
@@ -86,16 +86,16 @@
                 </div>
             </div>
         </div>
-        <div class="p-0">
+        <div class="p-0" style="width: 24.5%">
             <div class="card" id="pie-charts">
                 <div class="card-header text-bold text-center">
                     DIAGRAM PROGRES PENGERJAAN DATA
                 </div>
                 <div class="card-body">
-                    <div class="pie-chart-container mb-3">
+                    <div class="pie-chart-container mb-3 text-center">
                         <canvas id="pie-chart" style=""></canvas>
                     </div>
-                    <div class="row p-2">
+                    <div class="row p-2 justify-content-center">
                         <div class="text-center small mr-3">
                             <i class="fa-solid fa-circle" style="color: green;"></i>
                             Rilis
@@ -152,6 +152,8 @@
                         type: "doughnut",
                         data: ChartData,
                         options: {
+                            maintainAspectRatio: false,
+                            responsive: true,
                             plugins: {
                                 legend: {
                                     display: false,
@@ -168,7 +170,7 @@
                     // }
                 })
                 var pieChartsHeight = $('#pie-charts').height();
-                $('#percentage-progress').height(pieChartsHeight + $('#pie-chart').height() + 12);
+                $('#percentage-progress').height(pieChartsHeight + $('#pie-chart').height());
                 
             })
         </script>

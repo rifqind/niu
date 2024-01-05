@@ -102,6 +102,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('user/add', [UserController::class, 'addUser'])->name('users.add');
     Route::get('user/create', [UserController::class, 'create'])->name('users.create');
 });
+Route::get('user/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
+Route::post('user/editProfile', [UserController::class, 'editProfile'])->middleware(['auth', 'verified'])->name('users.editProfile');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // subject 
