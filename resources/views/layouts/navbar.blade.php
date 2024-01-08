@@ -14,12 +14,11 @@
                 {{ Auth::user()->name }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="{{ route('users.edit') }}"><i class="fas fa-user mx-1"></i> Profile</a>
+                <a class="dropdown-item" href="{{ route('users.edit') }}"><i class="nav-icon fas fa-user"></i> Profile</a>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="dropdown-item" href=""><i class="nav-icon fas fa-sign-out-alt"></i>
-                        Log Out</button>
+                    <button type="submit" class="dropdown-item" href=""><i class="nav-icon fas fa-sign-out-alt"></i> Log Out</button>
                 </form>
             </div>
         </li>

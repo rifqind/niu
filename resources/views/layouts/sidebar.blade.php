@@ -13,8 +13,6 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-       with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{ url('dashboard') }}"
                         class="nav-link {{ Request::is('/', 'dashboard') ? 'active' : '' }}">
@@ -63,8 +61,8 @@
                     </li>
                     {{-- @endif --}}
                     {{-- @if (auth()->user()->role === 'admin') --}}
-                    <li class="nav-item {{ Request::is('tabel*') ? 'menu-open' : '' }}">
-                        <a href="" class="nav-link {{ Request::is('tabel*') ? 'active' : '' }}">
+                    <li class="nav-item {{ Request::is('tabel/index', 'tabel/create') ? 'menu-open' : '' }}">
+                        <a href="" class="nav-link {{ Request::is('tabel/index', 'tabel/create') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-building"></i>
                             <p>
                                 Kelola Tabel
@@ -184,34 +182,15 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->satker_id == 1)
-                    <li class="nav-item">
-                        <a href="{{ url('periods/index') }}"
-                            class="nav-link {{ Request::is('periods/index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid far fa-calendar-alt"></i>
-                            <p>Kelola Periode</p>
-                        </a>
-                    </li>
-                @endif
-                @can('admin')
-                    <li class="nav-header">PENGATURAN</li>
-                    <li class="nav-item">
-                        <a href="{{ url('user') }}" class="nav-link {{ Request::is('user*') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Pengguna
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('period') }}" class="nav-link {{ Request::is('period*') ? 'active' : '' }}">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Jadwal
-                            </p>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a href="{{ route('users.edit') }}"
+                        class="nav-link {{ Request::is('user/edit') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Edit Profile
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

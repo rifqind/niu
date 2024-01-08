@@ -142,11 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     });
-    $("#changePassword").on("click", function (e) {
-        e.preventDefault();
-        console.log("asu");
-        $("#card-password").removeClass("d-none");
-    });
     $("#storeUser").click(function (e) {
         e.preventDefault();
         // $('.loader').removeClass('d-none');
@@ -163,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     });
-
     $("#createUsers").submit(function (e) {
         e.preventDefault();
         // $('.loader').removeClass('d-none');
@@ -187,10 +181,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    $("#editButton").on("click", function (e) {
+    $(".editButton").on("click", function (e) {
         e.preventDefault();
         var users = $("#form-edit").serialize();
-        // console.log(users);
+        console.log(users);
         $.ajax({
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
@@ -207,10 +201,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(data);
                 window.location.reload();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(errorThrown);
+            error: function (data) {
+                console.log(data.responseJSON.errors);
+                reportField(data.responseJSON.errors);
             },
         });
+    });
+
+    $("#changePassword").on("click", function (e) {
+        e.preventDefault();
+        console.log("asu");
+        $("#card-password").removeClass("d-none");
     });
 });
 $(document).on("click", ".delete-trash", function (e) {

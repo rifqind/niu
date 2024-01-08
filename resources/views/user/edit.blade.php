@@ -38,9 +38,10 @@
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="username">Username</label>
                         </div>
-                        <div class="col d-flex align-items-center">
+                        <div class="col d-flex align-items-center flex-column">
                             <input type="text" id="username" name="username" class="form-control"
                                 value="{{ $user->username }}">
+                            <div class="text-danger text-left" id="error-username"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -48,50 +49,57 @@
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="name">Nama</label>
                         </div>
-                        <div class="col d-flex align-items-center">
+                        <div class="col d-flex align-items-center flex-column">
                             <input type="text" id="name" name="name" class="form-control"
                                 value="{{ $user->name }}">
+                            <div class="text-danger text-left" id="error-name"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="email">Email</label>
                         </div>
-                        <div class="col d-flex align-items-center">
+                        <div class="col d-flex align-items-center flex-column">
                             <input type="email" id="email" name="email" class="form-control"
                                 value="{{ $user->email }}">
+                            <div class="text-danger text-left" id="error-email"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="iddinas">Instansi</label>
                         </div>
-                        <div class="col d-flex align-items-center">
+                        <div class="col d-flex align-items-center flex-column">
                             <select class="form-control select2bs4" id="iddinas" name="id_dinas">
                                 {{-- <option value="{{ $user->id_dinas }}">{{ $user->dinas->nama }}</option> --}}
                                 @foreach ($dinas as $din)
                                     <option value="{{ $din->id }}">{{ $din->nama }}</option>
                                 @endforeach
                             </select>
+                            <div class="text-danger text-left" id="error-id_dinas"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="noHp">Nomor Hp</label>
                         </div>
-                        <div class="col d-flex align-items-center">
+                        <div class="col d-flex align-items-center flex-column">
                             <input type="noHp" id="noHp" name="noHp" class="form-control"
                                 value="{{ $user->noHp }}">
+                            <div class="text-danger text-left" id="error-noHp"></div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div id="editButton" class="btn btn-sm btn-success"> <i class="fa-solid fa-check mr-2"></i>Simpan</div>
-                        <div id="changePassword" class="btn btn-sm btn-warning"> <i class="fa-solid fa-key mr-2"></i>Ganti Password</div>
+                        <div class="btn btn-sm btn-success editButton"> <i class="fa-solid fa-check mr-2"></i>Simpan
+                        </div>
+                        <div id="changePassword" class="btn btn-sm btn-warning"> <i
+                                class="fa-solid fa-key mr-2"></i>Ganti Password</div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class="card d-none" id="card-password">
+            {{-- <form action="" id="form-password"> --}}
+            {{-- @csrf --}}
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col d-flex align-items-center">
@@ -105,15 +113,18 @@
                     <div class="col d-flex align-items-center">
                         <label class="mb-0" for="password_confirmation">Konfirmasi Password</label>
                     </div>
-                    <div class="col d-flex align-items-center">
+                    <div class="col d-flex align-items-center flex-column">
                         <input type="password" id="password_confirmation" name="password_confirmation"
                             class="form-control">
+                        <div class="text-danger text-left" id="error-password"></div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div id="verifyPassword" class="btn btn-sm btn-warning"> <i class="fa-solid fa-key"></i> Simpan Password Baru</div>
+                    <div class="btn btn-sm btn-warning editButton"> <i class="fa-solid fa-key"></i> Simpan Password
+                        Baru</div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
     <x-slot name="script">

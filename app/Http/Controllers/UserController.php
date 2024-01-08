@@ -166,15 +166,21 @@ class UserController extends Controller
             'username' => ['required', 'string', Rule::unique('users')->ignore($id)],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($id)],
-            'noHp' => ['required', 'string', 'max:13']
+            'noHp' => ['required', 'string', 'max:13'],
+            'password' => $request->filled('password') ? ['confirmed', Rules\Password::defaults()] : [],
         ]);
         $user = User::where('id', $id)->update([
-                'username' => $request->username,
-                'name' => $request->name,
-                'email' => $request->email,
-                'noHp' => $request->noHp,
-                'id_dinas' => $request->id_dinas,
+            'username' => $request->username,
+            'name' => $request->name,
+            'email' => $request->email,
+            'noHp' => $request->noHp,
+            'id_dinas' => $request->id_dinas,
+        ]);
+        if ($request->filled('password')) {
+            $user = User::where('id', $id)->update([
+                'password' => Hash::make($request->password),
             ]);
+        }
         return response()->json([
             "message" => "Berhasil",
             "data" => $user,
