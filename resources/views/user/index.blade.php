@@ -15,6 +15,28 @@
             #tabel-dinas thead {
                 font-weight: bold;
             }
+
+            #tabel-user th {
+                cursor: pointer;
+            }
+
+            #tabel-user .th-sort-asc::after {
+                content: "\25b4";
+            }
+
+            #tabel-user .th-sort-desc::after {
+                content: "\25be";
+            }
+
+            #tabel-user .th-sort-asc::after,
+            #tabel-user .th-sort-desc::after {
+                margin-left: 5px;
+            }
+
+            #tabel-user .th-sort-asc,
+            #tabel-user .th-sort-desc {
+                background: rgba(0, 0, 0, 0.1);
+            }
         </style>
     </x-slot>
     <x-slot name="breadcrumb">
@@ -43,15 +65,15 @@
     <table class="table table-hover" id="tabel-user">
         <thead>
             <tr>
-                <td class="first-column">No.</td>
-                <td class="text-center">Username</td>
-                <td class="text-center" style="width: 15%">Nama</td>
-                <td class="text-center" style="width: 30%">Nama Instansi</td>
-                <td class="text-center">Wilayah Kerja</td>
-                <td class="text-center">No. HP</td>
-                <td class="text-center">Peran</td>
-                <td class="text-center">Edit</td>
-                <td class="text-center">Hapus</td>
+                <th class="first-column">No.</th>
+                <th class="text-center">Username</th>
+                <th class="text-center" style="width: 15%">Nama</th>
+                <th class="text-center" style="width: 30%">Nama Instansi</th>
+                <th class="text-center">Wilayah Kerja</th>
+                <th class="text-center">No. HP</th>
+                <th class="text-center">Peran</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Hapus</th>
             </tr>
         </thead>
         <tbody>
@@ -74,8 +96,7 @@
                             data-users="{{ json_encode([
                                 'id' => $user->id,
                             ]) }}"><i
-                                class="role-icon fa-solid" title="Ubah Role"
-                                style="color: #1032e0;"></i></a>
+                                class="role-icon fa-solid" title="Ubah Role" style="color: #1032e0;"></i></a>
                         {{-- @else
                             <a href=""  class="mx-1 role-update" data-users="{{ json_encode([
                                 'id' => $user->id
