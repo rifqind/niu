@@ -11,7 +11,7 @@ class StoreColumnRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreColumnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'label' => 'required|string',
+            'id_columns_group' => 'required|integer',
         ];
     }
 }

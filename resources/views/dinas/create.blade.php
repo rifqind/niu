@@ -29,7 +29,7 @@
                         <label for="nama">Nama Dinas</label>
                         <input class="form-control mb-3" id="nama" placeholder="Isi Nama Dinas">
                         <label for="regions">Wilayah Kerja</label>
-                        <select class="form-control select2bs4 mb-3" id="regions">
+                        <select class="form-control select2bs4 mb-3" style="width: 100%;" id="regions">
                             <option value="">Pilih Wilayah Kerja</option>
                             @foreach ($regions as $region)
                                 <option value="{{ $region->id }}">{{ $region->nama }}</option>
@@ -48,7 +48,14 @@
         <script>
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('dinas.store') }}")
-            const this_URL = new URL("{{ route('dinas.index') }}")
+            const this_URL = "{{ url('dinas/index') }}"
+            // document.addEventListener("DOMContentLoaded", function() {
+            //     document
+            //         .getElementById("dinas-save")
+            //         .addEventListener("click", function(e) {
+            //             saveDinas();
+            //         });
+            // })
         </script>
     </x-slot>
 </x-niu-layout>

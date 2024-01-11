@@ -25,14 +25,15 @@ class HomeController extends Controller
         //
         $regions = Region::all();
         $dinas = Dinas::all();
-        $tabel_final = Statustables::where('status', 4)->pluck('id');
+        $tabel_final = Statustables::where('status', 5)->pluck('id');
         // $tabels = Tabel::whereIn('id', $tabel_final)->get();
-        $tabels = Statustables::where('status', 4)
+        $tabels = Statustables::where('status', 5)
             ->leftJoin('tabels', 'statustables.id_tabel', '=', 'tabels.id')
             ->leftJoin('dinas', 'tabels.id_dinas', '=', 'dinas.id')
             ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
             ->leftJoin('subjects', 'tabels.id_subjek', '=', 'subjects.id')
             ->get([
+                'statustables.id as id_statustables',
                 'statustables.tahun',
                 'tabels.*',
                 'dinas.nama as nama_dinas',
@@ -40,9 +41,9 @@ class HomeController extends Controller
                 'subjects.label as nama_subjects'
             ]);
         $subjects = Subject::all();
-        $tahuns = Statustables::where('status', 4)->distinct()->get('tahun');
+        $tahuns = Statustables::where('status', 5)->distinct()->get('tahun');
 
-        $countfinals = Statustables::where('status', 4)->count();
+        $countfinals = Statustables::where('status', 5)->count();
         $counttabels = $tabels->count();
         return view('frontpage', [
             'regions' => $regions,
@@ -202,6 +203,39 @@ class HomeController extends Controller
         //
     }
 
+    public function dashboard(){
+        $myDinas = auth()->user()->id_dinas;
+        $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
+        
+        #status 1
+        $newTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 1)->count();
+
+        #status 2
+        $entriTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 2)->count();
+        
+        #status 3
+        $verifyTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 3)->count();
+
+        #status 4
+        $repairTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 4)->count();
+        
+        #status 5
+        $finalTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 5)->count();
+
+        #total tabel
+        $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
+
+        return view('dashboard', [
+            'newTabels' => $newTabels,
+            'entriTabels' => $entriTabels,
+            'verifyTabels' => $verifyTabels,
+            'repairTabels' => $repairTabels,
+            'finalTabels' => $finalTabels,
+            'totalTabels' => $totalTabels,
+        ]);
+
+    }
+
     public function getDatacontent(Request $request)
     {
         $tabel_id = $request->query('tabel_id');
@@ -233,47 +267,59 @@ class HomeController extends Controller
 
     public function show(string $id, string $tahun)
     {
-        $id = Crypt::decrypt($id);
-        $tabel = Tabel::where('id', $id)->first();
-        $data = Datacontent::where('label', 'LIKE', $tabel->id . '%' . '-' . $tahun . '%')->get();
-        // $sqlWithBindings = $data->toSql();
+        $decryptedId = Crypt::decrypt($id);
+        // dd($decryptedId);
+        // $tabel = Tabel::where('id', $decryptedId)->first();
+        // $statusTabel = Statustables::join('tabels AS t','t.id','statustables.id_tabel')
+        // ->select('statustables')
+        $statusTabel = Statustables::join('tabels as t', 'statustables.id_tabel', 't.id')
+            ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+            ->select('t.id as id_tabel', 't.label as judul_tabel', 'statustables.tahun', 'sdesc.label as status', 'statustables.id as id_statustables')
+            ->where('statustables.id', $decryptedId)->first();
 
-        // // Get the actual bindings
-        // $bindings = $data->getBindings();
 
-        // // Replace the placeholders with actual values
-        // $actualSql = vsprintf(str_replace('?', '%s', $sqlWithBindings), $bindings);
+        $id_tabel = $statusTabel->id_tabel;
+        $tahun = $statusTabel->tahun;
 
+        $pattern = $id_tabel . '-%-' . $tahun . '-%';
 
+        $data = Datacontent::where('label', 'LIKE', $pattern)->get();
+        // return response()->json(['data' => $data, 'pattern' => $pattern, 'id_status' => $decryptedId]);
         $id_rows = [];
         $id_columns = [];
-        // $tahuns = [];
+        $tahuns = [];
         $turTahunKeys = [];
 
         foreach ($data as $dat) {
             $split = explode("-", $dat->label);
+
             array_push($id_rows, $split[1]);
             array_push($id_columns, $split[2]);
-            // array_push($tahuns, $split[3]);
+            array_push($tahuns, $split[3]);
             array_push($turTahunKeys, $split[4]);
         }
         // $tabels = Tabel::where('id', $id)->get();
         $rows = Row::whereIn('id', $id_rows)->get();
         $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
         $columns = Column::whereIn('id', $id_columns)->get();
-        // $tahuns = array_unique($tahuns);
-        // sort($tahuns);
+        $tahuns = array_unique($tahuns);
+        sort($tahuns);
+        // $turtahuns = array_unique($turtahuns);
+        // sort($turtahuns);
         $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
 
+
+        // return response()->json(array('rows' => $tahuns));
         return view('view-tabel', [
             'datacontents' => $data,
-            // 'tahuns' => $tahuns,
-            'tahun' => $tahun,
+            // 'tabels' => $tabels,
+            'encryptedId' => $id,
+            'tahuns' => $tahuns,
             'rows' => $rows,
             'row_label' => $rowLabel,
             'columns' => $columns,
             'turtahuns' => $turtahuns,
-            'tabel' => $tabel
+            'tabel' => $statusTabel
         ]);
     }
 }

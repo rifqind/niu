@@ -1,99 +1,197 @@
 <x-niu-layout>
     <x-slot name="title">
         {{-- {{ __('Test') }} --}}
-        asads
+        {{ $tabel->judul_tabel }}
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
         <meta name="csrf-token" content="content">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
+
         <script></script>
         <style type="text/css">
+            #komponen {
+                table-layout: fixed;
+                width: 400px;
+                /* display: inline-block; */
+                background: #f9fafc;
+                border-right: 1px solid #e6eaf0;
+                vertical-align: top;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            #komponen td:first-child {
+                width: 4vh;
+            }
+
+            #komponen thead,
+            #rekon-view thead {
+                /* min-height: 200px; */
+                /* height: 200px; */
+                vertical-align: middle;
+                padding: .1rem;
+                /* white-space: nowrap; */
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            #rekon-view tbody tr td input {
+                padding-right: 1rem;
+                min-width: 180px;
+            }
+
+            #komponen tbody tr td,
+            #rekon-view tbody tr td {
+                height: 60px;
+                padding: 0.5rem;
+            }
+
+            .table-data-wrapper {
+                /* display: inline-block; */
+                overflow-x: auto;
+                vertical-align: top;
+                width: calc(100% - 400px);
+            }
+
+            .table-data-wrapper table {
+                border-left: 0;
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
 
     <x-slot name="breadcrumb">
-        <li class="breadcrumb-item active">Test Page</li>
+        <li class="breadcrumb-item active">Data Tabel</li>
     </x-slot>
+    <!-- Alert container -->
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show" role="alert"
+        style="display: none;">
+        <strong>Sukses!</strong> Berhasil menyimpan Perubahan data !
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="container-fluid" style="padding-left: 2vw; padding-right: 2vw;">
 
-    <div class="container">
         <div class="card">
-            <div class="card-body">
-                <p>{{ $tabel->label }}</p>
+            <div class="card-body bg-info">
+                <h2>{{ $tabel->judul_tabel . ' Tahun ' . $tahuns[0] }}</h2>
             </div>
         </div>
-
-        </select>
-        {{-- <hr> --}}
-        <table class="table table-bordered table-responsive">
-            <thead>
-                {{-- kolom tahun --}}
-                <tr>
-                    <td rowspan="3">#</td>
-                    <td rowspan="3">{{ $row_label[0]->label }}</td>
-                    @foreach ($tahuns as $tahun)
-                        <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">{{ $tahun }}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr>
-                    @foreach ($tahuns as $tahun)
-                        @foreach ($turtahuns as $turtahun)
-                            <td colspan="2" class="text-center">{{ $turtahun->label }}</td>
-                        @endforeach
-                    @endforeach
-                </tr>
-                {{-- kolom grup var  --}}
-                {{-- kolom var  --}}
-
-                <tr>
-                    @foreach ($turtahuns as $turtahun)
-                        @foreach ($tahuns as $tahun)
-                            @foreach ($columns as $index => $column)
-                                <td>{{ $column->label }}</td>
+        <div class="table-container">
+            <div class="row">
+                <div class="overflow-x-scroll">
+                    <table class="table table-striped table-bordered" id="komponen">
+                        <thead>
+                            <tr>
+                                <td rowspan="3">#</td>
+                                <td rowspan="3">{{ $row_label[0]->label }}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $row->label }}</td>
+                                </tr>
                             @endforeach
-                        @endforeach
-                    @endforeach
-
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach ($rows as $key => $row)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $row->label }}</td>
-                        @foreach ($tahuns as $tahun)
-                            @foreach ($turtahuns as $turtahun)
-                                @foreach ($columns as $column)
-                                    <td><input type="text" class="input-field" data-id-content=""
-                                            id={{ $tabel->id . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-data-wrapper">
+                    <table class="table table-bordered" id="rekon-view">
+                        <thead>
+                            {{-- <tr>
+                                @foreach ($tahuns as $tahun)
+                                    <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
+                                        {{ $tahun }}
                                     </td>
                                 @endforeach
+                            </tr> --}}
+                            <tr>
+                                @foreach ($tahuns as $tahun)
+                                    @foreach ($turtahuns as $turtahun)
+                                        <td colspan="{{ sizeof($columns) }}" class="text-center">{{ $turtahun->label }}
+                                        </td>
+                                    @endforeach
+                                @endforeach
+                            </tr>
+                            {{-- kolom grup var  --}}
+                            {{-- kolom var  --}}
+
+                            <tr>
+                                @foreach ($turtahuns as $turtahun)
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($columns as $index => $column)
+                                            <td>{{ $column->label }}</td>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($turtahuns as $turtahun)
+                                            @foreach ($columns as $column)
+                                                <td><input type="text" class="form-control input-field text-right"
+                                                        data-id-content=""
+                                                        id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                                </td>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                </tr>
                             @endforeach
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot></tfoot>
-        </table>
-        <button class="btn btn-primary" onClick="handleSaveTable();">Simpan</button>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-left">
+                    <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
+                            class="fas fa-chevron-left"></i> Kembali</a>
+                </div>
+                <div class="col text-right">
+                    <a href="#" class="btn btn-primary" id="save-table">Simpan <i class="fas fa-save"></i></a>
+                </div>
+            </div>
+        </div>
+        {{-- <hr> --}}
+        <div class="container">
+        </div>
     </div>
 
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // get data from the form
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('save-table').addEventListener('click', function(event) {
+                    const button = this;
 
-            const handleSaveTable = function() {
+
+                    var buttonInitialText = this.innerHTML;
+
+                    event.preventDefault();
+                    handleSaveTable(button, buttonInitialText);
+                });
+                document.body.classList.add("sidebar-collapse");
+                var rekonViewTheadHeight = $('#rekon-view thead').height();
+                $('#komponen thead').height(rekonViewTheadHeight);
+            });
+            const handleSaveTable = function(element, buttonInitialText) {
+                element.disabled = true;
+
+                element.innerHTML = 'Loading...';
+                // return 0
                 let inputField = Array.from(document.querySelectorAll('.input-field'));
                 let inputValues = inputField.map(element => ({
                     // get the Id and value of the element 
@@ -112,7 +210,7 @@
 
                 const xhr = new XMLHttpRequest();
 
-                xhr.open('POST', "{{ route('table.update') }}", true);
+                xhr.open('PUT', "{{ route('tabel.update_content', $encryptedId) }}", true);
 
                 xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -121,7 +219,13 @@
                 xhr.onload = function() {
                     if (xhr.status >= 200 && xhr.status < 300) {
                         var response = JSON.parse(xhr.responseText);
-                        console.log('Success:', response);
+                        // console.log('Success:', response);
+                        showSuccessAlert();
+                        setTimeout(hideSuccessAlert, 3000);
+                        element.disabled = false;
+
+                        element.innerHTML = buttonInitialText;
+
                     } else {
                         console.error('Error:', xhr.status, xhr.statusText);
                     }
@@ -132,16 +236,26 @@
                 xhr.send(jsonData);
 
             };
-            $(function() {
-                //Initialize Select2 Elements
-                $('.select2').select2()
 
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                })
-            });
+
+            // Show the success alert
+            function showSuccessAlert() {
+                var alert = document.getElementById('success-alert');
+                alert.style.display = 'block';
+            }
+
+            // Hide the success alert after a certain time (e.g., 3 seconds)
+            function hideSuccessAlert() {
+                var alert = document.getElementById('success-alert');
+                alert.style.display = 'none';
+            }
+
+            // Call the function to show the success alert as needed
+            // For example, after saving or updating data
+
+            // Call the function to hide the success alert after a certain time
+            // For example, after 3 seconds
+
             const dataContents = {{ Js::from($datacontents) }};
             dataContents.map((content) => {
                 contentSplitted = content.label.split("-");

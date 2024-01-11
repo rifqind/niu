@@ -1,10 +1,8 @@
 <x-front-layout>
     <x-slot name="title">
+        Home
     </x-slot>
     <x-slot name="head">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-        <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="{{ asset('css/filter_multi_select.css') }}">
     </x-slot>
     <div class="container mt-4">
@@ -25,8 +23,6 @@
                                 <div class="col-xl-12 col-lg-7">
                                     <div class="input-group">
                                         <div class="form-check mb-2 mr-sm-2" style="padding-left:0em;">
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -114,9 +110,9 @@
 
                         <div class="d-flex">
                             <input type="text" name="searchData" placeholder="Cari dengan Kata Kunci"
-                                class="form-control mb-3 mr-2">
+                                class="form-control mb-3 mr-2 w-75">
                             {{-- <div class="row pr-3 pb-2"> --}}
-                                <button type="submit" class="btn ml-auto mb-3" style="background-color:#a80606">
+                                <button type="submit" class="btn ml-auto mb-3 w-25" style="background-color:#a80606">
                                     <div class="text-white">
                                         <i class="fa-brands fa-searchengin"></i> Cari
                                     </div>
@@ -128,7 +124,7 @@
 
                 <!-- Pie Chart -->
                 <div class="col-xl-8 col-lg-5">
-                    <div class="card" id="tabel-list">
+                    <div class="card shadow" id="tabel-list">
                         @include('tabel-list')
                     </div>
                 </div>

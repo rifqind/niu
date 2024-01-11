@@ -1,43 +1,3 @@
-$("#storeUser").click(function (e) {
-    e.preventDefault();
-    // $('.loader').removeClass('d-none');
-    var users = $("#formUser").serialize();
-    console.log(users);
-    $.ajax({
-        type: "POST",
-        url: store_URL.href,
-        data: users,
-
-        success: function (data) {
-            // window.history.back();
-            window.location.href = index_URL.href;
-        },
-    });
-});
-
-$("#createUsers").submit(function (e) {
-    e.preventDefault();
-    // $('.loader').removeClass('d-none');
-    var users = $("#createUsers").serialize();
-    $("#spinner-border").removeClass("d-none");
-    $.ajax({
-        type: "POST",
-        url: add_URL.href,
-        data: users,
-        success: function (data) {
-            // window.history.back();
-            $("#spinner-border").addClass("d-none");
-            window.location.href = this_URL.href;
-        },
-        error: function (data) {
-            $("#spinner-border").addClass("d-none");
-            // alert(errorThrown);
-            console.log(data.responseJSON.errors);
-            reportField(data.responseJSON.errors);
-        },
-    });
-});
-
 function reportField(errors) {
     errorCheck = [
         "username",
@@ -100,11 +60,12 @@ function updateTable(users) {
                     <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                 </a>
             </td>
-            <tr>
+            </Wtr>
             `
         );
     });
 }
+
 function changeRoles() {
     $("#tabel-user tbody")
         .find("tr")
@@ -121,20 +82,27 @@ function changeRoles() {
         });
 }
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
+    // $(document).ready(function() {
     changeRoles();
     $("#formSearch").submit(function (e) {
         // console.log("asu");
         e.preventDefault();
-        $("#spinner-border").removeClass("d-none");
 
         $.ajax({
             url: $(this).attr("action"),
             type: "GET",
             data: $(this).serialize(),
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
             success: function (data) {
                 // console.log(data);
-                $("#spinner-border").addClass("d-none");
                 updateTable(data.users);
                 changeRoles();
             },
@@ -145,7 +113,6 @@ $(document).ready(function () {
     });
     $("#resetPassword").on("click", function (e) {
         let id = $("#idHidden").val();
-        $("#spinner-border").removeClass("d-none");
 
         $.ajax({
             url: default_URL.href,
@@ -154,8 +121,15 @@ $(document).ready(function () {
                 id: id,
                 _token: tokens,
             },
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
             success: function (data) {
-                $("#spinner-border").addClass("d-none");
                 console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -165,7 +139,6 @@ $(document).ready(function () {
     });
     $("#deleteUser").on("click", function (e) {
         let id = $("#idHidden").val();
-        $("#spinner-border").removeClass("d-none");
         $.ajax({
             type: "POST",
             url: delete_URL.href,
@@ -173,8 +146,15 @@ $(document).ready(function () {
                 id: id,
                 _token: tokens,
             },
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
             success: function (data) {
-                $("#spinner-border").addClass("d-none");
                 location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -182,50 +162,143 @@ $(document).ready(function () {
             },
         });
     });
-});
-$(document).on("click", ".delete-trash", function (e) {
-    // Your click event handling code here
-    let check = $("#cariUsers").val();
-    if (check != "") {
+    $("#storeUser").click(function (e) {
         e.preventDefault();
-        let users = $(this).data("users");
-        $("#idHidden").val(users);
-        console.log($("#idHidden").val());
-    } else {
+        // $('.loader').removeClass('d-none');
+        var users = $("#formUser").serialize();
+        console.log(users);
+        $.ajax({
+            type: "POST",
+            url: store_URL.href,
+            data: users,
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
+
+            success: function (data) {
+                // window.history.back();
+                window.location.href = index_URL.href;
+            },
+        });
+    });
+    $("#createUsers").submit(function (e) {
         e.preventDefault();
-        let users = $(this).data("users");
-        //change value modal
-        $("#idHidden").val(users.id);
-        console.log($("#idHidden").val());
-    }
-});
-$(document).on("click", ".role-update", function (e) {
-    e.preventDefault();
-    let check = $("#cariUsers").val();
-    if (check != "") {
-        let users = $(this).data("users");
-        // console.log(users);
-        var id = users;
-    } else {
-        let users = $(this).data("users");
-        // console.log(users.id);
-        var id = users.id;
-    }
-    let roles = $(this).closest("tr").find("#roles");
-    $.ajax({
-        type: "POST",
-        url: roleChange_URL.href,
-        data: {
-            id: id,
-            _token: tokens,
-        },
-        success: function (data) {
-            // console.log(data);
-            roles.html(data.role);
-            changeRoles();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown);
-        },
+        // $('.loader').removeClass('d-none');
+        var users = $("#createUsers").serialize();
+        $.ajax({
+            type: "POST",
+            url: add_URL.href,
+            data: users,
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
+            success: function (data) {
+                // window.history.back();
+                window.location.href = this_URL.href;
+            },
+            error: function (data) {
+                // alert(errorThrown);
+                console.log(data.responseJSON.errors);
+                reportField(data.responseJSON.errors);
+            },
+        });
+    });
+
+    $(".editButton").on("click", function (e) {
+        e.preventDefault();
+        var users = $("#form-edit").serialize();
+        console.log(users);
+        $.ajax({
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
+            type: "POST",
+            url: edit_URL.href,
+            data: users,
+            success: function (data) {
+                console.log(data);
+                window.location.reload();
+            },
+            error: function (data) {
+                console.log(data.responseJSON.errors);
+                reportField(data.responseJSON.errors);
+            },
+        });
+    });
+
+    $("#changePassword").on("click", function (e) {
+        e.preventDefault();
+        console.log("asu");
+        $("#card-password").removeClass("d-none");
+    });
+    $(document).on("click", ".delete-trash", function (e) {
+        // Your click event handling code here
+        let check = $("#cariUsers").val();
+        if (check != "") {
+            e.preventDefault();
+            let users = $(this).data("users");
+            $("#idHidden").val(users);
+            console.log($("#idHidden").val());
+        } else {
+            e.preventDefault();
+            let users = $(this).data("users");
+            //change value modal
+            $("#idHidden").val(users.id);
+            console.log($("#idHidden").val());
+        }
+    });
+    $(document).on("click", ".role-update", function (e) {
+        e.preventDefault();
+        let check = $("#cariUsers").val();
+        if (check != "") {
+            let users = $(this).data("users");
+            // console.log(users);
+            var id = users;
+        } else {
+            let users = $(this).data("users");
+            // console.log(users.id);
+            var id = users.id;
+        }
+        let roles = $(this).closest("tr").find("#roles");
+        $.ajax({
+            type: "POST",
+            url: roleChange_URL.href,
+            data: {
+                id: id,
+                _token: tokens,
+            },
+            beforeSend: function () {
+                $("#spinner-border").removeClass("d-none");
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#spinner-border").addClass("d-none");
+                }, 320);
+            },
+            success: function (data) {
+                // console.log(data);
+                roles.html(data.role);
+                changeRoles();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            },
+        });
     });
 });
+

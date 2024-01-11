@@ -19,42 +19,79 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body">
-                <p>Daftar Tabel</p>
+            <div class="card-body bg-info">
+                <h1 class="text-center">Daftar Tabel</h1>
             </div>
         </div>
         <hr>
 
-        <a href="/tables/create" style="background-color: green;color:white; padding:2px 4px">Buat Tabel Baru</a>
-        <table id="tabel" class="table table-border">
-            <thead id="header-tabel">
-                <tr>
-                    <td>#</td>
-                    <td>Nama Tabel</td>
-                    <td>Nama Row</td>
-                    <td>Daftar Kolom</td>
-                    <td>Status Pengisian</td>
-                    <td>aksi</td>
+        <div class="row mb-2">
+            @if (session('success'))
+                <div class="alert alert-success temporary-message">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger temporary-message">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </div>
+        <table id="tabel" class="table table-bordered table-hover">
+            <thead id="header-tabel" class="bg-info">
+                <tr scope="col">
+                    <td class="align-middle">#</td>
+                    <td class="align-middle">Nama Tabel</td>
+                    <td class="align-middle">Nama Row</td>
+                    <td class="align-middle">Daftar Kolom</td>
+                    <td class="align-middle">Tahun</td>
+
+                    <td class="align-middle">Status Pengisian</td>
+                    <td class="align-middle">Cek / Ubah Isian</td>
+
+                    <td class="align-middle">Hapus</td>
                 </tr>
             </thead>
-            <tbody id="body-tabel">
+            <tbody id="body-tabel" class="bg-white">
                 @foreach ($tables as $index => $tab)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $tab['tabels'][0]->label }}</td>
-                        <td>{{ $tab['row_label'][0]->label }}</td>
+                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)
-                                <button class="button" style="background-color: aqua; padding:2px 4px">
+                                <span class="badge badge-info">
                                     {{ $column->label }}
-                                </button>
+                                </span>
                             @endforeach
                         </td>
-                        <td>...</td>
+                        <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
+
+                        <td>{{ $tab['status'] }}</td>
                         <td>
-                            <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a>
-                            <a href="/tables/edit/{{ $tab['tabels'][0]->id }}">Ubah</a>
-                            <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a>
+                            {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
+                            <a
+                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
+                                <i class="fas fa-eye text-info"></i>
+                            </a>
+                        </td>
+
+                        {{-- <td> --}}
+                        {{-- <a
+                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
+                                    class="fas fa-trash text-info"></i></a> --}}
+                        <td class="text-center">
+                            <form id="delete-table-form" method="POST"
+                                action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <a href="#" onclick="handleDeleteTable();" class="delete-trash">
+                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                </a>
+                            </form>
+                        </td>
+                        {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
+                        {{-- </td> --}}
 
                         </td>
 
@@ -69,21 +106,20 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
-            $(function() {
-                //Initialize Select2 Elements
-                $('.select2').select2()
+            const handleDeleteTable = function(encryptedId) {
+                if (confirm('Are you sure you want to delete this subject?')) {
+                    const form = document.getElementById('delete-table-form');
+                    form.submit();
+                }
 
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                })
-            });
+            }
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log({{ Js::from($tables) }});
+            })
         </script>
     </x-slot>
 </x-niu-layout>

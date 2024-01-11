@@ -9,8 +9,10 @@ class Statustables extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    public $timestamps = false;
 
-    public function tabel(){
+    public function tabel()
+    {
         return $this->belongsTo(Tabel::class, 'id_tabel', 'id');
     }
 }

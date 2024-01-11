@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 
 class UserController extends Controller
@@ -20,7 +21,7 @@ class UserController extends Controller
         //
         $number = 1;
         $id_regions = Region::getRegionId();
-        $users = User::orderBy('name')
+        $users = User::orderBy('dinas.nama')
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
             ->whereIn('dinas.id_regions', $id_regions)->get(['users.*']);
         foreach ($users as $user) {
@@ -116,6 +117,7 @@ class UserController extends Controller
         $users = User::when($searchQuery, function ($query) use ($searchQuery) {
             return $query
                 ->where('users.name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('users.username', 'like', '%' . $searchQuery . '%')
                 ->orWhere('dinas.nama', 'like', '%' . $searchQuery . '%')
                 ->orWhere('regions.nama', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.role', 'like', '%' . $searchQuery . '%')
@@ -145,9 +147,44 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
         //
+        $id_regions = Region::getRegionId();
+        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
+        $user = auth()->user();
+        return view('user.edit', [
+            'user' => $user,
+            'dinas' => $dinas,
+        ]);
+    }
+
+    public function editProfile(Request $request)
+    {
+        $id = auth()->user()->id;
+        $request->validate([
+            'username' => ['required', 'string', Rule::unique('users')->ignore($id)],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+            'noHp' => ['required', 'string', 'max:13'],
+            'password' => $request->filled('password') ? ['confirmed', Rules\Password::defaults()] : [],
+        ]);
+        $user = User::where('id', $id)->update([
+            'username' => $request->username,
+            'name' => $request->name,
+            'email' => $request->email,
+            'noHp' => $request->noHp,
+            'id_dinas' => $request->id_dinas,
+        ]);
+        if ($request->filled('password')) {
+            $user = User::where('id', $id)->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+        return response()->json([
+            "message" => "Berhasil",
+            "data" => $user,
+        ]);
     }
 
     /**

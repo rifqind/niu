@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        index
+        Daftar Dinas
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -12,8 +12,29 @@
             #tabel-dinas thead {
                 font-weight: bold;
             }
+            #tabel-dinas th {
+                cursor: pointer;
+            }
+
+            #tabel-dinas .th-sort-asc::after {
+                content: "\25b4";
+            }
+
+            #tabel-dinas .th-sort-desc::after {
+                content: "\25be";
+            }
+
+            #tabel-dinas .th-sort-asc::after,
+            #tabel-dinas .th-sort-desc::after {
+                margin-left: 5px;
+            }
+
+            #tabel-dinas .th-sort-asc,
+            #tabel-dinas .th-sort-desc {
+                background: rgba(0, 0, 0, 0.1);
+            }
         </style>
-        @vite(['resources/css/app.css'])
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -40,11 +61,11 @@
         <table class="table table-hover" id="tabel-dinas">
             <thead>
                 <tr>
-                    <td class="first-column">No.</td>
-                    <td class="text-center">Dinas</td>
-                    <td class="text-center">Wilayah Kerja</td>
-                    <td class="text-center">Edit</td>
-                    <td class="text-center">Hapus</td>
+                    <th class="first-column">No.</th>
+                    <th class="text-center" style="width: 50%;">Dinas</th>
+                    <th class="text-center">Wilayah Kerja</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Hapus</th>
                 </tr>
             </thead>
             <tbody>

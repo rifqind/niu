@@ -22,12 +22,12 @@
             Reset Pengguna
         </li>
     </x-slot>
-    <div style="max-width: 40vw;">
+    <div style="max-width: 50vw;">
         <div class="card mb-3">
             <div class="card-body">
                 <div class="row mb-3">
                     <input id="idHidden" class="hiddenInput" value="{{ $user->id }}" hidden>
-                    <div class="col d-flex align-items-center">
+                    <div class="col-3 d-flex align-items-center">
                         <label class="mb-0" for="name">Nama</label>
                     </div>
                     <div class="col d-flex align-items-center">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col d-flex align-items-center">
+                    <div class="col-3 d-flex align-items-center">
                         <label class="mb-0" for="email">Email</label>
                     </div>
                     <div class="col d-flex align-items-center">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col d-flex align-items-center">
+                    <div class="col-3 d-flex align-items-center">
                         <label class="mb-0" for="iddinas">Instansi</label>
                     </div>
                     <div class="col d-flex align-items-center">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col d-flex align-items-center">
+                    <div class="col-3 d-flex align-items-center">
                         <label class="mb-0" for="noHp">Nomor Hp</label>
                     </div>
                     <div class="col d-flex align-items-center">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col d-flex align-items-center">
+                    <div class="col-3 d-flex align-items-center">
                         <label class="mb-0" for="role">Peran</label>
                     </div>
                     <div class="col d-flex align-items-center">

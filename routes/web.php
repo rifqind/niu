@@ -1,15 +1,17 @@
 <?php
 
 use App\Http\Controllers\ColumnController;
+
+use App\Http\Controllers\ColumnGroupController;
 use App\Http\Controllers\DinasController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RowController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TabelController;
 use App\Http\Controllers\TurTahunGroupsController;
 use App\Http\Controllers\UserController;
-use App\Models\TurTahunGroup;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,9 +30,9 @@ Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.vi
 Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
 // });
 
-Route::middleware('auth')->get('/', function () {
-    return view('dashboard');
-});
+// Route::middleware('auth')->get('/', function () {
+//     return view('dashboard');
+// });
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
 Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
@@ -46,14 +48,32 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//Home
+Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified']);
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 //tabel
-Route::get('/test', [TabelController::class, 'test'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tables/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tables/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
-Route::get('/tables/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
-Route::post('/tables/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tables/update', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('table.update');
+
+Route::get('/tabel/master', [TabelController::class, 'master'])->middleware(['auth', 'verified'])->name('tabel.master');
+Route::get('/tabel/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
+Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
+Route::put('/tabel/update-content/{id}', [TabelController::class, 'update_content'])->middleware(['auth', 'verified'])->name('tabel.update_content');
+Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
+Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+Route::put('/tabel/update/{id}', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
+Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
+Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
+Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+
+Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->middleware(['auth', 'verified'])->name('tabel.copy');
+Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->middleware(['auth', 'verified'])->name('tabel.storeCopy');
+// Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
+
+Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->middleware(['auth', 'verified'])->name('tabel.edit');
+
+Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
+
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
 //dinas
@@ -82,6 +102,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('user/add', [UserController::class, 'addUser'])->name('users.add');
     Route::get('user/create', [UserController::class, 'create'])->name('users.create');
 });
+Route::get('user/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
+Route::post('user/editProfile', [UserController::class, 'editProfile'])->middleware(['auth', 'verified'])->name('users.editProfile');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // subject 
@@ -106,6 +128,102 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('column/{id}', [ColumnController::class, 'destroy'])->name('column.destroy');
 
     // turtahun groups
+    Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    // subject 
+
+    Route::get('/subject/index', [SubjectController::class, 'index'])->name('subject.index');
+    Route::get('/subject/create', [SubjectController::class, 'create'])->name('subject.create');
+    Route::post('/subject/store', [SubjectController::class, 'store'])->name('subject.store');
+    Route::get('/subject/edit/{id}', [SubjectController::class, 'edit'])->name('subject.edit');
+    Route::put('/subject/update', [SubjectController::class, 'update'])->name('subject.update');
+    Route::delete('subject/{id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
+
+    // rows
+    Route::get('/api/rows', [RowController::class, 'fetch'])->name('rows.fetch');
+
+    // columns
+    Route::get('/api/column', [ColumnController::class, 'fetch'])->name('column.fetch');
+    Route::get('/column/index', [ColumnController::class, 'index'])->name('column.index');
+    Route::get('/column/create', [ColumnController::class, 'create'])->name('column.create');
+    Route::post('/column/store', [ColumnController::class, 'store'])->name('column.store');
+    Route::get('/column/edit/{id}', [ColumnController::class, 'edit'])->name('column.edit');
+    Route::put('/column/update', [ColumnController::class, 'update'])->name('column.update');
+    Route::delete('column/{id}', [ColumnController::class, 'destroy'])->name('column.destroy');
+
+    // Column Groups
+    Route::get('/column-group/index', [ColumnGroupController::class, 'index'])->name('column_group.index');
+    Route::get('/column-group/create', [ColumnGroupController::class, 'create'])->name('column_group.create');
+    Route::post('/column-group/store', [ColumnGroupController::class, 'store'])->name('column_group.store');
+    Route::get('/column-group/edit/{id}', [ColumnGroupController::class, 'edit'])->name('column_group.edit');
+    Route::put('/column-group/update', [ColumnGroupController::class, 'update'])->name('column_group.update');
+    Route::delete('column-group/{id}', [ColumnGroupController::class, 'destroy'])->name('column_group.destroy');
+
+    // Periodes
+    Route::get('/periode/index', [PeriodeController::class, 'index'])->name('periode.index');
+    Route::get('/periode/create', [PeriodeController::class, 'create'])->name('periode.create');
+    Route::post('/periode/store', [PeriodeController::class, 'store'])->name('periode.store');
+    Route::get('/periode/edit/{id}', [PeriodeController::class, 'edit'])->name('periode.edit');
+    Route::put('/periode/update', [PeriodeController::class, 'update'])->name('periode.update');
+    Route::delete('periode/{id}', [PeriodeController::class, 'destroy'])->name('periode.destroy');
+
+    // turtahun groups
+    Route::get('/periode-group/index', [TurTahunGroupsController::class, 'index'])->name('periode_group.index');
+    Route::get('/periode-group/create', [TurTahunGroupsController::class, 'create'])->name('periode_group.create');
+    Route::post('/periode-group/store', [TurTahunGroupsController::class, 'store'])->name('periode_group.store');
+    Route::get('/periode-group/edit/{id}', [TurTahunGroupsController::class, 'edit'])->name('periode_group.edit');
+    Route::put('/periode-group/update', [TurTahunGroupsController::class, 'update'])->name('periode_group.update');
+    Route::delete('periode-group/{id}', [TurTahunGroupsController::class, 'destroy'])->name('periode_group.destroy');
+    Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    // subject 
+
+    Route::get('/subject/index', [SubjectController::class, 'index'])->name('subject.index');
+    Route::get('/subject/create', [SubjectController::class, 'create'])->name('subject.create');
+    Route::post('/subject/store', [SubjectController::class, 'store'])->name('subject.store');
+    Route::get('/subject/edit/{id}', [SubjectController::class, 'edit'])->name('subject.edit');
+    Route::put('/subject/update', [SubjectController::class, 'update'])->name('subject.update');
+    Route::delete('subject/{id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
+
+    // rows
+    Route::get('/api/rows', [RowController::class, 'fetch'])->name('rows.fetch');
+
+    // columns
+    Route::get('/api/column', [ColumnController::class, 'fetch'])->name('column.fetch');
+    Route::get('/column/index', [ColumnController::class, 'index'])->name('column.index');
+    Route::get('/column/create', [ColumnController::class, 'create'])->name('column.create');
+    Route::post('/column/store', [ColumnController::class, 'store'])->name('column.store');
+    Route::get('/column/edit/{id}', [ColumnController::class, 'edit'])->name('column.edit');
+    Route::put('/column/update', [ColumnController::class, 'update'])->name('column.update');
+    Route::delete('column/{id}', [ColumnController::class, 'destroy'])->name('column.destroy');
+
+    // Column Groups
+    Route::get('/column-group/index', [ColumnGroupController::class, 'index'])->name('column_group.index');
+    Route::get('/column-group/create', [ColumnGroupController::class, 'create'])->name('column_group.create');
+    Route::post('/column-group/store', [ColumnGroupController::class, 'store'])->name('column_group.store');
+    Route::get('/column-group/edit/{id}', [ColumnGroupController::class, 'edit'])->name('column_group.edit');
+    Route::put('/column-group/update', [ColumnGroupController::class, 'update'])->name('column_group.update');
+    Route::delete('column-group/{id}', [ColumnGroupController::class, 'destroy'])->name('column_group.destroy');
+
+    // Periodes
+    Route::get('/periode/index', [PeriodeController::class, 'index'])->name('periode.index');
+    Route::get('/periode/create', [PeriodeController::class, 'create'])->name('periode.create');
+    Route::post('/periode/store', [PeriodeController::class, 'store'])->name('periode.store');
+    Route::get('/periode/edit/{id}', [PeriodeController::class, 'edit'])->name('periode.edit');
+    Route::put('/periode/update', [PeriodeController::class, 'update'])->name('periode.update');
+    Route::delete('periode/{id}', [PeriodeController::class, 'destroy'])->name('periode.destroy');
+
+    // turtahun groups
+    Route::get('/periode-group/index', [TurTahunGroupsController::class, 'index'])->name('periode_group.index');
+    Route::get('/periode-group/create', [TurTahunGroupsController::class, 'create'])->name('periode_group.create');
+    Route::post('/periode-group/store', [TurTahunGroupsController::class, 'store'])->name('periode_group.store');
+    Route::get('/periode-group/edit/{id}', [TurTahunGroupsController::class, 'edit'])->name('periode_group.edit');
+    Route::put('/periode-group/update', [TurTahunGroupsController::class, 'update'])->name('periode_group.update');
+    Route::delete('periode-group/{id}', [TurTahunGroupsController::class, 'destroy'])->name('periode_group.destroy');
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
 });
 require __DIR__ . '/auth.php';

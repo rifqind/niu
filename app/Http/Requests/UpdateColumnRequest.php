@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Crypt;
 
 class UpdateColumnRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateColumnRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,24 @@ class UpdateColumnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id' => 'required',
+            'label' => 'required|string',
+            'id_columns_group' => 'required|integer',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $this->decryptId();
+        });
+    }
+    protected function decryptId()
+    {
+        $id = $this->input('id');
+        if ($id) {
+            $decryptedId = Crypt::decrypt($id);
+            $this->merge(['id' => $decryptedId]);
+        }
     }
 }

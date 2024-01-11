@@ -20,7 +20,13 @@
 }
 
 body {
-    font-family: "Segoe UI";
+    /* font-family: "Segoe UI"; */
+    /* font-family: 'Georgia', serif; */
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #40476d !important;
 }
 
 .overlay {

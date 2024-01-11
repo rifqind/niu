@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('columns', function (Blueprint $table) {
-            $table->renameColumn('id_columns_group', 'id_column_group');
+        Schema::create('status_desc', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            // $table->timestamps();
         });
     }
 
@@ -21,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('table_status_label');
     }
 };
