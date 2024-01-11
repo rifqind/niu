@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dinas;
+use App\Models\MasterWilayah;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,10 +21,10 @@ class UserController extends Controller
     {
         //
         $number = 1;
-        $id_regions = Region::getRegionId();
+        $id_wilayah = MasterWilayah::getMyWilayahId();
         $users = User::orderBy('dinas.nama')
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
-            ->whereIn('dinas.id_regions', $id_regions)->get(['users.*']);
+            ->whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])->get(['users.*']);
         foreach ($users as $user) {
             $user->number = $number;
             $number++;
@@ -48,8 +49,8 @@ class UserController extends Controller
 
     public function create()
     {
-        $id_regions = Region::getRegionId();
-        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
         return view('user.create', [
             'dinas' => $dinas,
         ]);
@@ -119,14 +120,14 @@ class UserController extends Controller
                 ->where('users.name', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.username', 'like', '%' . $searchQuery . '%')
                 ->orWhere('dinas.nama', 'like', '%' . $searchQuery . '%')
-                ->orWhere('regions.nama', 'like', '%' . $searchQuery . '%')
+                ->orWhere('master_wilayah.label', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.role', 'like', '%' . $searchQuery . '%')
                 ->orWhere('users.noHp', 'like', '%' . $searchQuery . '%');
         })
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
-            ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
+            ->leftJoin('master_wilayah', 'dinas.wilayah_fullcode', '=', 'master_wilayah.wilayah_fullcode')
             ->orderBy('dinas.nama')
-            ->get(['users.*', 'dinas.nama as dinas_nama', 'regions.nama as region_nama']);
+            ->get(['users.*', 'dinas.nama as dinas_nama', 'master_wilayah.label as region_nama']);
 
         $users->each(function ($user, $key) {
             $user->number = $key + 1;

@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
     {{ $head }}
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="hold-transition layout-fixed">
@@ -82,24 +82,10 @@
     <!-- Bootstrap 4 -->
     <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
-    <script src="{{ url('') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
-    <script src="{{ url('') }}/plugins/toastr/toastr.min.js"></script>
-    <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.main-footer').css('margin-left', 0);
         })
-        $(function() {
-            //Initialize Select2 Elements
-            $('.select2').select2()
-
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4',
-                // width: '100%',
-            })
-        });
     </script>
     {{ $script }}
 </body>

@@ -4,7 +4,7 @@ function saveDinas() {
         url: save_URL.href,
         data: {
             nama: $("#nama").val(),
-            id_regions: $("#regions").val(),
+            wilayah_fullcode: $("#wilayah_fullcode").val(),
             _token: tokens,
         },
         beforeSend: function () {
@@ -39,7 +39,7 @@ function updateTable(dinas) {
             <td class="text-center">
                 <a href=""
                 class="update-pen"
-                data-dinas="${data.id};${data.nama};${data.id_regions}"
+                data-dinas="${data.id};${data.nama};${data.wilayah_fullcode}"
                 data-toggle="modal" data-target="#updateModal">
                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
             </a>
@@ -86,14 +86,14 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#updateDinas").on("click", function (e) {
         let id = $("#idHidden").val();
         let nama = $("#namaModal").val();
-        let id_regions = $("#regionsModal").val();
+        let wilayah_fullcode = $("#wilayahModal").val();
         $.ajax({
             type: "POST",
             url: update_URL.href,
             data: {
                 id: id,
                 nama: nama,
-                id_regions: id_regions,
+                wilayah_fullcode: wilayah_fullcode,
                 _token: tokens,
             },
             beforeSend: function () {
@@ -163,15 +163,15 @@ document.addEventListener("DOMContentLoaded", function () {
             let split_dinas = dinas.split(/\s*,\s*/);
             let id = split_dinas[0];
             let nama = split_dinas[1];
-            let id_regions = split_dinas[2];
+            let wilayah_fullcode = split_dinas[2];
             $("#idHidden").val(id);
             $("#namaModal").val(nama);
-            $("#regionsModal").val(id_regions);
-            $(`#regionsModal option[value='${id_regions}']`).prop(
+            $("#wilayahModal").val(wilayah_fullcode);
+            $(`#wilayahModal option[value='${wilayah_fullcode}']`).prop(
                 "selected",
                 true
             );
-            $("#regionsModal").trigger("change");
+            $("#wilayahModal").trigger("change");
         } else {
             e.preventDefault();
             let dinas = $(this).data("dinas");
@@ -179,12 +179,12 @@ document.addEventListener("DOMContentLoaded", function () {
             //change value modal
             $("#idHidden").val(dinas.id);
             $("#namaModal").val(dinas.nama);
-            $("#regionsModal").val(dinas.id_regions);
-            $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
+            $("#wilayahModal").val(dinas.wilayah_fullcode);
+            $(`#wilayahModal option[value='${dinas.wilayah_fullcode}']`).prop(
                 "selected",
                 true
             );
-            $("#regionsModal").trigger("change");
+            $("#wilayahModal").trigger("change");
         }
     });
     $(document).on("click", ".update-pen", function (e) {
@@ -195,12 +195,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let split_dinas = dinas.split(/\s*;\s*/);
         let id = split_dinas[0];
         let nama = split_dinas[1];
-        let id_regions = split_dinas[2];
+        let wilayah_fullcode = split_dinas[2];
         $("#idHidden").val(id);
         $("#namaModal").val(nama);
-        $("#regionsModal").val(id_regions);
-        $(`#regionsModal option[value='${id_regions}']`).prop("selected", true);
-        $("#regionsModal").trigger("change");
+        $("#wilayahModal").val(wilayah_fullcode);
+        $(`#wilayahModal option[value='${wilayah_fullcode}']`).prop("selected", true);
+        $("#wilayahModal").trigger("change");
         // } else {
         //     e.preventDefault();
         //     let dinas = $(this).data("dinas");
@@ -208,12 +208,12 @@ document.addEventListener("DOMContentLoaded", function () {
         //     //change value modal
         //     $("#idHidden").val(dinas.id);
         //     $("#namaModal").val(dinas.nama);
-        //     $("#regionsModal").val(dinas.id_regions);
-        //     $(`#regionsModal option[value='${dinas.id_regions}']`).prop(
+        //     $("#wilayahModal").val(dinas.wilayah_fullcode);
+        //     $(`#wilayahModal option[value='${dinas.wilayah_fullcode}']`).prop(
         //         "selected",
         //         true
         //     );
-        //     $("#regionsModal").trigger("change");
+        //     $("#wilayahModal").trigger("change");
         // }
     });
 });

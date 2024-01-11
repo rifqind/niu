@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dinas;
+use App\Models\MasterWilayah;
 use App\Models\Region;
 use Illuminate\Http\Request;
 
@@ -15,17 +16,19 @@ class DinasController extends Controller
     {
         //
         $number = 1;
-        $regions = Region::getMyRegion();
-        $id_regions = Region::getRegionId();
-        // dd($regions);
-        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
+        $wilayah = MasterWilayah::getMyWilayah();
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $kabs = $wilayah["kabs"];
+        // dd($id_wilayah["kabs"]);
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
         foreach ($dinas as $din) {
             $din->number = $number;
             $number++;
         }
+
         return view('dinas.index', [
             'dinas' => $dinas,
-            'regions' => $regions
+            'kabs' => $kabs
         ]);
     }
 
@@ -36,10 +39,10 @@ class DinasController extends Controller
     {
         //
         // $regions = Region::all();
-        $regions = Region::getMyRegion();
+        $wilayah = MasterWilayah::getMyWilayah();
         // $id_regions = Region::getRegionId();
         return view('dinas.create', [
-            'regions' => $regions
+            'kabs' => $wilayah["kabs"]
         ]);
     }
 
@@ -50,11 +53,11 @@ class DinasController extends Controller
         $dinas = Dinas::when($searchQuery, function ($query) use ($searchQuery) {
             return $query
                 ->where('dinas.nama', 'like', '%' . $searchQuery . '%')
-                ->orWhere('regions.nama', 'like', '%' . $searchQuery . '%');
+                ->orWhere('master_wilayah.label', 'like', '%' . $searchQuery . '%');
         })
-            ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
+            ->leftJoin('master_wilayah', 'dinas.wilayah_fullcode', '=', 'master_wilayah.wilayah_fullcode')
             ->orderBy('dinas.nama')
-            ->get(['dinas.*', 'regions.nama as region_nama']);
+            ->get(['dinas.*', 'master_wilayah.label as region_nama']);
 
         $dinas->each(function ($din, $key) {
             $din->number = $key + 1;
@@ -71,7 +74,7 @@ class DinasController extends Controller
         //
         $dinas = Dinas::create([
             'nama' => $request->nama,
-            'id_regions' => $request->id_regions,
+            'wilayah_fullcode' => $request->wilayah_fullcode,
         ]);
         return response()->json('Berhasil');
     }
@@ -99,12 +102,10 @@ class DinasController extends Controller
     {
         //
         $id = $request->id;
-        $nama = $request->nama;
-        $id_regions = $request->id_regions;
 
         Dinas::where('id', $id)->update([
-            'nama' => $nama,
-            'id_regions' => $id_regions,
+            'nama' => $request->nama,
+            'wilayah_fullcode' => $request->wilayah_fullcode,
         ]);
         return response()->json('Berhasil');
     }

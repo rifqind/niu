@@ -73,10 +73,10 @@
                     <tr>
                         <td>{{ $din->number }}</td>
                         <td>{{ $din->nama }}</td>
-                        <td class="text-center">{{ $din->regions->nama }}</td>
+                        <td class="text-center">{{ $din->wilayah->label }}</td>
                         <td class="text-center">
                             <a href="" class="update-pen"
-                            data-dinas="{{ $din->id . ";" . $din->nama . ";" . $din->id_regions}}"
+                            data-dinas="{{ $din->id . ";" . $din->nama . ";" . $din->wilayah_fullcode}}"
                                 data-toggle="modal" data-target="#updateModal">
                                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
                             </a>

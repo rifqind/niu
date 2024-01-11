@@ -13,10 +13,10 @@
                     <input class="form-control mb-3" id="namaModal" placeholder="Isi Nama Dinas">
                     <input id="idHidden" class="hiddenInput" hidden>
                     <label for="regions">Wilayah Kerja</label>
-                    <select class="form-control select2bs4 mb-3" id="regionsModal">
-                        <option value="">Pilih Wilayah Kerja</option>
-                        @foreach ($regions as $region)
-                            <option value="{{ $region->id }}">{{ $region->nama }}</option>
+                    <select class="form-control select2bs4 mb-3" id="wilayahModal" style="width: 100%">
+                        <option value="" selected hidden disabled>-- Pilih Wilayah Kerja --</option>
+                        @foreach ($kabs as $kab)
+                            <option value="{{ $kab->wilayah_fullcode }}">{{ $kab->label }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -35,7 +35,7 @@
                 <h5 class="modal-title" id="deleteModalTitle">Hapus</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button
             </div>
             <div class="modal-body">
                 <div class="form-group">

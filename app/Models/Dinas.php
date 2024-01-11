@@ -11,7 +11,7 @@ class Dinas extends Model
     protected $guarded = ['id'];
     public $timestamps = false;
     
-    public function regions(){
-        return $this->belongsTo(Region::class, 'id_regions', 'id');
+    public function wilayah(){
+        return $this->belongsTo(MasterWilayah::class, 'wilayah_fullcode', 'wilayah_fullcode');
     }
 }

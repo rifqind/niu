@@ -29,10 +29,10 @@
                         <label for="nama">Nama Dinas</label>
                         <input class="form-control mb-3" id="nama" placeholder="Isi Nama Dinas">
                         <label for="regions">Wilayah Kerja</label>
-                        <select class="form-control select2bs4 mb-3" style="width: 100%;" id="regions">
-                            <option value="">Pilih Wilayah Kerja</option>
-                            @foreach ($regions as $region)
-                                <option value="{{ $region->id }}">{{ $region->nama }}</option>
+                        <select class="form-control select2bs4 mb-3" style="width: 100%;" id="wilayah_fullcode">
+                            <option value="" disabled selected hidden>-- Pilih Wilayah Kerja --</option>
+                            @foreach ($kabs as $kab)
+                                <option value="{{ $kab->wilayah_fullcode }}">{{ $kab->label }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -49,13 +49,9 @@
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('dinas.store') }}")
             const this_URL = "{{ url('dinas/index') }}"
-            // document.addEventListener("DOMContentLoaded", function() {
-            //     document
-            //         .getElementById("dinas-save")
-            //         .addEventListener("click", function(e) {
-            //             saveDinas();
-            //         });
-            // })
+            document.addEventListener("DOMContentLoaded", function() {
+                // $("#regions").select2()
+            })
         </script>
     </x-slot>
 </x-niu-layout>

@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-7 d-flex flex-column">
                             <select class="form-control select2bs4" id="iddinas" name="id_dinas">
-                                <option value="">-- Pilih Instansi --</option>
+                                <option value="" selected hidden disabled>-- Pilih Instansi --</option>
                                 @foreach ($dinas as $din)
                                     <option value="{{ $din->id }}">{{ $din->nama }}</option>
                                 @endforeach

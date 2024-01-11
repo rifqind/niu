@@ -41,7 +41,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="text-right">
-                            <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm btn-info">Daftar</a>
+                            {{-- <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm btn-info">Daftar</a> --}}
                             <button id="login" class="btn btn-sm btn-success">Masuk</button>
                         </div>
                     </div>
@@ -52,12 +52,6 @@
     <x-slot name="script">
         {{-- <script src="{{ asset('js/user.js') }}"></script> --}}
         <script>
-            $(document).ready(function() {
-                // $('.select2bs4').select2();
-                
-            })
-            // const store_URL = new URL ("{{ route('users.store') }}")
-            // const index_URL = new URL ("{{ route('users.index') }}")
         </script>
     </x-slot>
 </x-register-layout>

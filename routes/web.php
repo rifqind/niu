@@ -33,10 +33,11 @@ Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search')
 Route::middleware('auth')->get('/', function () {
     return view('dashboard');
 })->name('/');
+
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
-Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
-Route::post('user/store', [UserController::class, 'store'])->name('users.store');
+// Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
+// Route::post('user/store', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

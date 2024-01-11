@@ -68,11 +68,11 @@
                 <th class="first-column">No.</th>
                 <th class="text-center">Username</th>
                 <th class="text-center" style="width: 15%">Nama</th>
-                <th class="text-center" style="width: 30%">Nama Instansi</th>
-                <th class="text-center">Wilayah Kerja</th>
+                <th class="text-center" style="width: 20%">Nama Instansi</th>
+                <th class="text-center" style="width: 20%;">Wilayah Kerja</th>
                 <th class="text-center">No. HP</th>
                 <th class="text-center">Peran</th>
-                <th class="text-center">Edit</th>
+                <th class="text-center" style="width: 5%;">Edit</th>
                 <th class="text-center">Hapus</th>
             </tr>
         </thead>
@@ -83,7 +83,7 @@
                     <td>{{ $user->username }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->dinas->nama }}</td>
-                    <td>{{ $user->dinas->regions->nama }}</td>
+                    <td>{{ $user->dinas->wilayah->label }}</td>
                     <td class="text-center">{{ $user->noHp }}</td>
                     <td class="text-center" id="roles">{{ $user->role }}</td>
                     <td class="text-center">
