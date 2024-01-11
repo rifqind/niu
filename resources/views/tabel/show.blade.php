@@ -124,8 +124,8 @@
                             @foreach ($turtahuns as $turtahun)
                                 @foreach ($columns as $column)
                                     <td><input type="text" class="form-control input-field text-right"
-                                            data-id-content=""
-                                            id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                            data-id-content="" data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
+                                            id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                     </td>
                                 @endforeach
                             </tr> --}}
@@ -211,15 +211,29 @@
                 element.innerHTML = 'Loading...';
                 // return 0
                 let inputField = Array.from(document.querySelectorAll('.input-field'));
-                let inputValues = inputField.map(element => ({
-                    // get the Id and value of the element 
-                    'id': element.dataset.idContent,
-                    'label': element.id,
-                    'value': element.value
 
-                    // assign it to the arrays
 
-                }));
+                let inputValues = inputField.map(element => {
+                    let explodedId = element.id.split('-');
+                    console.log({
+                        explodedId
+                    })
+
+                    return ({
+                        // get the Id and value of the element 
+                        'id': element.dataset.idContent,
+                        // 'id_tabel': explodedId[0],
+                        // 'id_row': explodedId[1].length == 10 ? 0 : explodedId[1],
+                        // 'id_column': explodedId[2],
+                        // 'tahun': explodedId[3],
+                        // 'id_turtahun': explodedId[4],
+                        // 'wilayah_fullcode': element.dataset.wilayah_fullcode,
+                        'value': element.value
+
+                        // assign it to the arrays
+
+                    })
+                });
                 let token = '{{ csrf_token() }}'
                 let data_json = ({
                     'data': inputValues,
@@ -275,18 +289,22 @@
             // For example, after 3 seconds
 
             const dataContents = {{ Js::from($datacontents) }};
+            console.log({
+                dataContents
+            });
             dataContents.map((content) => {
-                contentSplitted = content.label.split("-");
-                tableId = contentSplitted[0];
-                rowId = contentSplitted[1];
-                columnId = contentSplitted[2];
-                tahun = contentSplitted[3];
-                turtahun = contentSplitted[4];
+                // contentSplitted = content.label.split("-");
+                tableId = content.id_tabel;
+                rowId = content.id_row;
+                columnId = content.id_column;
+                tahun = content.tahun;
+                turtahun = content.id_turtahun;
+                wilayah = content.wilayah_fullcode;
 
                 // rowLabel = data.rows.find((row) => {
                 //     if (row.id == rowId) return row.label;
                 // });
-                let inputId = `${tableId}-${rowId}-${columnId}-${tahun}-${turtahun}`;
+                let inputId = `${tableId}-${rowId==0?wilayah:$rowId}-${columnId}-${tahun}-${turtahun}`;
                 // debugn 
                 console.log({
                     inputId,

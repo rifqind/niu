@@ -3,6 +3,12 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\MasterDesa;
+use App\Models\MasterKabupaten;
+use App\Models\MasterKecamatan;
+use App\Models\MasterProvinsi;
+use App\Models\MasterWilayah;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,5 +35,10 @@ class DatabaseSeeder extends Seeder
                 $this->call(DinasSeeder::class);
                 $this->call(RegionSeeder::class);
                 $this->call(SubjectSeeder::class);
+                $this->call(MasterProvinsi::class);
+                $this->call(MasterKabupaten::class);
+                $this->call(MasterKecamatan::class);
+                $this->call(MasterDesa::class);
+                $this->call(MasterWilayah::class);
         }
 }

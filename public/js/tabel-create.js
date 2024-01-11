@@ -22,6 +22,7 @@ function handleCheckRow(idRow) {
 // submit action
 
 function handleSubmitCreateTable(createURL, data) {
+    console.log("submitting...");
     const xhr = new XMLHttpRequest();
 
     xhr.open("POST", createURL, true);
@@ -75,6 +76,62 @@ function handleLabel(url, nameLabel, bodyHtmlId) {
             });
             document.getElementById(bodyHtmlId).innerHTML =
                 tableBodyHtml.join("");
+        } else {
+            console.error("Error:", xhr.status, xhr.statusText);
+        }
+    };
+    xhr.onerror = function () {
+        console.error("Network Error");
+    };
+
+    // Send the request
+    xhr.send();
+}
+
+function handleFetchKecamatan(url) {
+    let kecamatanHtmlId = "kec-label-select";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+
+    // Set up event handlers
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var response = JSON.parse(xhr.responseText);
+            let placeholderText =
+                '<option value="">--- Pilih Kecamatan ---</option>';
+            const tableBodyHtml = response.data.map((item, key) => {
+                return `<option value="${item.wilayah_fullcode}">${item.label}</option>`;
+            });
+            document.getElementById(kecamatanHtmlId).innerHTML =
+                placeholderText + tableBodyHtml.join("");
+        } else {
+            console.error("Error:", xhr.status, xhr.statusText);
+        }
+    };
+    xhr.onerror = function () {
+        console.error("Network Error");
+    };
+
+    // Send the request
+    xhr.send();
+}
+function handleFetchDesa(url) {
+    let kecamatanHtmlId = "desa-label-select";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+
+    // Set up event handlers
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var response = JSON.parse(xhr.responseText);
+            console.log("Success:", response.data);
+            let placeholderText =
+                '<option value="">--- Pilih Desa ---</option>';
+            const tableBodyHtml = response.data.map((item, key) => {
+                return `<option value="${item.wilayah_fullcode}">${item.label}</option>`;
+            });
+            document.getElementById(kecamatanHtmlId).innerHTML =
+                placeholderText + tableBodyHtml.join("");
         } else {
             console.error("Error:", xhr.status, xhr.statusText);
         }

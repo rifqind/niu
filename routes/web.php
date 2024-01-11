@@ -30,9 +30,9 @@ Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.vi
 Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
 // });
 
-// Route::middleware('auth')->get('/', function () {
-//     return view('dashboard');
-// });
+Route::middleware('auth')->get('/', function () {
+    return view('dashboard');
+})->name('/');
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
 Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
@@ -225,5 +225,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::put('/periode-group/update', [TurTahunGroupsController::class, 'update'])->name('periode_group.update');
     Route::delete('periode-group/{id}', [TurTahunGroupsController::class, 'destroy'])->name('periode_group.destroy');
     Route::get('/api/turtahungroups', [TurTahunGroupsController::class, 'fetch'])->name('turtahungroups.fetch');
+
+    // master api
+    Route::get('master/wilayah/kecamatan/{kab}', [TabelController::class, 'fetchMasterKecamatan'])->name('master.wilayah.kecamatan');
+    Route::get('master/wilayah/desa/{kec}', [TabelController::class, 'fetchMasterDesa'])->name('master.wilayah.desa');
 });
 require __DIR__ . '/auth.php';
