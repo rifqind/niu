@@ -1,5 +1,5 @@
-$(document).ready(function () {
-    $("form").submit(function (e) {
+document.addEventListener("DOMContentLoaded", function () {
+    $("form").on("submit", function (e) {
         e.preventDefault();
         let datas = $(
             "#search-tabel :input:not(#dinas\\[\\]--1-chbx)"

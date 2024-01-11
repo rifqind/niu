@@ -1,7 +1,11 @@
 // Import jQuery
 import jQuery from "jquery";
 
-window.$ = window.jQuery = jQuery;
+window.$ = window.jQuery = jQuery.noConflict(true);
+var formCreateTable = {};
+
+// import $ from "jquery";
+// window.$ = window.jQuery = $;
 
 // Import Bootstrap's JavaScript
 import "bootstrap";
@@ -26,17 +30,13 @@ window.Alpine = Alpine;
 Alpine.start();
 select2();
 
-// import filterMultiSelect from "filterMultiSelect";
-
-// import filterMultiSelect from "../../public/js/filter-multi-select-bundle.min.js";
-
-// Importing filter-multi-select-bundle.min.js with any chosen name
-// import * as myFilterModule from "../../public/js/filter-multi-select-bundle.min.js";
-
+import FilterMultiSelect from "./filter-multi-select-bundle.min.js";
+FilterMultiSelect($);
 // Import your custom scripts here
 
 // Initialize any code that relies on jQuery after the document is ready
 document.addEventListener("DOMContentLoaded", function () {
+    // console.log($);
     $(".select2").select2();
 
     //Initialize Select2 Elements

@@ -73,40 +73,59 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="container-fluid" style="padding-left: 2vw; padding-right: 2vw;">
+    <div class="container-fluid">
 
         <div class="card">
             <div class="card-body bg-info">
-                <h2>{{ $tabel->judul_tabel . ' Tahun ' . $tahuns[0] }}</h2>
+                <h2>{{ $tabel->judul_tabel }}</h2>
             </div>
         </div>
-        <div class="table-container">
-            <div class="row">
-                <div class="overflow-x-scroll">
-                    <table class="table table-striped table-bordered" id="komponen">
-                        <thead>
-                            <tr>
-                                <td rowspan="3">#</td>
-                                <td rowspan="3">{{ $row_label[0]->label }}</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($rows as $key => $row)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $row->label }}</td>
-                                </tr>
+
+        </select>
+        <table class="table table-bordered table-hover">
+            <thead class="bg-info">
+                {{-- kolom tahun --}}
+                <tr>
+                    <td rowspan="3">#</td>
+                    <td rowspan="3">{{ $row_label[0]->label }}</td>
+                    @foreach ($tahuns as $tahun)
+                        <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">{{ $tahun }}
+                        </td>
+                    @endforeach
+                </tr>
+                <tr>
+                    @foreach ($tahuns as $tahun)
+                        @foreach ($turtahuns as $turtahun)
+                            <td colspan="{{ sizeof($columns) }}" class="text-center">{{ $turtahun->label }}</td>
+                        @endforeach
+                    @endforeach
+                </tr>
+                {{-- kolom grup var  --}}
+                {{-- kolom var  --}}
+
+                <tr>
+                    @foreach ($turtahuns as $turtahun)
+                        @foreach ($tahuns as $tahun)
+                            @foreach ($columns as $index => $column)
+                                <td>{{ $column->label }}</td>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-data-wrapper">
-                    <table class="table table-bordered" id="rekon-view">
-                        <thead>
-                            {{-- <tr>
-                                @foreach ($tahuns as $tahun)
-                                    <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
-                                        {{ $tahun }}
+                        @endforeach
+                    @endforeach
+
+                </tr>
+            </thead>
+
+            <tbody class="bg-white">
+                @foreach ($rows as $key => $row)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $row->label }}</td>
+                        @foreach ($tahuns as $tahun)
+                            @foreach ($turtahuns as $turtahun)
+                                @foreach ($columns as $column)
+                                    <td><input type="text" class="form-control input-field text-right"
+                                            data-id-content=""
+                                            id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                     </td>
                                 @endforeach
                             </tr> --}}
@@ -146,10 +165,14 @@
                                     @endforeach
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+        {{-- <hr> --}}
+        <div class="container">
             <div class="row">
                 <div class="col text-left">
                     <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
@@ -159,9 +182,6 @@
                     <a href="#" class="btn btn-primary" id="save-table">Simpan <i class="fas fa-save"></i></a>
                 </div>
             </div>
-        </div>
-        {{-- <hr> --}}
-        <div class="container">
         </div>
     </div>
 
@@ -182,10 +202,8 @@
 
                     event.preventDefault();
                     handleSaveTable(button, buttonInitialText);
+
                 });
-                document.body.classList.add("sidebar-collapse");
-                var rekonViewTheadHeight = $('#rekon-view thead').height();
-                $('#komponen thead').height(rekonViewTheadHeight);
             });
             const handleSaveTable = function(element, buttonInitialText) {
                 element.disabled = true;

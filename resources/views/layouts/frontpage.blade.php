@@ -22,7 +22,8 @@
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
-    @vite(['resources/css/app.css'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="hold-transition">
@@ -77,28 +78,28 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
+    {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script> --}}
     <!-- Bootstrap 4 -->
-    <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
     <!-- AdminLTE App -->
-    <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
-    <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
+    {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
+    {{-- <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script> --}}
     <script>
-        $(function() {
-            //Initialize Select2 Elements
-            $('.select2').select2()
+        // $(function() {
+        //     //Initialize Select2 Elements
+        //     // $('.select2').select2()
 
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4',
-                width: '100%',
-            })
-            $('.select-multiple').select2({
-                theme: 'bootstrap4',
-                width: '100%',
-                multiple: true,
-            })
-        });
+        //     // //Initialize Select2 Elements
+        //     // $('.select2bs4').select2({
+        //     //     theme: 'bootstrap4',
+        //     //     width: '100%',
+        //     // })
+        //     // $('.select-multiple').select2({
+        //     //     theme: 'bootstrap4',
+        //     //     width: '100%',
+        //     //     multiple: true,
+        //     // })
+        // });
     </script>
     {{ $script }}
 </body>

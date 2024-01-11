@@ -133,16 +133,18 @@
 
         <x-slot name="script">
             {{-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> --}}
-            <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script>
+            {{-- <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script> --}}
             <script src="{{ asset('js/home.js') }}"></script>
             <script>
-                $(function() {
-                    $('#dinas-select').filterMultiSelect({
-                        placeholderText: 'Pilih Dinas'
-                    });
-                    $('#tahun-select').filterMultiSelect({
-                        placeholderText: 'Pilih Tahun'
-                    });
+                document.addEventListener('DOMContentLoaded', function() {
+                    // alert('asu')
+                    // $('#dinas-select').filterMultiSelect({
+                    //     placeholderText: 'Pilih Dinas'
+                    // });
+                    // $('#tahun-select').filterMultiSelect({
+                    //     placeholderText: 'Pilih Tahun'
+                    // });
+                    // $('body').addClass('bg-info')
                 });
             </script>
         </x-slot>

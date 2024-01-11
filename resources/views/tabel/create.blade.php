@@ -32,11 +32,11 @@
         </div>
 
         <hr>
-        <form action="" id="table">
+        <form action="" id="create-form">
             <b>Detail Tabel</b>
             <div class="form-group">
                 <label for="dinas">Dinas Tabel</label>
-                <select name="dinas" class="form-control select2-selection select2bs4">
+                <select name="dinas" id="dinas" class="form-control select2-selection select2bs4" required>
                     <option value="">-- Pilih Dinas --</option>
                     @foreach ($daftar_dinas as $item)
                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -45,16 +45,17 @@
             </div>
             <div class="form-group">
                 <label for="nomor">Nomor Tabel</label>
-                <input type="text" class="form-control" name="nomor">
+                <input type="text" class="form-control" name="nomor" required>
             </div>
             <div class="form-group">
                 <label for="judul">Judul Tabel</label>
-                <input type="text" class="form-control" name="judul">
+                <input type="text" class="form-control" name="judul" required>
             </div>
             <div class="form-group">
                 <label for="subjek">Subjek Tabel</label>
 
-                <select name="subjek" class="form-control select2 select2-selection select2bs4">
+                <select name="subjek" id="subjek" class="form-control select2 select2-selection select2bs4"
+                    required>
                     <option value="">-- Pilih Subjek --</option>
                     @foreach ($subjects as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
@@ -63,7 +64,7 @@
             </div>
             <div class="form-group">
                 <label for="unit">Unit Tabel</label>
-                <input type="text" class="form-control" name="unit">
+                <input type="text" class="form-control" name="unit" required>
             </div>
             <br>
             <hr>
@@ -71,7 +72,8 @@
             <br>
             <div class="form-group">
                 <label for="row-label">Row Label</label>
-                <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select">
+                <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select"
+                    required>
                     <option value="">-- Pilih Row Label --</option>
                     @foreach ($row_labels as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
@@ -107,7 +109,8 @@
 
             <div class="form-group">
                 <label for="column-group">Grup Kolom</label>
-                <select name="column-group" class="form-control select2-selection select2bs4" id="column-group-select">
+                <select name="column-group" class="form-control select2-selection select2bs4" id="column-group-select"
+                    required>
                     <option value="">-- Pilih Grup Kolom --</option>
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
@@ -138,13 +141,14 @@
             <br>
             <div class="form-group">
                 <label for="tahun">Tahun Tabel</label>
-                <select name="tahun" id="tahun" class="form-control select2-selection select2bs4"></select>
+                <select name="tahun" id="tahun" class="form-control select2-selection select2bs4"
+                    required></select>
             </div>
 
             <div class="form-group">
                 <label for="turtahun-group">Jenis Turunan Tahun</label>
                 <select name="turtahun-group" class="form-control select2-selection select2bs4"
-                    id="turtahun-group-select">
+                    id="turtahun-group-select" required>
                     <option value="">-- Pilih Turunan Tahun / Periode --</option>
                     @foreach ($turtahun_groups as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
@@ -170,224 +174,183 @@
                 </thead>
                 <tbody id="turtahun-list-body" class="bg-white">
 
+
+
                 </tbody>
             </table>
 
-            <button type="button" id="submit-create-table" class="btn btn-info">Buat Tabel</button>
+
+            <button type="button" id="check-create-table" class="btn btn-info">Buat Tabel</button>
         </form>
 
     </div>
-
+    @include('tabel.create-modal');
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-
+        <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script>
-            const url_key = new URL("{{ route('tabel.getDatacontent') }}");
-            // set initial values
-            const form = document.getElementById('table');
+            document.addEventListener("DOMContentLoaded", function() {
+
+                const createForm = document.getElementById("create-form");
+                document
+                    .getElementById("check-create-table")
+                    .addEventListener("click", function(event) {
+                        event.preventDefault();
+
+                        let formValidity = createForm.checkValidity();
+                        if (formValidity) {
+                            let table = {
+                                nomor: document.getElementsByName("nomor")[0].value,
+                                label: document.getElementsByName("judul")[0].value,
+                                unit: document.getElementsByName("unit")[0].value,
+                                id_dinas: document.getElementsByName("dinas")[0].value,
+                                id_subjek: document.getElementsByName("subjek")[0].value,
+                            };
+
+                            // prepare rows
+                            let rows_selected = [
+                                    ...document.getElementsByClassName("row-list-checkbox"),
+                                ]
+                                .filter((item) => item.checked)
+                                .map((item) => item.value);
+                            let rows = {
+                                row_label: document.getElementsByName("row-label")[0].value,
+                                rows_selected: rows_selected,
+                            };
+                            //prepare kolom
+                            let columns_selected = [
+                                    ...document.getElementsByClassName("column-list-checkbox"),
+                                ]
+                                .filter((item) => item.checked)
+                                .map((item) => item.value);
+                            let column_keyValuePair = [
+                                    ...document.getElementsByClassName("column-list-checkbox"),
+                                ]
+                                .filter((item) => item.checked)
+                                .map((item) => ({
+                                    'label': item.getAttribute('data-label'),
+                                    'key': item.value
+                                }));
+
+                            let columns = {
+                                columns_label: document.getElementsByName("column-group")[0].value,
+                                columns: columns_selected,
+                            };
+
+                            // prepare periode
+                            let periode = {
+                                tahun: document.getElementsByName("tahun")[0].value,
+                                periode: document.getElementsByName("turtahun-group")[0].value,
+                            };
+                            const tdElements = document.querySelectorAll('#turtahun-list-body tr td:nth-child(3)');
+
+                            // Use the map method to create an array from the inner HTML content of the selected td elements
+                            const periodeArray = Array.from(tdElements).map(function(td) {
+                                return td.innerHTML; // Return the inner HTML content of each td element
+                            });
+                            const tdElementRows = document.querySelectorAll('#row-list-body tr td:nth-child(3)');
+
+                            // Use the map method to create an array from the inner HTML content of the selected td elements
+                            const rowsArray = Array.from(tdElementRows).map(function(td) {
+                                return td.innerHTML; // Return the inner HTML content of each td element
+                            });
 
 
-            // handle select all
-            function handleSelectAll(isSelected, elementSelector) {
-                var selectedItems = $(elementSelector).each(function(index, item) {
-                    item.checked = isSelected;
-                    console.log({
-                        checked: item.checked
+
+
+
+                            // create table preview
+                            let row_label_ = document.querySelector(
+                                '#row-list-body > tr:nth-child(1) > td:nth-child(2)').innerHTML;
+                            const theadHTML = `
+    <tr>
+        <th rowspan="2" class="text-center align-middle">#</th>
+        <th rowspan="2" class="text-center align-middle">${row_label_}</th>
+        ${periodeArray.map(item => `<th colspan="${column_keyValuePair.length}" class="text-center align-middle">${item}</td>`).join('')}
+        </tr>
+        <tr>
+            ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th style="width:100px">${item2.label}</th>`).join('')).join('')}
+    </tr>
+`;
+                            const tbodyHTML = rowsArray.map((rowItem, index) => {
+                                return `<tr>
+        <td>${index + 1}</td>
+        <td>${rowItem}</td>
+        ${periodeArray.map(periodItem => column_keyValuePair.map(columnItem => "<td></td>").join('')).join('')}
+    </tr>`;
+                            }).join('');
+                            document.querySelector('#preview-table thead').innerHTML = theadHTML;
+                            document.querySelector('#preview-table tbody').innerHTML = tbodyHTML;
+
+                            // prepare table
+
+                            window.formCreateTable = {
+                                table,
+                                rows,
+                                columns,
+                                periode,
+                                _token: token_,
+                            };
+
+
+                            $("#confirmationModal").modal("show");
+                        } else {
+                            createForm.reportValidity();
+                        }
+
                     });
-                });
-                return 1;
-            }
-
-            // handle select one row
-
-            function handleCheckRow(idRow) {
-                let rowChecked = document.getElementById(idRow).checked;
-                if (rowChecked) {
-                    return document.getElementById(idRow).checked = false;
-                }
-                return document.getElementById(idRow).checked = true;
-            }
-
-            // submit action 
-
-            function handleSubmitCreateTable() {
-                // prepare table
-                let table = {
-                    'nomor': document.getElementsByName('nomor')[0].value,
-                    'label': document.getElementsByName('judul')[0].value,
-                    'unit': document.getElementsByName('unit')[0].value,
-                    'id_dinas': document.getElementsByName('dinas')[0].value,
-                    'id_subjek': document.getElementsByName('subjek')[0].value,
-                };
-
-                // prepare rows 
-                let rows_selected = [...document.getElementsByClassName('row-list-checkbox')].filter(item => item.checked)
-                    .map(
-                        item =>
-                        item.value);
-                let rows = {
-                    'row_label': document.getElementsByName('row-label')[0].value,
-                    'rows_selected': rows_selected
-                };
-                //prepare kolom 
-                let columns_selected = [...document.getElementsByClassName('column-list-checkbox')].filter(item => item
-                        .checked)
-                    .map(
-                        item =>
-                        item.value);
-                let columns = {
-                    'columns_label': document.getElementsByName('column-group')[0].value,
-                    'columns': columns_selected
-                };
-
-                // prepare periode 
-                let periode = {
-                    'tahun': document.getElementsByName('tahun')[0].value,
-                    'periode': document.getElementsByName('turtahun-group')[0].value,
-                }
-                let token = '{{ csrf_token() }}'
-
-                let data = {
-                    table,
-                    rows,
-                    columns,
-                    periode,
-                    _token: '{{ csrf_token() }}',
-                }
-                console.log({
-                    data
-                })
-                // return 0;
-
-                // prepare sending data
-
-
-                const xhr = new XMLHttpRequest();
-
-                xhr.open('POST', "{{ route('tabel.create') }}", true);
-
-                xhr.setRequestHeader('Content-Type', 'application/json');
-
-                let jsonData = JSON.stringify(data);
-
-                xhr.onload = function() {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        var response = JSON.parse(xhr.responseText);
-                        console.log('Success:', response);
-                    } else {
-                        console.error('Error:', xhr.status, xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('Network Error');
-                };
-                xhr.send(jsonData);
-            }
-
-            function handleLabel(url, nameLabel, bodyHtmlId, ) {
-                // Create URL with parameters
-                // let url = '{{ route('rows.fetch') }}?id_rowLabels=' + id_rowLabels;
-
-                // Create XMLHttpRequest
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
-
-                // Set up event handlers
-                xhr.onload = function() {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        var response = JSON.parse(xhr.responseText);
-                        console.log('Success:', response.data);
-                        const tableBodyHtml = response.data.map((item,
-                            key
-                        ) => {
-                            console.log({
-                                item
-                            })
-                            return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
-                                <th scope="row" class="text-right">
-                                    ${key + 1 }
-                                </th>
-                                <td>${item.tipe}</td>
-                                <td>${item.label}</td>
-                                <td> <input type="checkbox" aria-label="Checkbox for following text input"
-                                        class="${nameLabel}-list-checkbox" id="${nameLabel}-${key }" value="${item.id}">
-                                </td>
-                            </tr>`
-                        });
-                        document.getElementById(bodyHtmlId).innerHTML = tableBodyHtml.join('');
-
-                    } else {
-                        console.error('Error:', xhr.status, xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('Network Error');
-                };
-
-                // Send the request
-                xhr.send();
-            }
-
-
-
-
-            document.addEventListener('DOMContentLoaded', function() {
-
-                document.getElementById('submit-create-table').addEventListener('click', function(event) {
-                    event.preventDefault();
-                    handleSubmitCreateTable();
-
-                });
 
                 // $('.select2bs4').select2();
 
-                $('#row-label-select').on('select2:select', () => {
-                    let idRowLabel = document.getElementById('row-label-select').value;
+                $("#row-label-select").on("select2:select", () => {
+                    let idRowLabel = document.getElementById("row-label-select").value;
                     let rowLabelUrl = `{{ route('rows.fetch') }}?id_rowLabels=${idRowLabel}`;
 
-                    handleLabel(rowLabelUrl, 'row', 'row-list-body')
+                    handleLabel(rowLabelUrl, "row", "row-list-body");
                 });
-                $('#column-group-select').on('select2:select', () => {
-                    let idRowLabel = document.getElementById('column-group-select').value;
+                $("#column-group-select").on("select2:select", () => {
+                    let idRowLabel = document.getElementById("column-group-select").value;
                     let rowLabelUrl = `{{ route('column.fetch') }}?id_columnGroups=${idRowLabel}`;
 
-                    handleLabel(rowLabelUrl, 'column', 'column-list-body');
+                    handleLabel(rowLabelUrl, "column", "column-list-body");
                 });
-                $('#turtahun-group-select').on('select2:select', () => {
-                    let idRowLabel = document.getElementById('turtahun-group-select').value;
+                $("#turtahun-group-select").on("select2:select", () => {
+                    let idRowLabel = document.getElementById("turtahun-group-select").value;
                     let rowLabelUrl = `{{ route('turtahungroups.fetch') }}?id_turtahunGroup=${idRowLabel}`;
 
-                    handleLabel(rowLabelUrl, 'turtahun', 'turtahun-list-body');
-
+                    handleLabel(rowLabelUrl, "turtahun", "turtahun-list-body");
                 });
 
-                $('#select-toggle-column').on('click', (event) => {
+                $("#select-toggle-column").on("click", (event) => {
                     let isSelected = event.target.checked;
-                    handleSelectAll(isSelected, '.column-list-checkbox');
+                    handleSelectAll(isSelected, ".column-list-checkbox");
                 });
-                $('#select-toggle-row').on('click', (event) => {
+                $("#select-toggle-row").on("click", (event) => {
+
                     let isSelected = event.target.checked;
-                    handleSelectAll(isSelected, '.row-list-checkbox');
+                    handleSelectAll(isSelected, ".row-list-checkbox");
                 });
 
                 const currentYear = new Date().getFullYear();
 
                 // Populate the select dropdown with years
-                const yearSelect = document.getElementById('tahun');
+                const yearSelect = document.getElementById("tahun");
 
                 for (let year = currentYear; year >= currentYear - 10; year--) {
-                    const option = document.createElement('option');
+                    const option = document.createElement("option");
                     option.value = year;
                     option.text = year;
                     yearSelect.add(option);
                 }
 
-                document.getElementsByName('nomor')[0].value = "000/1";
-                document.getElementsByName('judul')[0].value = "Judul Tabel";
-                document.getElementsByName('unit')[0].value = "Unit asw";
+                document.getElementsByName("nomor")[0].value = "000/1";
+                document.getElementsByName("judul")[0]
+                    .value = "Judul Tabel";
+                document.getElementsByName("unit")[0].value = "Unit asw";
                 // $('.select2-selection').trigger('change');
-
+                $("#dinas").val("2").trigger("change");
+                $("#subjek").val("4").trigger("change");
             });
         </script>
     </x-slot>
