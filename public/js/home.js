@@ -13,7 +13,6 @@ $(document).ready(function () {
                     $("#spinner-border").addClass("d-none");
                 }, 320);
             },
-
             url: $(this).attr("action"),
             type: "GET",
             data: datas,
