@@ -57,7 +57,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
-                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['row_label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">

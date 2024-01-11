@@ -220,7 +220,7 @@
                 // rowLabel = data.rows.find((row) => {
                 //     if (row.id == rowId) return row.label;
                 // });
-                let inputId = `${tableId}-${rowId==0?wilayah:$rowId}-${columnId}-${tahun}-${turtahun}`;
+                let inputId = `${tableId}-${rowId==0?wilayah:rowId}-${columnId}-${tahun}-${turtahun}`;
                 // debugn 
                 console.log({
                     inputId,
