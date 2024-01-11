@@ -28,9 +28,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        const token_ = "{{ csrf_token() }}";
+
         createTableURL = "{{ route('tabel.store') }}";
-        document.getElementById("submit-create-table").addEventListener("click", handleSubmitCreateTable(
+        document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
             createTableURL, window.formCreateTable));
     });
 </script>

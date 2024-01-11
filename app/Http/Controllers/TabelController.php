@@ -8,6 +8,8 @@ use App\Models\ColumnGroup;
 
 use App\Models\Datacontent;
 use App\Models\Dinas;
+use App\Models\MasterDesa;
+use App\Models\MasterWilayah;
 use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
@@ -18,6 +20,7 @@ use App\Models\Turtahun;
 use App\Models\TurTahunGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class TabelController extends Controller
 {
@@ -40,34 +43,32 @@ class TabelController extends Controller
             //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
             //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
             //     ->get();
-            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
+            $datacontents = Datacontent::where('id_tabel', $table->id)->get();
 
             $id_rows = [];
             $id_columns = [];
-            foreach ($data as $dat) {
-                $split = explode("-", $dat->label);
-                array_push($id_rows, $split[1]);
-                array_push($id_columns, $split[2]);
-                $tahun = $split[3];
-                $turtahuns = $split[4];
+            foreach ($datacontents as $datacontent) {
+                $split = explode("-", $datacontent->label);
+                array_push($id_rows, $datacontent->id_row);
+                array_push($id_columns, $datacontent->id_column);
             }
             $rows = Row::whereIn('id', $id_rows)->get();
             try {
                 //code...
                 $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
             } catch (\Exception $e) {
-                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id));
+                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'rows' => $rows));
             }
             $columns = Column::whereIn('id', $id_columns)->get();
             array_push($table_objects, [
-                'datacontents' => $data,
+                'datacontents' => $datacontents,
                 'label' => $table->label,
                 'id' => $table->id,
                 'rows' => $rows,
                 'row_label' => $rowLabel,
                 'columns' => $columns,
                 'tahun' => $table->tahun,
-                'turtahuns' => $turtahuns,
+                // 'turtahuns' => $turtahuns,
                 'status' => $table->status,
                 'id_statustables' => $table->id_statustables,
             ]);
@@ -93,23 +94,20 @@ class TabelController extends Controller
             //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
             //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
             //     ->get();
-            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
+            $datacontents = Datacontent::where('id_tabel', $table->id)->get();
 
             $id_rows = [];
             $tahunObjects = Statustables::where('id_tabel', $table->id)->select('tahun')->distinct()->get();
 
             $tahuns = $tahunObjects->pluck('tahun')->toArray();
             $id_columns = [];
-            foreach ($data as $dat) {
-                $split = explode("-", $dat->label);
-                array_push($id_rows, $split[1]);
-                array_push($id_columns, $split[2]);
-                // $tahun = $split[3];
+            foreach ($datacontents as $datacontent) {
+                // $split = explode("-", $datacontent->label);
+                array_push($id_rows, $datacontent->id_row);
 
-                // if (!in_array($tahun, $tahuns)) {
-                //     $tahuns[] = $tahun;
-                // }
-                $turtahuns = $split[4];
+                array_push($id_columns, $datacontent->id_column);
+
+                // $turtahuns = $split[4];
             }
             $rows = Row::whereIn('id', $id_rows)->get();
             try {
@@ -117,18 +115,18 @@ class TabelController extends Controller
                 $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
             } catch (\Exception $e) {
                 // return response()->json(array('data' => $tables));
-                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'data' => $data));
+                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'data' => $datacontents));
             }
             $columns = Column::whereIn('id', $id_columns)->get();
             array_push($table_objects, [
-                'datacontents' => $data,
+                'datacontents' => $datacontents,
                 'label' => $table->label,
                 'id' => $table->id,
                 'rows' => $rows,
                 'row_label' => $rowLabel,
                 'columns' => $columns,
                 'tahuns' => $tahuns,
-                'turtahuns' => $turtahuns,
+                // 'turtahuns' => $turtahuns,
                 'status' => $table->status,
                 'id_statustables' => $table->id_statustables,
             ]);
@@ -230,6 +228,9 @@ class TabelController extends Controller
         $subjects = Subject::all();
         $turtahun_groups = TurTahunGroup::all();
 
+        // nyari kabupaten
+        $kabupatens = MasterWilayah::where('desa', 'like', '000')->where('kec', 'like', '000')->where('kab', 'not like', '00')->select(['wilayah_fullcode', 'label'])->get();
+
         // $row_list = $this->get_rows_by_row_labels(1);
 
         return view('tabel.create', [
@@ -241,7 +242,7 @@ class TabelController extends Controller
             // 'row_list' => $row_list,
             'kolom_grup' => $kolom_grup,
             'subjects' => $subjects,
-
+            'kabupatens' => $kabupatens
         ]);
     }
 
@@ -252,42 +253,33 @@ class TabelController extends Controller
     {
         // insert table
         $newTable = Tabel::create($request->table);
+        $id_dinas = $request->table["id_dinas"];
+        //debatable
+        $wilayah_fc = Dinas::where('id', $id_dinas)->pluck("wilayah_fullcode");
         $periodes = Turtahun::where('type', $request->periode['periode'])->get();
         // generate datacontents
         $data_contents = [];
+        $is_wilayah = $request->rows['tipe_row'] == 1;
         foreach ($request->rows["rows_selected"] as $row) {
             foreach ($request->columns["columns"] as $column) {
                 foreach ($periodes as $period) {
 
-                    $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
-                    $datavalue = "";
-                    array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
-                }
-            }
-        }
-        Datacontent::insert($data_contents);
-        return response()->json([
-            "column" => $request->columns,
-            "periode" => $request->periode,
-            "row" => $request->rows,
-            "table" => $request->table,
-            'dat' => $data_contents
-        ]);
-        // insert table
-        $newTable = Tabel::create($request->table);
-        $periodes = Turtahun::where('type', $request->periode['periode'])->get();
-        // generate datacontents
-        $data_contents = [];
-        foreach ($request->rows["rows_selected"] as $row) {
-            foreach ($request->columns["columns"] as $column) {
-                foreach ($periodes as $period) {
+                    // $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
+                    $datacontent = [
+                        'id_tabel' => $newTable->id,
+                        'id_row' =>  $is_wilayah ? 0 : $row,
+                        'id_column' => $column,
+                        'tahun' => $request->periode['tahun'],
+                        'id_turtahun' => $period->id,
+                        'wilayah_fullcode' =>  $is_wilayah ? (string) $row : (string) $wilayah_fc,
 
-                    $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
+                    ];
                     $datavalue = "";
-                    array_push($data_contents, ["label" => $datacode, 'value' => $datavalue]);
+                    array_push($data_contents, $datacontent);
                 }
             }
         }
+
         Datacontent::insert($data_contents);
         Statustables::create(
             [
@@ -389,26 +381,37 @@ class TabelController extends Controller
         $id_tabel = $statusTabel->id_tabel;
         $tahun = $statusTabel->tahun;
 
-        $pattern = $id_tabel . '-%-' . $tahun . '-%';
+        // $pattern = $id_tabel . '-%-' . $tahun . '-%';
 
-        $data = Datacontent::where('label', 'LIKE', $pattern)->get();
-        // return response()->json(['data' => $data, 'pattern' => $pattern, 'id_status' => $decryptedId]);
+        $datacontents = Datacontent::where('id_tabel', $id_tabel)->where('tahun', $tahun)->get();
+        // return response()->json(['data' => $datacontents, 'pattern' => $pattern, 'id_status' => $decryptedId]);
         $id_rows = [];
+        $wilayah_fullcodes = [];
         $id_columns = [];
         $tahuns = [];
         $turTahunKeys = [];
 
-        foreach ($data as $dat) {
-            $split = explode("-", $dat->label);
+        foreach ($datacontents as $datacontent) {
+            $split = explode("-", $datacontent->label);
 
-            array_push($id_rows, $split[1]);
-            array_push($id_columns, $split[2]);
-            array_push($tahuns, $split[3]);
-            array_push($turTahunKeys, $split[4]);
+            array_push($id_rows, $datacontent->id_row);
+            array_push($id_columns, $datacontent->id_column);
+            array_push($tahuns, $datacontent->tahun);
+            array_push($turTahunKeys, $datacontent->id_turtahun);
+
+            array_push($wilayah_fullcodes, $datacontent->wilayah_fullcode);
         }
         // $tabels = Tabel::where('id', $id)->get();
+
         $rows = Row::whereIn('id', $id_rows)->get();
         $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+        if ($rows[0]->id == 0) {
+
+            $rowLabel = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)->get();
+            $rows = $rowLabel;
+            //belum beres
+        }
+
         $columns = Column::whereIn('id', $id_columns)->get();
         $tahuns = array_unique($tahuns);
         sort($tahuns);
@@ -419,7 +422,7 @@ class TabelController extends Controller
 
         // return response()->json(array('rows' => $tahuns));
         return view('tabel.show', [
-            'datacontents' => $data,
+            'datacontents' => $datacontents,
             // 'tabels' => $tabels,
             'encryptedId' => $id,
             'tahuns' => $tahuns,
@@ -439,15 +442,15 @@ class TabelController extends Controller
         $decryptedId = Crypt::decrypt($id);
         $tabel = Tabel::where('id', $decryptedId)->first();
         // search for id row label
-        $data_contents = DataContent::where('label', 'like', $decryptedId . '-%')->first();
-        $splittedData = explode("-", $data_contents->label);
-        $id_row = $splittedData[1];
+        $data_contents = DataContent::where('id_tabel', 'like', $decryptedId)->first();
+        // $splittedData = explode("-", $data_contents->label);
+        // $id_row = $splittedData[1];
 
-        // search for id column group
-        $id_column = $splittedData[2];
+        // // search for id column group
+        // $id_column = $splittedData[2];
 
-        //search for turtahun
-        $id_turtahun = $splittedData[4];
+        // //search for turtahun
+        // $id_turtahun = $splittedData[4];
 
 
 
@@ -577,5 +580,21 @@ class TabelController extends Controller
             return response()->json(['status' => $e->getMessage()]);
             return back()->with('error', $e->getMessage());
         }
+    }
+    public function fetchMasterKecamatan($kab)
+    {
+        $daftar_kecamatan = MasterWilayah::where('kab', 'like', $kab)->where('kec', 'not like', '000')->where('desa', 'like', '000')->get();
+        return response()->json([
+            'data' => $daftar_kecamatan,
+            'status_code' => 200
+        ]);
+    }
+    public function fetchMasterDesa($kec)
+    {
+        $daftar_desa = MasterWilayah::where('kec', 'like', $kec)->where('kec', 'not like', '000')->where('desa', 'not like', '000')->get();
+        return response()->json([
+            'data' => $daftar_desa,
+            'status_code' => 200
+        ]);
     }
 }

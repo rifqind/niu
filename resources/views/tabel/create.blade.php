@@ -70,19 +70,71 @@
             <hr>
             <b>Detail Rows</b>
             <br>
+
             <div class="form-group">
-                <label for="row-label">Row Label</label>
-                <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select"
-                    required>
-                    <option value="">-- Pilih Row Label --</option>
-                    @foreach ($row_labels as $item)
-                        <option value="{{ $item->id }}">{{ $item->label }}</option>
-                    @endforeach
+                <label for="tipe-row-label">Tipe Row</label>
+                <select name="tipe-row-label" class="form-control" id="tipe-row-label-select" required>
+                    <option value="">-- Pilih Tipe Row --</option>
+                    <option value="1">Wilayah</option>
+                    <option value="2">Non - Wilayah</option>
                 </select>
+            </div>
+
+            {{-- IF tipe row = wilayah --}}
+            <div id="row-wilayah" style="display: none">
+                <div class="form-group">
+                    <label for="tingkat-label">Tingkatan Wilayah</label>
+                    <select name="tingkat-label" class="form-control" id="tingkat-label-select">
+                        <option value="">-- Pilih Tingkatan --</option>
+
+                        <option value="1">Kabupaten</option>
+                        <option value="2">Kecamatan</option>
+                        <option value="3">Desa</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="kabupaten-group">
+                    <label for="kab-label">Kabupaten</label>
+                    <select name="kab-label" class="form-control  select2-selection select2bs4" id="kab-label-select">
+                        <option value="">-- Pilih Kabupaten --</option>
+                        @foreach ($kabupatens as $kabupaten)
+                            <option value="{{ $kabupaten->wilayah_fullcode }}">{{ $kabupaten->label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group" id="kecamatan-group">
+                    <label for="kec-label">Kecamatan</label>
+                    <select name="kec-label" class="form-control  select2-selection select2bs4" id="kec-label-select">
+                        {{-- <option value="">-- Pilih Row Label --</option> --}}
+
+                    </select>
+                </div>
+                <div class="form-group" id="desa-group">
+                    <label for="desa-label">Desa</label>
+                    <select name="desa-label" class="form-control  select2-selection select2bs4" id="desa-label-select">
+                        {{-- <option value="">-- Pilih Row Label --</option> --}}
+
+                    </select>
+                </div>
+            </div>
+
+            {{-- IF tipe row = non wilayah --}}
+            <div id="non-wilayah">
+
+                <div class="form-group">
+                    <label for="row-label">Row Label</label>
+                    <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select">
+                        <option value="">-- Pilih Row Label --</option>
+                        @foreach ($row_labels as $item)
+                            <option value="{{ $item->id }}">{{ $item->label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
             </div>
             <b>Row List</b>
             <hr>
-
             <div class="row">
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
@@ -92,7 +144,8 @@
                             </th>
                             <th scope="col">Tipe</th>
                             <th scope="col">Label</th>
-                            <th scope="col"><input type="checkbox" id="select-toggle-row" name="select-toggle-row">
+                            <th scope="col"><input type="checkbox" id="select-toggle-row"
+                                    name="select-toggle-row">
                                 <label for="select-toggle-row"> Pilih Semua</label>
                             </th>
                         </tr>
@@ -109,8 +162,8 @@
 
             <div class="form-group">
                 <label for="column-group">Grup Kolom</label>
-                <select name="column-group" class="form-control select2-selection select2bs4" id="column-group-select"
-                    required>
+                <select name="column-group" class="form-control select2-selection select2bs4"
+                    id="column-group-select" required>
                     <option value="">-- Pilih Grup Kolom --</option>
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
@@ -128,7 +181,8 @@
                         </th>
                         <th scope="col">Tipe</th>
                         <th scope="col">Label</th>
-                        <th scope="col"><input type="checkbox" id="select-toggle-column" name="select-toggle-column">
+                        <th scope="col"><input type="checkbox" id="select-toggle-column"
+                                name="select-toggle-column">
                             <label for="select-toggle-column"> Pilih Semua</label>
                         </th>
                     </tr>
@@ -191,7 +245,172 @@
         <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
+                createTableURL = "{{ route('tabel.store') }}";
+                document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
+                    createTableURL, window.formCreateTable));
+                let tipe_row = document.getElementById('tipe-row-label-select');
+                tipe_row.addEventListener("change", function(event) {
 
+                    if (event.target.value == 1) {
+                        document.getElementById('row-wilayah').style.display = "block";
+                        document.getElementById('non-wilayah').style.display = "none";
+                    } else {
+                        document.getElementById('row-wilayah').style.display = "none";
+                        document.getElementById('non-wilayah').style.display = "block";
+                    }
+                });
+
+                let tingkat_wilayah = document.getElementById('tingkat-label-select');
+                tingkat_wilayah.addEventListener("change", function(event) {
+
+                    if (event.target.value == 1) {
+                        // kabupaten
+                        document.getElementById('kabupaten-group').style.display = "none";
+                        document.getElementById('kecamatan-group').style.display = "none";
+                        document.getElementById('desa-group').style.display = "none";
+                        // fetch kabupaten
+                        let kabupaten = {{ Js::from($kabupatens) }};
+                        let nameLabel = 'row';
+                        let kabupaten_html = kabupaten.map((item, key) => {
+                            item.tipe = 'KABUPATEN';
+                            return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                    <th scope="row" class="text-right">
+                        ${key + 1}
+                    </th>
+                    <td>${item.tipe}</td>
+                    <td>${item.label}</td>
+                    <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
+                        item.label
+                    }"
+                            class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
+                    item.wilayah_fullcode
+                }">
+                    </td>
+                </tr>`;
+                        }).join('');
+                        let row_list = document.getElementById('row-list-body');
+                        row_list.innerHTML = kabupaten_html;
+
+
+                    } else if (event.target.value == 2) {
+                        document.getElementById('kabupaten-group').style.display = "block";
+                        document.getElementById('kecamatan-group').style.display = "none";
+                        document.getElementById('desa-group').style.display = "none";
+
+                        // fetch 
+
+                    } else {
+                        document.getElementById('kabupaten-group').style.display = "block";
+                        document.getElementById('kecamatan-group').style.display = "block";
+                        document.getElementById('desa-group').style.display = "none";
+                    }
+                });
+
+
+                $("#kab-label-select").on("select2:select", (event) => {
+                    let kabupaten_kode = event.target.value.substring(2, 4);
+                    let tingkat_wilayah = document.getElementById('tingkat-label-select').value;
+                    let url = `{{ route('/') }}/master/wilayah/kecamatan/${kabupaten_kode}`;
+                    if (tingkat_wilayah == 3) {
+                        handleFetchKecamatan(url);
+                    }
+                    if (tingkat_wilayah == 2) {
+
+                        let kecamatanHtmlId = "kec-label-select";
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("GET", url, true);
+
+                        // Set up event handlers
+                        xhr.onload = function() {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                var response = JSON.parse(xhr.responseText);
+
+                                let nameLabel = 'row';
+                                let kecamatan_html = response.data.map((item, key) => {
+                                    item.tipe = 'KECAMATAN';
+                                    return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                                        <th scope="row" class="text-right">
+                                            ${key + 1}
+                                        </th>
+                                        <td>${item.tipe}</td>
+                                        <td>${item.label}</td>
+                                        <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
+                                            item.label
+                                        }"
+                                                class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
+                                        item.wilayah_fullcode
+                                    }">
+                                        </td>
+                                    </tr>`;
+                                }).join('');
+                                let row_list = document.getElementById('row-list-body');
+                                row_list.innerHTML = kecamatan_html;
+
+                            } else {
+                                console.error("Error:", xhr.status, xhr.statusText);
+                            }
+                        };
+                        xhr.onerror = function() {
+                            console.error("Network Error");
+                        };
+
+                        // Send the request
+                        xhr.send();
+
+                    }
+
+                    return 0;
+                });
+
+                $("#kec-label-select").on("select2:select", (event) => {
+                    let kecamatan_kode = event.target.value.substring(4, 7);
+
+                    let url = `{{ route('/') }}/master/wilayah/desa/${kecamatan_kode}`;
+
+                    let desaHtmlId = "desa-label-select";
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", url, true);
+
+                    // Set up event handlers
+                    xhr.onload = function() {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            var response = JSON.parse(xhr.responseText);
+
+                            let nameLabel = 'row';
+                            let desa_html = response.data.map((item, key) => {
+                                item.tipe = 'DESA';
+                                return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                                        <th scope="row" class="text-right">
+                                            ${key + 1}
+                                        </th>
+                                        <td>${item.tipe}</td>
+                                        <td>${item.label}</td>
+                                        <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
+                                            item.label
+                                        }"
+                                                class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
+                                        item.wilayah_fullcode
+                                    }">
+                                        </td>
+                                    </tr>`;
+                            }).join('');
+                            let row_list = document.getElementById('row-list-body');
+                            row_list.innerHTML = desa_html;
+
+                        } else {
+                            console.error("Error:", xhr.status, xhr.statusText);
+                        }
+                    };
+                    xhr.onerror = function() {
+                        console.error("Network Error");
+                    };
+
+                    // Send the request
+                    xhr.send();
+
+
+                    return 0;
+                });
                 const createForm = document.getElementById("create-form");
                 document
                     .getElementById("check-create-table")
@@ -209,12 +428,14 @@
                             };
 
                             // prepare rows
+
                             let rows_selected = [
                                     ...document.getElementsByClassName("row-list-checkbox"),
                                 ]
                                 .filter((item) => item.checked)
                                 .map((item) => item.value);
                             let rows = {
+                                tipe_row: document.getElementById('tipe-row-label-select').value,
                                 row_label: document.getElementsByName("row-label")[0].value,
                                 rows_selected: rows_selected,
                             };
@@ -290,7 +511,7 @@
                                 rows,
                                 columns,
                                 periode,
-                                _token: token_,
+                                _token: "{{ csrf_token() }}",
                             };
 
 
