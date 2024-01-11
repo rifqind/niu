@@ -25,7 +25,7 @@ class HomeController extends Controller
         //
         $regions = Region::all();
         $dinas = Dinas::all();
-        $tabel_final = Statustables::where('status', 4)->pluck('id');
+        $tabel_final = Statustables::where('status', 5)->pluck('id');
         // $tabels = Tabel::whereIn('id', $tabel_final)->get();
         $tabels = Statustables::where('status', 5)
             ->leftJoin('tabels', 'statustables.id_tabel', '=', 'tabels.id')
@@ -41,9 +41,9 @@ class HomeController extends Controller
                 'subjects.label as nama_subjects'
             ]);
         $subjects = Subject::all();
-        $tahuns = Statustables::where('status', 4)->distinct()->get('tahun');
+        $tahuns = Statustables::where('status', 5)->distinct()->get('tahun');
 
-        $countfinals = Statustables::where('status', 4)->count();
+        $countfinals = Statustables::where('status', 5)->count();
         $counttabels = $tabels->count();
         return view('frontpage', [
             'regions' => $regions,
