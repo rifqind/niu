@@ -47,15 +47,41 @@ class TabelController extends Controller
 
             $id_rows = [];
             $id_columns = [];
+            $wilayah_fullcodes = [];
             foreach ($datacontents as $datacontent) {
                 $split = explode("-", $datacontent->label);
                 array_push($id_rows, $datacontent->id_row);
                 array_push($id_columns, $datacontent->id_column);
+                array_push($wilayah_fullcodes, $datacontent->wilayah_fullcode);
             }
             $rows = Row::whereIn('id', $id_rows)->get();
             try {
                 //code...
-                $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+                if ($rows[0]->id == 0) {
+                    // $wilayah_master = MasterWilayah::where('wilayah_fullcode','like',$wilayah_fullcodes[0]);
+                    $wilayah_parent_code = '';
+                    $jenis = "DAFTAR ";
+
+                    $desa = substr($wilayah_fullcodes[0], 7, 3);
+                    $kec = substr($wilayah_fullcodes[0], 4, 3);
+                    $kab = substr($wilayah_fullcodes[0], 2, 2);
+                    if ($desa != '000') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 7) . '000';
+                        $jenis = $jenis . "DESA DI ";
+                    } else if ($kec != '000') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 4) . '000' . '000';
+                        $jenis = $jenis . "KECAMATAN DI ";
+                    } else if ($kab != '00') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 2) . '00' . '000' . '000';
+                        $jenis = $jenis . "KABUPATEN DI ";
+                    }
+                    $rowLabel = $jenis . MasterWilayah::where('wilayah_fullcode', $wilayah_parent_code)->pluck('label')[0];
+                    $rowLabel = strtolower($rowLabel);
+                    $rowLabel = ucwords($rowLabel);
+                } else {
+
+                    $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->pluck('label')[0];
+                }
             } catch (\Exception $e) {
                 return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'rows' => $rows));
             }
@@ -420,7 +446,17 @@ class TabelController extends Controller
         $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
 
 
-        // return response()->json(array('rows' => $tahuns));
+        // return response()->json( [
+        //     'datacontents' => $datacontents,
+        //     // 'tabels' => $tabels,
+        //     'encryptedId' => $id,
+        //     'tahuns' => $tahuns,
+        //     'rows' => $rows,
+        //     'row_label' => $rowLabel,
+        //     'columns' => $columns,
+        //     'turtahuns' => $turtahuns,
+        //     'tabel' => $statusTabel
+        // ]);
         return view('tabel.show', [
             'datacontents' => $datacontents,
             // 'tabels' => $tabels,
@@ -589,9 +625,9 @@ class TabelController extends Controller
             'status_code' => 200
         ]);
     }
-    public function fetchMasterDesa($kec)
+    public function fetchMasterDesa($kab, $kec)
     {
-        $daftar_desa = MasterWilayah::where('kec', 'like', $kec)->where('kec', 'not like', '000')->where('desa', 'not like', '000')->get();
+        $daftar_desa = MasterWilayah::where('kab', 'like', $kab)->where('kec', 'like', $kec)->where('kec', 'not like', '000')->where('desa', 'not like', '000')->get();
         return response()->json([
             'data' => $daftar_desa,
             'status_code' => 200

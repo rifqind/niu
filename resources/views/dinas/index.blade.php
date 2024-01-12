@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover" id="tabel-dinas">
+        <table class="table table-sorted table-hover" id="tabel-dinas">
             <thead>
                 <tr>
                     <th class="first-column">No.</th>

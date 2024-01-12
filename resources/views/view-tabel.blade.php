@@ -20,7 +20,7 @@
             }
 
             #komponen td:first-child {
-                width: 4vh;
+                width: 10%;
             }
 
             #komponen thead,
@@ -40,7 +40,7 @@
             }
 
             #komponen tbody tr td,
-            #rekon-view tbody tr td{
+            #rekon-view tbody tr td {
                 /* height: 20px; */
                 height: 40px;
                 padding: 0;
@@ -60,19 +60,27 @@
             .table-data-wrapper table {
                 border-left: 0;
             }
+            .bg-jos {
+                background-color: #40476d;
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
 
     <div class="container-fluid" style="padding-left: 2vw; padding-right: 2vw;">
+        <div class="card mt-5">
+            <div class="card-body bg-jos">
+                <h1 class="text-center text-white">Tabel {{ $tabels->label }}, Tahun {{ $tahun }}</h1>
+            </div>
+        </div>
         <div class="table-container">
-            <div class="row mt-5">
+            <div class="row">
                 <div class="overflow-x-scroll">
                     <table class="table table-bordered" id="komponen">
-                        <thead class="text-bold text-white" style="background-color: #40476d">
+                        <thead class="text-bold text-white bg-jos">
                             <tr>
                                 <td rowspan="3" class="align-middle">#</td>
-                                <td rowspan="3" class="align-middle">{{ $row_label[0]->label }}</td>
+                                <td rowspan="3" class="align-middle">{{ $row_label }}</td>
                             </tr>
                         </thead>
                         <tbody style="background-color: white">
@@ -87,7 +95,7 @@
                 </div>
                 <div class="table-data-wrapper">
                     <table class="table table-bordered" id="rekon-view">
-                        <thead class="text-bold text-white" style="background-color: #40476d">
+                        <thead class="text-bold text-white bg-jos">
                             {{-- <tr>
                                 @foreach ($tahuns as $tahun)
                                     <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
@@ -124,7 +132,8 @@
                                         @foreach ($turtahuns as $turtahun)
                                             @foreach ($columns as $column)
                                                 <td class="text-center align-middle"
-                                                    id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                                data-id-content="" data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
+                                                id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                                 </td>
                                             @endforeach
                                         @endforeach
@@ -149,18 +158,22 @@
             // get data from the form
 
             const dataContents = {{ Js::from($datacontents) }};
+            console.log({
+                dataContents
+            });
             dataContents.map((content) => {
-                contentSplitted = content.label.split("-");
-                tableId = contentSplitted[0];
-                rowId = contentSplitted[1];
-                columnId = contentSplitted[2];
-                tahun = contentSplitted[3];
-                turtahun = contentSplitted[4];
+                // contentSplitted = content.label.split("-");
+                tableId = content.id_tabel;
+                rowId = content.id_row;
+                columnId = content.id_column;
+                tahun = content.tahun;
+                turtahun = content.id_turtahun;
+                wilayah = content.wilayah_fullcode;
 
                 // rowLabel = data.rows.find((row) => {
                 //     if (row.id == rowId) return row.label;
                 // });
-                let inputId = `${tableId}-${rowId}-${columnId}-${tahun}-${turtahun}`;
+                let inputId = `${tableId}-${rowId==0?wilayah:rowId}-${columnId}-${tahun}-${turtahun}`;
                 // debugn 
                 console.log({
                     inputId,
@@ -169,7 +182,8 @@
                 document.getElementById(inputId).innerHTML = content.value;
                 // document.getElementById(inputId).dataset.idContent = content.id;
             });
-            $(document).ready(function() {
+            // $(document).ready(function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 var rekonViewTheadHeight = $('#rekon-view thead').height();
                 $('#komponen thead').height(rekonViewTheadHeight);
             })

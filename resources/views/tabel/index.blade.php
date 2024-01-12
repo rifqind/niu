@@ -37,19 +37,19 @@
                 </div>
             @endif
         </div>
-        <table id="tabel" class="table table-bordered table-hover">
+        <table id="tabel" class="table table-bordered table-hover table-sorted">
             <thead id="header-tabel" class="bg-info">
                 <tr scope="col">
-                    <td class="align-middle">#</td>
-                    <td class="align-middle">Nama Tabel</td>
-                    <td class="align-middle">Nama Row</td>
-                    <td class="align-middle">Daftar Kolom</td>
-                    <td class="align-middle">Tahun</td>
+                    <th class="align-middle">#</th>
+                    <th class="align-middle">Nama Tabel</th>
+                    <th class="align-middle">Nama Row</th>
+                    <th class="align-middle">Daftar Kolom</th>
+                    <th class="align-middle">Tahun</th>
 
-                    <td class="align-middle">Status Pengisian</td>
-                    <td class="align-middle">Cek / Ubah Isian</td>
+                    <th class="align-middle">Status Pengisian</th>
+                    <th class="align-middle">Cek / Ubah Isian</th>
 
-                    <td class="align-middle">Hapus</td>
+                    <th class="align-middle">Hapus</th>
                 </tr>
             </thead>
             <tbody id="body-tabel" class="bg-white">
@@ -57,7 +57,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
-                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['row_label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">

@@ -10,54 +10,6 @@
 
         <script></script>
         <style type="text/css">
-            #komponen {
-                table-layout: fixed;
-                width: 400px;
-                /* display: inline-block; */
-                background: #f9fafc;
-                border-right: 1px solid #e6eaf0;
-                vertical-align: top;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-
-            #komponen td:first-child {
-                width: 4vh;
-            }
-
-            #komponen thead,
-            #rekon-view thead {
-                /* min-height: 200px; */
-                /* height: 200px; */
-                vertical-align: middle;
-                padding: .1rem;
-                /* white-space: nowrap; */
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-
-            #rekon-view tbody tr td input {
-                padding-right: 1rem;
-                min-width: 180px;
-            }
-
-            #komponen tbody tr td,
-            #rekon-view tbody tr td {
-                height: 60px;
-                padding: 0.5rem;
-            }
-
-            .table-data-wrapper {
-                /* display: inline-block; */
-                overflow-x: auto;
-                vertical-align: top;
-                width: calc(100% - 400px);
-            }
-
-            .table-data-wrapper table {
-                border-left: 0;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -128,42 +80,6 @@
                                             id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                     </td>
                                 @endforeach
-                            </tr> --}}
-                            <tr>
-                                @foreach ($tahuns as $tahun)
-                                    @foreach ($turtahuns as $turtahun)
-                                        <td colspan="{{ sizeof($columns) }}" class="text-center">{{ $turtahun->label }}
-                                        </td>
-                                    @endforeach
-                                @endforeach
-                            </tr>
-                            {{-- kolom grup var  --}}
-                            {{-- kolom var  --}}
-
-                            <tr>
-                                @foreach ($turtahuns as $turtahun)
-                                    @foreach ($tahuns as $tahun)
-                                        @foreach ($columns as $index => $column)
-                                            <td>{{ $column->label }}</td>
-                                        @endforeach
-                                    @endforeach
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($rows as $key => $row)
-                                <tr>
-                                    @foreach ($tahuns as $tahun)
-                                        @foreach ($turtahuns as $turtahun)
-                                            @foreach ($columns as $column)
-                                                <td><input type="text" class="form-control input-field text-right"
-                                                        data-id-content=""
-                                                        id={{ $tabel->id_tabel . '-' . $row->id . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
-                                                </td>
-                                            @endforeach
-                                        @endforeach
-                                    @endforeach
-                                </tr>
                             @endforeach
                         @endforeach
                     </tr>
@@ -304,7 +220,7 @@
                 // rowLabel = data.rows.find((row) => {
                 //     if (row.id == rowId) return row.label;
                 // });
-                let inputId = `${tableId}-${rowId==0?wilayah:$rowId}-${columnId}-${tahun}-${turtahun}`;
+                let inputId = `${tableId}-${rowId==0?wilayah:rowId}-${columnId}-${tahun}-${turtahun}`;
                 // debugn 
                 console.log({
                     inputId,

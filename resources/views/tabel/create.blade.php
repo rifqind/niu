@@ -95,7 +95,7 @@
 
                 <div class="form-group" id="kabupaten-group">
                     <label for="kab-label">Kabupaten</label>
-                    <select name="kab-label" class="form-control  select2-selection select2bs4" id="kab-label-select">
+                    <select name="kab-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="kab-label-select">
                         <option value="">-- Pilih Kabupaten --</option>
                         @foreach ($kabupatens as $kabupaten)
                             <option value="{{ $kabupaten->wilayah_fullcode }}">{{ $kabupaten->label }}</option>
@@ -105,14 +105,14 @@
 
                 <div class="form-group" id="kecamatan-group">
                     <label for="kec-label">Kecamatan</label>
-                    <select name="kec-label" class="form-control  select2-selection select2bs4" id="kec-label-select">
+                    <select name="kec-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="kec-label-select">
                         {{-- <option value="">-- Pilih Row Label --</option> --}}
 
                     </select>
                 </div>
                 <div class="form-group" id="desa-group">
                     <label for="desa-label">Desa</label>
-                    <select name="desa-label" class="form-control  select2-selection select2bs4" id="desa-label-select">
+                    <select name="desa-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="desa-label-select">
                         {{-- <option value="">-- Pilih Row Label --</option> --}}
 
                     </select>
@@ -245,9 +245,6 @@
         <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                createTableURL = "{{ route('tabel.store') }}";
-                document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
-                    createTableURL, window.formCreateTable));
                 let tipe_row = document.getElementById('tipe-row-label-select');
                 tipe_row.addEventListener("change", function(event) {
 
@@ -363,9 +360,9 @@
                 });
 
                 $("#kec-label-select").on("select2:select", (event) => {
+                    let kabupaten_kode = event.target.value.substring(2, 4);
                     let kecamatan_kode = event.target.value.substring(4, 7);
-
-                    let url = `{{ route('/') }}/master/wilayah/desa/${kecamatan_kode}`;
+                    let url = `{{ route('/') }}/master/wilayah/desa/${kabupaten_kode}/${kecamatan_kode}`;
 
                     let desaHtmlId = "desa-label-select";
                     const xhr = new XMLHttpRequest();
@@ -485,21 +482,21 @@
                             let row_label_ = document.querySelector(
                                 '#row-list-body > tr:nth-child(1) > td:nth-child(2)').innerHTML;
                             const theadHTML = `
-    <tr>
-        <th rowspan="2" class="text-center align-middle">#</th>
-        <th rowspan="2" class="text-center align-middle">${row_label_}</th>
-        ${periodeArray.map(item => `<th colspan="${column_keyValuePair.length}" class="text-center align-middle">${item}</td>`).join('')}
-        </tr>
-        <tr>
-            ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th style="width:100px">${item2.label}</th>`).join('')).join('')}
-    </tr>
-`;
-                            const tbodyHTML = rowsArray.map((rowItem, index) => {
-                                return `<tr>
-        <td>${index + 1}</td>
-        <td>${rowItem}</td>
-        ${periodeArray.map(periodItem => column_keyValuePair.map(columnItem => "<td></td>").join('')).join('')}
-    </tr>`;
+                                <tr>
+                                    <th rowspan="2" class="text-center align-middle">#</th>
+                                    <th rowspan="2" class="text-center align-middle">${row_label_}</th>
+                                    ${periodeArray.map(item => `<th colspan="${column_keyValuePair.length}" class="text-center align-middle">${item}</td>`).join('')}
+                                    </tr>
+                                    <tr>
+                                        ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th style="width:100px">${item2.label}</th>`).join('')).join('')}
+                                </tr>
+                            `;
+                                                        const tbodyHTML = rowsArray.map((rowItem, index) => {
+                                                            return `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${rowItem}</td>
+                                    ${periodeArray.map(periodItem => column_keyValuePair.map(columnItem => "<td></td>").join('')).join('')}
+                                </tr>`;
                             }).join('');
                             document.querySelector('#preview-table thead').innerHTML = theadHTML;
                             document.querySelector('#preview-table tbody').innerHTML = tbodyHTML;

@@ -85,21 +85,6 @@
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script> --}}
     <script>
-        $(function() {
-            //Initialize Select2 Elements
-            // $('.select2').select2()
-
-            // //Initialize Select2 Elements
-            // $('.select2bs4').select2({
-            //     theme: 'bootstrap4',
-            //     width: '100%',
-            // })
-            // $('.select-multiple').select2({
-            //     theme: 'bootstrap4',
-            //     width: '100%',
-            //     multiple: true,
-            // })
-        });
     </script>
     {{ $script }}
 </body>

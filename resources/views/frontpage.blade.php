@@ -4,6 +4,15 @@
     </x-slot>
     <x-slot name="head">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/filter_multi_select.css') }}">
+        <style type="text/css">
+            .text-capitalize {
+                /* text-transform: lowercase !important; */
+            }
+
+            .text-capitalize::first-letter {
+                /* text-transform: capitalize !important; */
+            }
+        </style>
     </x-slot>
     <div class="container mt-4">
         <div class="row">
@@ -52,13 +61,13 @@
                             <div class="card-body">
                                 <div class=""
                                     style="height : 200px; overflow-y: scroll; overflow-x: hidden; color:#333333;">
-                                    @foreach ($regions as $region)
+                                    @foreach ($kabs as $kab)
                                         <div class="row my-2" style="min-width: 50vw">
-                                            <input type="checkbox" id="{{ 'dinas-' . $region->id }}" class="ml-3"
-                                                name="wilayah[]" value="{{ $region->id }}">
-                                            <div class="ml-3 mb-0 click-to-check"
-                                                data-target="{{ 'dinas-' . $region->id }}">
-                                                {{ $region->nama }}
+                                            <input type="checkbox" id="{{ 'dinas-' . $kab->wilayah_fullcode }}"
+                                                class="ml-3" name="wilayah[]" value="{{ $kab->wilayah_fullcode }}">
+                                            <div class="ml-3 mb-0 click-to-check text-capitalize"
+                                                data-target="{{ 'dinas-' . $kab->wilayah_fullcode }}">
+                                                {{ $kab->label }}
                                             </div>
                                         </div>
                                     @endforeach
@@ -112,11 +121,11 @@
                             <input type="text" name="searchData" placeholder="Cari dengan Kata Kunci"
                                 class="form-control mb-3 mr-2 w-75">
                             {{-- <div class="row pr-3 pb-2"> --}}
-                                <button type="submit" class="btn ml-auto mb-3 w-25" style="background-color:#a80606">
-                                    <div class="text-white">
-                                        <i class="fa-brands fa-searchengin"></i> Cari
-                                    </div>
-                                </button>
+                            <button type="submit" class="btn ml-auto mb-3 w-25" style="background-color:#a80606">
+                                <div class="text-white">
+                                    <i class="fa-brands fa-searchengin"></i> Cari
+                                </div>
+                            </button>
                             {{-- </div> --}}
                         </div>
                     </form>
@@ -138,12 +147,13 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // alert('asu')
-                    // $('#dinas-select').filterMultiSelect({
-                    //     placeholderText: 'Pilih Dinas'
-                    // });
-                    // $('#tahun-select').filterMultiSelect({
-                    //     placeholderText: 'Pilih Tahun'
-                    // });
+                    $('#dinas-select').filterMultiSelect({
+                        placeholderText: 'Pilih Dinas'
+                    });
+                    $(".text-capitalize").text().toLowerCase();
+                    $('#tahun-select').filterMultiSelect({
+                        placeholderText: 'Pilih Tahun'
+                    });
                     // $('body').addClass('bg-info')
                 });
             </script>

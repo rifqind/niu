@@ -8,7 +8,7 @@ var formCreateTable = {};
 // window.$ = window.jQuery = $;
 
 // Import Bootstrap's JavaScript
-import "bootstrap";
+// import "bootstrap";
 
 // Import AdminLTE's JavaScript
 import "admin-lte";
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .classList.toggle("th-sort-desc", !asc);
     }
 
-    document.querySelectorAll("table th").forEach((headerCell) => {
+    document.querySelectorAll(".table-sorted th").forEach((headerCell) => {
         headerCell.addEventListener("click", () => {
             const tableElement =
                 headerCell.parentElement.parentElement.parentElement;

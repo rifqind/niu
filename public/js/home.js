@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let datas = $(
             "#search-tabel :input:not(#dinas\\[\\]--1-chbx)"
         ).serialize();
+        console.log(datas);
         $.ajax({
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");

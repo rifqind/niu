@@ -30,10 +30,6 @@ Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.vi
 Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
 // });
 
-Route::middleware('auth')->get('/', function () {
-    return view('dashboard');
-})->name('/');
-
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
 // Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
@@ -50,7 +46,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //Home
-Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified']);
+Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('/');
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
@@ -229,6 +225,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
     // master api
     Route::get('master/wilayah/kecamatan/{kab}', [TabelController::class, 'fetchMasterKecamatan'])->name('master.wilayah.kecamatan');
-    Route::get('master/wilayah/desa/{kec}', [TabelController::class, 'fetchMasterDesa'])->name('master.wilayah.desa');
+    Route::get('master/wilayah/desa/{kab}/{kec}', [TabelController::class, 'fetchMasterDesa'])->name('master.wilayah.desa');
 });
 require __DIR__ . '/auth.php';

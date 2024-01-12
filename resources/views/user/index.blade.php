@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-    <table class="table table-hover" id="tabel-user">
+    <table class="table table-sorted table-hover" id="tabel-user">
         <thead>
             <tr>
                 <th class="first-column">No.</th>

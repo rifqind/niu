@@ -151,8 +151,8 @@ class UserController extends Controller
     public function edit()
     {
         //
-        $id_regions = Region::getRegionId();
-        $dinas = Dinas::orderBy('nama')->whereIn('id_regions', $id_regions)->get();
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
         $user = auth()->user();
         return view('user.edit', [
             'user' => $user,
