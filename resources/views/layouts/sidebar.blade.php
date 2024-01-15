@@ -22,6 +22,37 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item {{ Request::is('tabel/index', 'tabel/create') ? 'menu-open' : '' }}">
+                    <a href="" class="nav-link {{ Request::is('tabel/index', 'tabel/create') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-building"></i>
+                        <p>
+                            Kelola Tabel
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('tabel.index') }}"
+                                class="nav-link {{ Request::is('tabel/index') ? 'active' : '' }}">
+                                <i class="nav-icon fa-solid fa-list-ol"></i>
+                                <p>
+                                    Daftar Tabel
+                                </p>
+                            </a>
+                        </li>
+                        @if (auth()->user()->role === 'admin')
+                        <li class="nav-item">
+                            <a href="{{ route('tabel.create') }}"
+                                class="nav-link {{ Request::is('tabel/create') ? 'active' : '' }}">
+                                <i class="nav-icon fa-solid fa-plus"></i>
+                                <p>
+                                    Tambah Tabel
+                                </p>
+                            </a>
+                        </li>
+                        @endif
+                    </ul>
+                </li>
                 @if (auth()->user()->role === 'admin')
                     <li class="nav-item">
                         <a href="{{ url('user/index') }}"
@@ -61,36 +92,6 @@
                     </li>
                     {{-- @endif --}}
                     {{-- @if (auth()->user()->role === 'admin') --}}
-                    <li class="nav-item {{ Request::is('tabel/index', 'tabel/create') ? 'menu-open' : '' }}">
-                        <a href="" class="nav-link {{ Request::is('tabel/index', 'tabel/create') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-building"></i>
-                            <p>
-                                Kelola Tabel
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-
-                            <li class="nav-item">
-                                <a href="{{ route('tabel.index') }}"
-                                    class="nav-link {{ Request::is('tabel/index') ? 'active' : '' }}">
-                                    <i class="nav-icon fa-solid fa-list-ol"></i>
-                                    <p>
-                                        Daftar Tabel
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('tabel.create') }}"
-                                    class="nav-link {{ Request::is('tabel/create') ? 'active' : '' }}">
-                                    <i class="nav-icon fa-solid fa-plus"></i>
-                                    <p>
-                                        Tambah Tabel
-                                    </p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
                     {{-- <li class="nav-item {{ Request::is('tabel*') ? 'menu-open' : '' }}"> --}}
                     <li
                         class="nav-item {{ collect([

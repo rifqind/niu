@@ -17,7 +17,7 @@
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">Index Page</li>
     </x-slot>
-    <div class="container">
+    <div class="container-fluid">
         <div class="card">
             <div class="card-body bg-info">
                 <h1 class="text-center">Daftar Tabel</h1>
@@ -41,14 +41,13 @@
             <thead id="header-tabel" class="bg-info">
                 <tr scope="col">
                     <th class="align-middle">#</th>
-                    <th class="align-middle">Nama Tabel</th>
+                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
+                    <th class="align-middle" style="width: 20%;">Nama Produsen Data</th>
                     <th class="align-middle">Nama Row</th>
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle">Tahun</th>
-
                     <th class="align-middle">Status Pengisian</th>
                     <th class="align-middle">Cek / Ubah Isian</th>
-
                     <th class="align-middle">Hapus</th>
                 </tr>
             </thead>
@@ -57,6 +56,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['nama_dinas'] }}</td>
                         <td>{{ $tab['row_label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)

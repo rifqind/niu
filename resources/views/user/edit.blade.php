@@ -29,6 +29,12 @@
             Reset Pengguna
         </li>
     </x-slot>
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+        <strong>Sukses!</strong> Berhasil menyimpan Perubahan data !
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div style="col-xl-6 col-l-6 col-md-9 col-sm-12 col-xs-12">
         <div class="card mb-3">
             <form action="" id="form-edit">

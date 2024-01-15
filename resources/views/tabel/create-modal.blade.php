@@ -27,10 +27,13 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
-
         createTableURL = "{{ route('tabel.store') }}";
-        document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
-            createTableURL, window.formCreateTable));
+        document.getElementById("submit-create-table").addEventListener("click", () => {
+            $("#spinner-border").removeClass("d-none");
+            setTimeout(() => {
+                handleSubmitCreateTable(createTableURL, window.formCreateTable)
+                $("#spinner-border").addClass("d-none");
+            }, 1500);
+        });
     });
 </script>

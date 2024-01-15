@@ -8,7 +8,7 @@ var formCreateTable = {};
 // window.$ = window.jQuery = $;
 
 // Import Bootstrap's JavaScript
-// import "bootstrap";
+import "bootstrap";
 
 // Import AdminLTE's JavaScript
 import "admin-lte";

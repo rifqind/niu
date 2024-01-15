@@ -18,7 +18,7 @@
                 /* You can adjust this value as needed */
             }
         </style>
-        @vite(['resources/css/app.css'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -95,7 +95,8 @@
 
                 <div class="form-group" id="kabupaten-group">
                     <label for="kab-label">Kabupaten</label>
-                    <select name="kab-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="kab-label-select">
+                    <select name="kab-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                        id="kab-label-select">
                         <option value="">-- Pilih Kabupaten --</option>
                         @foreach ($kabupatens as $kabupaten)
                             <option value="{{ $kabupaten->wilayah_fullcode }}">{{ $kabupaten->label }}</option>
@@ -105,14 +106,16 @@
 
                 <div class="form-group" id="kecamatan-group">
                     <label for="kec-label">Kecamatan</label>
-                    <select name="kec-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="kec-label-select">
+                    <select name="kec-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                        id="kec-label-select">
                         {{-- <option value="">-- Pilih Row Label --</option> --}}
 
                     </select>
                 </div>
                 <div class="form-group" id="desa-group">
                     <label for="desa-label">Desa</label>
-                    <select name="desa-label" class="form-control  select2-selection select2bs4" style="width: 100%;" id="desa-label-select">
+                    <select name="desa-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                        id="desa-label-select">
                         {{-- <option value="">-- Pilih Row Label --</option> --}}
 
                     </select>
@@ -267,24 +270,22 @@
                         document.getElementById('desa-group').style.display = "none";
                         // fetch kabupaten
                         let kabupaten = {{ Js::from($kabupatens) }};
+
                         let nameLabel = 'row';
                         let kabupaten_html = kabupaten.map((item, key) => {
                             item.tipe = 'KABUPATEN';
                             return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
-                    <th scope="row" class="text-right">
-                        ${key + 1}
-                    </th>
-                    <td>${item.tipe}</td>
-                    <td>${item.label}</td>
-                    <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
-                        item.label
-                    }"
-                            class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
-                    item.wilayah_fullcode
-                }">
-                    </td>
-                </tr>`;
+                                <th scope="row" class="text-right">
+                                    ${key + 1}
+                                </th>
+                                <td>${item.tipe}</td>
+                                <td>${item.label}</td>
+                                <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${item.label}"
+                                        class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${item.wilayah_fullcode}">
+                                </td>
+                            </tr>`;
                         }).join('');
+                        console.log(kabupaten_html)
                         let row_list = document.getElementById('row-list-body');
                         row_list.innerHTML = kabupaten_html;
 
@@ -302,7 +303,6 @@
                         document.getElementById('desa-group').style.display = "none";
                     }
                 });
-
 
                 $("#kab-label-select").on("select2:select", (event) => {
                     let kabupaten_kode = event.target.value.substring(2, 4);
@@ -491,8 +491,8 @@
                                         ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th style="width:100px">${item2.label}</th>`).join('')).join('')}
                                 </tr>
                             `;
-                                                        const tbodyHTML = rowsArray.map((rowItem, index) => {
-                                                            return `<tr>
+                            const tbodyHTML = rowsArray.map((rowItem, index) => {
+                                return `<tr>
                                     <td>${index + 1}</td>
                                     <td>${rowItem}</td>
                                     ${periodeArray.map(periodItem => column_keyValuePair.map(columnItem => "<td></td>").join('')).join('')}

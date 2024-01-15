@@ -30,13 +30,21 @@ class TabelController extends Controller
     public function index()
     {
         //
-        $tables = Statustables::join('tabels', 'statustables.id_tabel', 'tabels.id')
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        // dd($id_wilayah["kabs"]);
+        $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
+            ->join('tabels', 'statustables.id_tabel','=' ,'tabels.id')
             ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
-            ->select('tabels.*', 'statustables.tahun', 'sdesc.label as status', 'statustables.id as id_statustables')
-
+            ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
+            ->select(
+                'tabels.*',
+                'dinas.nama as nama_dinas',
+                'statustables.tahun',
+                'sdesc.label as status',
+                'statustables.id as id_statustables'
+            )
             ->get();
         $table_objects = [];
-        $daftar_region = Region::get();
         foreach ($tables as $table) {
             // $tabels = Statustables::where('id_tabel', $table->id)
             //     ->join('tabels AS t', 'statustables.id_tabel', '=', 't.id')
@@ -44,7 +52,6 @@ class TabelController extends Controller
             //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
             //     ->get();
             $datacontents = Datacontent::where('id_tabel', $table->id)->get();
-
             $id_rows = [];
             $id_columns = [];
             $wilayah_fullcodes = [];
@@ -89,6 +96,7 @@ class TabelController extends Controller
             array_push($table_objects, [
                 'datacontents' => $datacontents,
                 'label' => $table->label,
+                'nama_dinas' => $table->nama_dinas,
                 'id' => $table->id,
                 'rows' => $rows,
                 'row_label' => $rowLabel,
@@ -427,15 +435,41 @@ class TabelController extends Controller
 
             array_push($wilayah_fullcodes, $datacontent->wilayah_fullcode);
         }
-        // $tabels = Tabel::where('id', $id)->get();
+        // $tabels = Tabel::where('id', $id_tabel)->first();
 
         $rows = Row::whereIn('id', $id_rows)->get();
         $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
-        if ($rows[0]->id == 0) {
+        try {
+            //code...
+            if ($rows[0]->id == 0) {
+                // $wilayah_master = MasterWilayah::where('wilayah_fullcode','like',$wilayah_fullcodes[0]);
+                $wilayah_parent_code = '';
+                $jenis = "DAFTAR ";
+                $temp = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)->get();
+                $rows = $temp;
 
-            $rowLabel = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)->get();
-            $rows = $rowLabel;
-            //belum beres
+                $desa = substr($wilayah_fullcodes[0], 7, 3);
+                $kec = substr($wilayah_fullcodes[0], 4, 3);
+                $kab = substr($wilayah_fullcodes[0], 2, 2);
+                if ($desa != '000') {
+                    $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 7) . '000';
+                    $jenis = $jenis . "DESA DI ";
+                } else if ($kec != '000') {
+                    $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 4) . '000' . '000';
+                    $jenis = $jenis . "KECAMATAN DI ";
+                } else if ($kab != '00') {
+                    $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 2) . '00' . '000' . '000';
+                    $jenis = $jenis . "KABUPATEN DI ";
+                }
+                $rowLabel = $jenis . MasterWilayah::where('wilayah_fullcode', $wilayah_parent_code)->pluck('label')[0];
+                $rowLabel = strtolower($rowLabel);
+                $rowLabel = ucwords($rowLabel);
+            } else {
+
+                $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->pluck('label')[0];
+            }
+        } catch (\Exception $e) {
+            return response()->json(array('error' => $e->getMessage(), 'rows' => $rows));
         }
 
         $columns = Column::whereIn('id', $id_columns)->get();
@@ -444,8 +478,9 @@ class TabelController extends Controller
         // $turtahuns = array_unique($turtahuns);
         // sort($turtahuns);
         $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
-
-
+        
+        // $turtahuns = array_unique($turtahuns);
+        // sort($turtahuns);
         // return response()->json( [
         //     'datacontents' => $datacontents,
         //     // 'tabels' => $tabels,

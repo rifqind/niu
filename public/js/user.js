@@ -71,7 +71,7 @@ function changeRoles() {
         .find("tr")
         .each(function (e) {
             let roles = $(this).find("#roles").html();
-            console.log(roles);
+            // console.log(roles);
             if (roles == "produsen") {
                 $(this).find(".role-icon").removeClass("fa-user-tie");
                 $(this).find(".role-icon").addClass("fa-graduation-cap");
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeRoles();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(errorThrown);
+                // console.log(errorThrown);
             },
         });
     });
@@ -130,10 +130,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 320);
             },
             success: function (data) {
-                console.log(data);
+                // console.log(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(errorThrown);
+                // console.log(errorThrown);
             },
         });
     });
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         // $('.loader').removeClass('d-none');
         var users = $("#formUser").serialize();
-        console.log(users);
+        // console.log(users);
         $.ajax({
             type: "POST",
             url: store_URL.href,
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             error: function (data) {
                 // alert(errorThrown);
-                console.log(data.responseJSON.errors);
+                // console.log(data.responseJSON.errors);
                 reportField(data.responseJSON.errors);
             },
         });
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $(".editButton").on("click", function (e) {
         e.preventDefault();
         var users = $("#form-edit").serialize();
-        console.log(users);
+        // console.log(users);
         $.ajax({
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
@@ -231,11 +231,15 @@ document.addEventListener("DOMContentLoaded", function () {
             url: edit_URL.href,
             data: users,
             success: function (data) {
-                console.log(data);
-                window.location.reload();
+                // console.log(data);
+                // window.location.reload();
+                $("#success-alert").removeClass("d-none");
+                $("#card-password").addClass("d-none");
+                $("#password").val("");
+                $("#password_confirmation").val("");
             },
             error: function (data) {
-                console.log(data.responseJSON.errors);
+                // console.log(data.responseJSON.errors);
                 reportField(data.responseJSON.errors);
             },
         });
@@ -243,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     $("#changePassword").on("click", function (e) {
         e.preventDefault();
-        console.log("asu");
+        // console.log("asu");
         $("#card-password").removeClass("d-none");
     });
     $(document).on("click", ".delete-trash", function (e) {
@@ -253,13 +257,13 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             let users = $(this).data("users");
             $("#idHidden").val(users);
-            console.log($("#idHidden").val());
+            // console.log($("#idHidden").val());
         } else {
             e.preventDefault();
             let users = $(this).data("users");
             //change value modal
             $("#idHidden").val(users.id);
-            console.log($("#idHidden").val());
+            // console.log($("#idHidden").val());
         }
     });
     $(document).on("click", ".role-update", function (e) {
@@ -296,9 +300,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeRoles();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(errorThrown);
+                // console.log(errorThrown);
             },
         });
     });
 });
-

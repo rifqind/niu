@@ -39,7 +39,7 @@
                 {{-- kolom tahun --}}
                 <tr>
                     <td rowspan="3">#</td>
-                    <td rowspan="3">{{ $row_label[0]->label }}</td>
+                    <td rowspan="3">{{ $row_label }}</td>
                     @foreach ($tahuns as $tahun)
                         <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">{{ $tahun }}
                         </td>
