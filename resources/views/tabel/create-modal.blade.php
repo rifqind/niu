@@ -30,7 +30,10 @@
 
 
         createTableURL = "{{ route('tabel.store') }}";
-        document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
-            createTableURL, window.formCreateTable));
+        document.getElementById("submit-create-table").addEventListener("click", () => {
+            console.log("1");
+            handleSubmitCreateTable(
+                createTableURL, window.formCreateTable)
+        });
     });
 </script>

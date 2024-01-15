@@ -245,9 +245,7 @@
         <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                createTableURL = "{{ route('tabel.store') }}";
-                document.getElementById("submit-create-table").addEventListener("click", () => handleSubmitCreateTable(
-                    createTableURL, window.formCreateTable));
+
                 let tipe_row = document.getElementById('tipe-row-label-select');
                 tipe_row.addEventListener("change", function(event) {
 
