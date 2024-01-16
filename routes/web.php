@@ -62,6 +62,7 @@ Route::put('/tabel/update/{id}', [TabelController::class, 'update'])->middleware
 Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
 Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
 Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
+Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->middleware(['auth', 'verified'])->name('tabel.adminHandleData');
 
 Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->middleware(['auth', 'verified'])->name('tabel.copy');
 Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->middleware(['auth', 'verified'])->name('tabel.storeCopy');

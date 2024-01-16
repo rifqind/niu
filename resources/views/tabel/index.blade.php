@@ -42,7 +42,7 @@
                 <tr scope="col">
                     <th class="align-middle">#</th>
                     <th class="align-middle" style="width: 25%;">Nama Tabel</th>
-                    <th class="align-middle" style="width: 20%;">Nama Produsen Data</th>
+                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
                     <th class="align-middle">Nama Row</th>
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle">Tahun</th>

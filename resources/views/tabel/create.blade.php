@@ -285,7 +285,7 @@
                                 </td>
                             </tr>`;
                         }).join('');
-                        console.log(kabupaten_html)
+                        // console.log(kabupaten_html)
                         let row_list = document.getElementById('row-list-body');
                         row_list.innerHTML = kabupaten_html;
 

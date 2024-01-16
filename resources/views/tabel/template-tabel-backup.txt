@@ -1,0 +1,54 @@
+ <table class="table table-bordered table-hover">
+            <thead class="bg-info">
+                {{-- kolom tahun --}}
+                <tr>
+                    <td rowspan="3">#</td>
+                    <td rowspan="3">{{ $row_label }}</td>
+                    @foreach ($tahuns as $tahun)
+                        <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
+                            {{ $tahun }}
+                        </td>
+                    @endforeach
+                </tr>
+                <tr>
+                    @foreach ($tahuns as $tahun)
+                        @foreach ($turtahuns as $turtahun)
+                            <td colspan="{{ sizeof($columns) }}" class="text-center">{{ $turtahun->label }}</td>
+                        @endforeach
+                    @endforeach
+                </tr>
+                {{-- kolom grup var  --}}
+                {{-- kolom var  --}}
+
+                <tr>
+                    @foreach ($turtahuns as $turtahun)
+                        @foreach ($tahuns as $tahun)
+                            @foreach ($columns as $index => $column)
+                                <td>{{ $column->label }}</td>
+                            @endforeach
+                        @endforeach
+                    @endforeach
+
+                </tr>
+            </thead>
+
+            <tbody class="bg-white">
+                @foreach ($rows as $key => $row)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $row->label }}</td>
+                        @foreach ($tahuns as $tahun)
+                            @foreach ($turtahuns as $turtahun)
+                                @foreach ($columns as $column)
+                                    <td><input type="text" class="form-control input-field text-right"
+                                            data-id-content="" data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
+                                            id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                    </td>
+                                @endforeach
+                            @endforeach
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot></tfoot>
+        </table>

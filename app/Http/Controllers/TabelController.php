@@ -33,7 +33,7 @@ class TabelController extends Controller
         $id_wilayah = MasterWilayah::getMyWilayahId();
         // dd($id_wilayah["kabs"]);
         $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
-            ->join('tabels', 'statustables.id_tabel','=' ,'tabels.id')
+            ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
             ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
             ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
             ->select(
@@ -408,12 +408,22 @@ class TabelController extends Controller
         // ->select('statustables')
         $statusTabel = Statustables::join('tabels as t', 'statustables.id_tabel', 't.id')
             ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
-            ->select('t.id as id_tabel', 't.label as judul_tabel', 'statustables.tahun', 'sdesc.label as status', 'statustables.id as id_statustables')
+            ->select(
+                't.id as id_tabel',
+                't.label as judul_tabel',
+                'statustables.tahun',
+                'statustables.status as status',
+                'statustables.id as id_statustables',
+                'sdesc.label as status_desc'
+            )
             ->where('statustables.id', $decryptedId)->first();
 
 
         $id_tabel = $statusTabel->id_tabel;
         $tahun = $statusTabel->tahun;
+        $status = $statusTabel->status;
+        $roles = auth()->user()->role;
+        $sdesc = $statusTabel->status_desc;
 
         // $pattern = $id_tabel . '-%-' . $tahun . '-%';
 
@@ -478,7 +488,7 @@ class TabelController extends Controller
         // $turtahuns = array_unique($turtahuns);
         // sort($turtahuns);
         $turtahuns = Turtahun::whereIn('id', $turTahunKeys)->get();
-        
+
         // $turtahuns = array_unique($turtahuns);
         // sort($turtahuns);
         // return response()->json( [
@@ -501,7 +511,10 @@ class TabelController extends Controller
             'row_label' => $rowLabel,
             'columns' => $columns,
             'turtahuns' => $turtahuns,
-            'tabel' => $statusTabel
+            'tabel' => $statusTabel,
+            'status' => $status,
+            'roles' => $roles,
+            'status_desc' => $sdesc,
         ]);
     }
 
@@ -581,8 +594,6 @@ class TabelController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-
-
         // Update records in a single query
         foreach ($data as $item) {
 
@@ -590,36 +601,55 @@ class TabelController extends Controller
         }
         return response()->json($data);
         $data = $request->data;
-
-
-        // Update records in a single query
-        foreach ($data as $item) {
-
-            Datacontent::where('id', $item['id'])->update($item);
-        }
-        return response()->json($data);
     }
 
     public function update_content(Request $request)
     {
         $data = $request->data;
-
-
+        $decisions = $request->decisions;
+        // dd($decisions);
+        Statustables::where('id_tabel', $data[0]['id_tabel'])
+            ->where('tahun', $data[0]['tahun'])
+            ->update([
+                'status' => ($decisions == "save") ? '2' : '3'
+            ]);
         // Update records in a single query
         foreach ($data as $item) {
 
-            Datacontent::where('id', $item['id'])->update($item);
+            Datacontent::where('id', $item['id'])
+                ->update([
+                    'value' => $item['value']
+                ]);
         }
-        return response()->json($data);
+        $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
+            ->where('tahun', $data[0]['tahun'])
+            ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
+            ->first(['statustables.*', 'status_desc.label as statuslabel']);
+        return response()->json([
+            'data' => $data,
+            'status' => $status->status,
+            'status_label' => $status->statuslabel
+        ]);
+    }
+
+    public function adminHandleData(Request $request)
+    {
+        $isAdmin = auth()->user()->role == "admin";
+        if (!$isAdmin) {
+            return response()->json([
+                'error' => 'Operasi ini hanya bisa dilakukan oleh Admin'
+            ], 403);
+        }
         $data = $request->data;
-
-
-        // Update records in a single query
-        foreach ($data as $item) {
-
-            Datacontent::where('id', $item['id'])->update($item);
-        }
-        return response()->json($data);
+        $decisions = $request->decisions;
+        Statustables::where('id_tabel', $data[0]['id_tabel'])
+            ->where('tahun', $data[0]['tahun'])
+            ->update([
+                'status' => ($decisions == "reject") ? '4' : '5'
+            ]);
+        return response()->json([
+            'messages' => 'Berhasil di-' . $decisions
+        ]);
     }
 
     /**
