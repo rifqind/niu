@@ -23,8 +23,8 @@
                 <h1 class="text-center">Daftar Tabel</h1>
             </div>
         </div>
-        <hr>
-
+        {{-- <hr> --}}
+       
         <div class="row mb-2">
             @if (session('success'))
                 <div class="alert alert-success temporary-message">
@@ -38,8 +38,8 @@
             @endif
         </div>
         <table id="tabel" class="table table-bordered table-hover table-sorted">
-            <thead id="header-tabel" class="bg-info">
-                <tr scope="col">
+            <thead id="header-tabel">
+                <tr scope="col" class="bg-info">
                     <th class="align-middle">#</th>
                     <th class="align-middle" style="width: 25%;">Nama Tabel</th>
                     <th class="align-middle" style="width: 20%;">Produsen Data</th>
@@ -49,6 +49,17 @@
                     <th class="align-middle">Status Pengisian</th>
                     <th class="align-middle">Cek / Ubah Isian</th>
                     <th class="align-middle">Hapus</th>
+                </tr>
+                <tr>
+                    <td class="align-middle search-header">#</td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"></td>
+                    <td class="align-middle search-header"></td>
                 </tr>
             </thead>
             <tbody id="body-tabel" class="bg-white">
@@ -108,6 +119,7 @@
         <!-- Additional JS resources -->
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
+        <script src="{{ asset('js/tabel.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             const handleDeleteTable = function(encryptedId) {
@@ -118,7 +130,7 @@
 
             }
             document.addEventListener('DOMContentLoaded', function() {
-                console.log({{ Js::from($tables) }});
+                // console.log({{ Js::from($tables) }});
             })
         </script>
     </x-slot>

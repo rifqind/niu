@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Row;
 use App\Http\Requests\StoreRowRequest;
 use App\Http\Requests\UpdateRowRequest;
-
+use App\Models\Rowlabel;
 use Illuminate\Http\Request as HttpRequest;
 
 class RowController extends Controller
@@ -16,6 +16,10 @@ class RowController extends Controller
     public function index()
     {
         //
+        $rows = Row::all();
+        return view('rows.index', [
+            'rows' => $rows
+        ]);
     }
 
     /**
@@ -24,6 +28,10 @@ class RowController extends Controller
     public function create()
     {
         //
+        $rowLabels = Rowlabel::get();
+        return view('rows.create', [
+            'rowLabels' => $rowLabels
+        ]);
     }
 
     /**

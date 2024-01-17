@@ -15,7 +15,7 @@
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
-            Tambah Kolom
+            Tambah Baris
         </li>
     </x-slot>
     <div class="container-fluid">
@@ -24,7 +24,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <form id = "KolomForm" method="post" class="form-horizontal" action="{{ route('column.store') }}">
+                <form id = "BarisForm" method="post" class="form-horizontal" action="{{ route('rows.store') }}">
                     @csrf
                     <div class="form-group">
                         <label for="label">Nama Kolom</label>
@@ -35,10 +35,10 @@
                         <label for="id_columns_group">Nama Kelompok Kolom</label>
                         <select name="id_columns_group" id="id_columns_group" class="form-control select2bs4">
                             <option value="" disabled selected hidden>-- Pilih Kelompok Kolom --</option>
-                            @foreach ($column_groups as $column_group)
+                            {{-- @foreach ($column_groups as $column_group)
                                 <option value="{{ $column_group->id }}">
                                     {{ $column_group->label }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                     <div class="ml-auto">

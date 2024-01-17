@@ -12,6 +12,6 @@ class Row extends Model
     protected $guarded = ['id'];
     public $timestamps = false;
     public function id_rowlabel(){
-        return $this->belongsTo(Rowlabel::class);
+        return $this->belongsTo(Rowlabel::class, 'id_rowlabels', 'id');
     }
 }

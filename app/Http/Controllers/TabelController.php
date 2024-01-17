@@ -20,6 +20,7 @@ use App\Models\Turtahun;
 use App\Models\TurTahunGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\Array_;
 
 class TabelController extends Controller
@@ -72,6 +73,7 @@ class TabelController extends Controller
                     $desa = substr($wilayah_fullcodes[0], 7, 3);
                     $kec = substr($wilayah_fullcodes[0], 4, 3);
                     $kab = substr($wilayah_fullcodes[0], 2, 2);
+                    // dd($kec);
                     if ($desa != '000') {
                         $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 7) . '000';
                         $jenis = $jenis . "DESA DI ";
@@ -94,7 +96,7 @@ class TabelController extends Controller
             }
             $columns = Column::whereIn('id', $id_columns)->get();
             array_push($table_objects, [
-                'datacontents' => $datacontents,
+                // 'datacontents' => $datacontents,
                 'label' => $table->label,
                 'nama_dinas' => $table->nama_dinas,
                 'id' => $table->id,

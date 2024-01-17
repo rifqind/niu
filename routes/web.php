@@ -8,10 +8,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RowController;
+use App\Http\Controllers\RowlabelController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TabelController;
 use App\Http\Controllers\TurTahunGroupsController;
 use App\Http\Controllers\UserController;
+use App\Models\Rowlabel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,24 +53,25 @@ Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['aut
 
 
 //tabel
-
-Route::get('/tabel/master', [TabelController::class, 'master'])->middleware(['auth', 'verified'])->name('tabel.master');
-Route::get('/tabel/index', [TabelController::class, 'index'])->middleware(['auth', 'verified'])->name('tabel.index');
-Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
-Route::put('/tabel/update-content/{id}', [TabelController::class, 'update_content'])->middleware(['auth', 'verified'])->name('tabel.update_content');
-Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
-Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::put('/tabel/update/{id}', [TabelController::class, 'update'])->middleware(['auth', 'verified'])->name('tabel.update');
-Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->middleware(['auth', 'verified'])->name('tabel.show');
-Route::get('/tabel/create', [TabelController::class, 'create'])->middleware(['auth', 'verified'])->name('tabel.create');
-Route::post('/tabel/create', [TabelController::class, 'store'])->middleware(['auth', 'verified'])->name('tabel.store');
-Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->middleware(['auth', 'verified'])->name('tabel.adminHandleData');
-
-Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->middleware(['auth', 'verified'])->name('tabel.copy');
-Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->middleware(['auth', 'verified'])->name('tabel.storeCopy');
-// Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
-
-Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->middleware(['auth', 'verified'])->name('tabel.edit');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/tabel/master', [TabelController::class, 'master'])->name('tabel.master');
+    Route::get('/tabel/index', [TabelController::class, 'index'])->name('tabel.index');
+    Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->name('tabel.show');
+    Route::put('/tabel/update-content/{id}', [TabelController::class, 'update_content'])->name('tabel.update_content');
+    Route::get('/tabel/create', [TabelController::class, 'create'])->name('tabel.create');
+    Route::post('/tabel/create', [TabelController::class, 'store'])->name('tabel.store');
+    Route::put('/tabel/update/{id}', [TabelController::class, 'update'])->name('tabel.update');
+    Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->name('tabel.show');
+    Route::get('/tabel/create', [TabelController::class, 'create'])->name('tabel.create');
+    Route::post('/tabel/create', [TabelController::class, 'store'])->name('tabel.store');
+    Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->name('tabel.adminHandleData');
+    
+    Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->name('tabel.copy');
+    Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->name('tabel.storeCopy');
+    // Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
+    
+    Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->name('tabel.edit');
+});
 
 Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
 
@@ -188,7 +191,23 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('subject/{id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
 
     // rows
+    Route::get('/api/rowLabels', [RowlabelController::class, 'fetch'])->name('rowLabels.fetch');
+    Route::get('/rowLabels/index', [RowlabelController::class, 'index'])->name('rowLabels.index');
+    Route::get('/rowLabels/create', [RowlabelController::class, 'create'])->name('rowLabels.create');
+    Route::post('/rowLabels/store', [RowlabelController::class, 'store'])->name('rowLabels.store');
+    Route::get('/rowLabels/edit/{id}', [RowlabelController::class, 'edit'])->name('rowLabels.edit');
+    Route::put('/rowLabels/update', [RowlabelController::class, 'update'])->name('rowLabels.update');
+    Route::delete('rowLabels/{id}', [RowlabelController::class, 'destroy'])->name('rowLabels.destroy');
+    
+    // rows
     Route::get('/api/rows', [RowController::class, 'fetch'])->name('rows.fetch');
+    Route::get('/rows/index', [RowController::class, 'index'])->name('rows.index');
+    Route::get('/rows/create', [RowController::class, 'create'])->name('rows.create');
+    Route::post('/rows/store', [RowController::class, 'store'])->name('rows.store');
+    Route::get('/rows/edit/{id}', [RowController::class, 'edit'])->name('rows.edit');
+    Route::put('/rows/update', [RowController::class, 'update'])->name('rows.update');
+    Route::delete('rows/{id}', [RowController::class, 'destroy'])->name('rows.destroy');
+    
 
     // columns
     Route::get('/api/column', [ColumnController::class, 'fetch'])->name('column.fetch');

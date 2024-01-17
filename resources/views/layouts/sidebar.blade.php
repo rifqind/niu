@@ -100,6 +100,7 @@
                             'column-group*',
                             'column*',
                             'rows*',
+                            'rowLabels*',
                             'periode*',
                             'periode-group*',
                         ])->contains(function ($pattern) {
@@ -115,6 +116,7 @@
                                 'column-group*',
                                 'column*',
                                 'rows*',
+                                'rowLabels*',
                                 'periode*',
                                 'periode-group*',
                             ])->contains(function ($pattern) {
@@ -157,6 +159,13 @@
                                     class="nav-link {{ Request::is('column/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fas fa-bars"></i>
                                     <p> Kolom</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('rowLabels/index') }}"
+                                    class="nav-link {{ Request::is('rowLabels/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fas fa-th-list"></i>
+                                    <p> Kelompok Baris</p>
                                 </a>
                             </li>
                             <li class="nav-item">
