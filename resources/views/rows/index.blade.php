@@ -31,12 +31,6 @@
                     {{-- tobedestined --}}
                     <a href="{{ route('rows.create') }}" class="btn btn-info">Tambah Baris</a>
                 </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('dinas.search') }}" method="GET">
-                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;"
-                            placeholder="Cari Dinas" name="search">
-                    </form>
-                </div> --}}
             </div>
         </div>
         @if (session('success'))
@@ -49,15 +43,22 @@
                 {{ session('error') }}
             </div>
         @endif
-        <table class="table table-hover" id="tabel-kolom">
+        <table class="table table-hover table-sorted" id="tabel-baris">
             <thead>
                 <tr>
-                    <td class="first-column">No.</td>
-                    <td class="text-left">Kelompok Baris</td>
-                    <td class="text-left">Label</td>
+                    <th class="first-column">No.</th>
+                    <th class="text-left">Kelompok Baris</th>
+                    <th class="text-left">Label</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Hapus</th>
+                </tr>
+                <tr>
+                    <td class="first-column" style="width: 10%;"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
-                    <td class="text-center">Edit</td>
-                    <td class="text-center">Hapus</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
                 </tr>
             </thead>
             <tbody>
@@ -67,8 +68,22 @@
                         <td>{{ $key+1 }}</td>
                         <td>{{ $item->id_rowlabel->label }}</td>
                         <td>{{ $item->label }}</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                            <a
+                                href="{{ route('rows.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}">
+                                <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <form method="POST"
+                                action="{{ route('rows.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"
+                                class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn"><i class="fa-solid fa-trash-can"
+                                        style="color: #9a091f;"></i></button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -87,7 +102,7 @@
             // const delete_URL = new URL("{{ route('dinas.delete') }}")
             const handleDeleteColumn = function(encryptedId) {
                 if (confirm('Are you sure you want to delete this subject?')) {
-                    fetch("{{ route('column.destroy', ['id' => ':id']) }}".replace(':id', encryptedId), {
+                    fetch("{{ route('rows.destroy', ['id' => ':id']) }}".replace(':id', encryptedId), {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

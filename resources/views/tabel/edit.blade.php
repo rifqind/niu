@@ -35,7 +35,6 @@
                 {{ session('error') }}
             </div>
         @endif
-        <hr>
         <form action="{{ route('tabel.update', $encryptedId) }}" id="edit-form" method="POST">
             @csrf
             @method('PUT')
@@ -124,16 +123,17 @@
                 submitButton.addEventListener('click', function(event) {
                     event.preventDefault();
                     submitButton.disabled = true;
-                    form.submit();
-
+                    if (confirm(
+                            "Apakah Anda Yakin melakukan perubahan? Perubahan akan berlaku ke seluruh tahun data"
+                            )) {
+                        form.submit();
+                    }
                 });
 
                 backButton.addEventListener('click', function() {
                     window.location.href = '{{ route('tabel.master') }}';
                 });
-
-
-
+                
             });
         </script>
     </x-slot>

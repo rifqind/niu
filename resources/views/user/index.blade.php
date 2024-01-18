@@ -37,6 +37,21 @@
             #tabel-user .th-sort-desc {
                 background: rgba(0, 0, 0, 0.1);
             }
+            .pagination>li {
+                padding-top: 6px;
+                padding-right: 12px;
+                padding-bottom: 6px;
+                padding-left: 12px;
+            }
+
+            .pagination>li.active {
+                color: whitesmoke;
+                background-color: #17a2b8;
+            }
+
+            .pagination>li:hover {
+                cursor: pointer;
+            }
         </style>
     </x-slot>
     <x-slot name="breadcrumb">
@@ -119,13 +134,40 @@
         </tbody>
         @include('user.modal')
     </table>
+    <div class="row">
+        <div class="form-group ml-auto"> <!--		Show Numbers Of Rows 		-->
+            <select class  ="form-control" name="state" id="maxRows">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="pagination-container">
+            <nav>
+                <ul class="pagination">
+                    <li data-page="prev">
+                        <span>
+                            < <span class="sr-only">(current)
+                        </span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
     <x-slot name="script">
         <script src="{{ asset('js/user.js') }}"></script>
+        {{-- <script src="{{ asset('js/pagination.js') }}"></script> --}}
         <script>
             const tokens = '{{ csrf_token() }}'
             const reset_URL = new URL("{{ route('users.reset') }}")
             const delete_URL = new URL("{{ route('users.delete') }}")
             const roleChange_URL = new URL("{{ route('users.roleChange') }}")
+            
         </script>
     </x-slot>
 </x-niu-layout>

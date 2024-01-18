@@ -17,15 +17,11 @@
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">Index Page</li>
     </x-slot>
-    <div class="container">
-        <div class="card">
-            <div class="card-body bg-info">
-                <h1 class="text-center">Master Tabel</h1>
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+            <div class="ml-1 h4 mb-3">
+                Master Tabel
             </div>
-        </div>
-        <hr>
-
-        <div class="row mb-2">
             @if (session('success'))
                 <div class="alert alert-success temporary-message">
                     {{ session('success') }}
@@ -36,24 +32,40 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <div class="col-auto ml-auto">
-                <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Tambah Tahun</a>
-                <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Buat Tabel</a>
+            <div class="mr-1 justify-content-between row">
+                <div class="col-auto ml-auto">
+                    <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Buat Tabel
+                        Baru</a>
+                </div>
             </div>
         </div>
-        <table id="tabel" class="table table-bordered table-hover">
-            <thead id="header-tabel" class="bg-info">
-                <tr scope="col">
-                    <td class="align-middle">#</td>
-                    <td class="align-middle">Nama Tabel</td>
-                    <td class="align-middle">Nama Row</td>
-                    <td class="align-middle">Daftar Kolom</td>
-                    <td class="align-middle"> Daftar Tahun</td>
-                    <td class="align-middle">Tambah Tahun</td>
-                    {{-- <td class="align-middle">Status Pengisian</td> --}}
-                    {{-- <td class="align-middle">Cek / Ubah Isian</td> --}}
-                    <td class="align-middle">Ubah Struktur</td>
-                    <td class="align-middle">Hapus</td>
+        <table id="tabel" class="table table-bordered table-hover table-sorted">
+            <thead id="header-tabel">
+                <tr class="bg-info">
+                    <th class="align-middle">#</th>
+                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
+                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
+                    <th class="align-middle">Nama Row</th>
+                    <th class="align-middle">Daftar Kolom</th>
+                    <th class="align-middle"> Daftar Tahun</th>
+                    <th class="align-middle">Tambah Tahun</th>
+                    {{-- <th class="align-middle">Status Pengisian</th> --}}
+                    {{-- <th class="align-middle">Cek / Ubah Isian</th> --}}
+                    <th class="align-middle">Ubah Struktur</th>
+                    <th class="align-middle">Hapus</th>
+                </tr>
+                <tr>
+                    <td class="align-middle search-header">#</td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"></td>
+                    {{-- <td class="align-middle search-header">Status Pengisian</td> --}}
+                    {{-- <td class="align-middle search-header">Cek / Ubah Isian</td> --}}
+                    <td class="align-middle search-header"></td>
+                    <td class="align-middle search-header"></td>
                 </tr>
             </thead>
             <tbody id="body-tabel" class="bg-white">
@@ -61,7 +73,8 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
-                        <td>{{ $tab['row_label'][0]['label'] }}</td> // tbbd
+                        <td>{{ $tab['nama_dinas'] }}</td>
+                        <td>{{ $tab['row_label'] }}</td>
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">
@@ -82,7 +95,7 @@
                                     class="fas fa-plus-circle text-info"></i></a></td>
 
 
-                        <td>
+                        <td class="text-center">
                             <a
                                 href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-cog text-info"></i></a>
@@ -105,9 +118,7 @@
                         </td>
                         {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
                         {{-- </td> --}}
-
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>
@@ -131,7 +142,20 @@
 
             }
             document.addEventListener('DOMContentLoaded', function() {
-                console.log({{ Js::from($tables) }});
+                // console.log({{ Js::from($tables) }});
+                var temporaryMessages = document.querySelectorAll('.temporary-message');
+                temporaryMessages = Array.from(temporaryMessages);
+
+                // Check if the success message element exists
+                if (temporaryMessages) {
+                    // Set a timer to hide the success message after 5 seconds (5000 milliseconds)
+                    temporaryMessages.forEach(element => setTimeout(() => {
+                        element.style.opacity = '0'; // Fade out the message
+                        setTimeout(() => {
+                            return element.style.display = 'none'; // Hide the success message
+                        }, 500);
+                    }, 2000));
+                }
             })
         </script>
     </x-slot>

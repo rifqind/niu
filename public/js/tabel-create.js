@@ -35,6 +35,7 @@ function handleSubmitCreateTable(createURL, data) {
         if (xhr.status >= 200 && xhr.status < 300) {
             var response = JSON.parse(xhr.responseText);
             console.log("Success:", response);
+            window.location.href = tabelIndex.href;
         } else {
             console.error("Error:", xhr.status, xhr.statusText);
         }
@@ -58,24 +59,38 @@ function handleLabel(url, nameLabel, bodyHtmlId) {
         if (xhr.status >= 200 && xhr.status < 300) {
             var response = JSON.parse(xhr.responseText);
             console.log("Success:", response.data);
-            const tableBodyHtml = response.data.map((item, key) => {
-                return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
-                    <th scope="row" class="text-right">
-                        ${key + 1}
-                    </th>
-                    <td>${item.tipe}</td>
-                    <td>${item.label}</td>
-                    <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
-                        item.label
-                    }"
-                            class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
-                    item.id
-                }">
-                    </td>
-                </tr>`;
-            });
-            document.getElementById(bodyHtmlId).innerHTML =
-                tableBodyHtml.join("");
+            if (bodyHtmlId == "turtahun-list-body") {
+                const tableBodyHtml = response.data.map((item, key) => {
+                    return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                        <th scope="row" class="text-right">
+                            ${key + 1}
+                        </th>
+                        <td>${item.tipe}</td>
+                        <td>${item.label}</td>
+                    </tr>`;
+                });
+                document.getElementById(bodyHtmlId).innerHTML =
+                    tableBodyHtml.join("");
+            } else {
+                const tableBodyHtml = response.data.map((item, key) => {
+                    return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
+                        <th scope="row" class="text-right">
+                            ${key + 1}
+                        </th>
+                        <td>${item.tipe}</td>
+                        <td>${item.label}</td>
+                        <td> <input type="checkbox" aria-label="Checkbox for following text input" data-label="${
+                            item.label
+                        }"
+                                class="${nameLabel}-list-checkbox" id="${nameLabel}-${key}" value="${
+                        item.id
+                    }">
+                        </td>
+                    </tr>`;
+                });
+                document.getElementById(bodyHtmlId).innerHTML =
+                    tableBodyHtml.join("");
+            }
         } else {
             console.error("Error:", xhr.status, xhr.statusText);
         }

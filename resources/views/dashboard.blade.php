@@ -80,9 +80,16 @@
         <div class="p-0 mr-1 col-9" style="">
             <div class="card mr-3" style="width: 100%;" id="percentage-progress">
                 <div class="card-header text-center text-bold">
-                    PERSENTASE PROGRES PENGERJAAN
+                    PROGRES PENGERJAAN
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="overflow-y:scroll;">
+                    @foreach ($notifikasiList as $key => $item)
+                        <li class="">
+                            <span class="badge badge-info">{{ $item->created_at }}</span>
+                            {{ $item->komentar }}
+                            <span class="text-bold">{{ $item->judul_tabel }}</span>
+                        </li>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -119,9 +126,11 @@
     </div>
     <x-slot name="script">
         <script>
-            document.addEventListener('DOMContentLoaded', function(){
+            document.addEventListener('DOMContentLoaded', function() {
                 $(function() {
-                    var Data = [{{ $finalTabels }}, {{ $entriTabels }}, {{ $verifyTabels }}, {{ $repairTabels }}]
+                    var Data = [{{ $finalTabels }}, {{ $entriTabels }}, {{ $verifyTabels }},
+                        {{ $repairTabels }}
+                    ]
                     var Target = $('#pie-chart')
                     const ChartData = {
                         labels: [
@@ -163,7 +172,7 @@
                             }
                         },
                     })
-    
+
                     // const Charts = {
                     //     type: 'doughnut',
                     //     data: ChartData,
@@ -171,7 +180,7 @@
                 })
                 var pieChartsHeight = $('#pie-charts').height();
                 $('#percentage-progress').height(pieChartsHeight + $('#pie-chart').height());
-                
+
             })
         </script>
     </x-slot>

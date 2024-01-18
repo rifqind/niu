@@ -52,11 +52,19 @@
         <table class="table table-hover" id="tabel-kolom">
             <thead>
                 <tr>
-                    <td class="first-column">No.</td>
-                    <td class="text-left">Label</td>
-                    <td class="text-left">Kelompok</td>
-                    <td class="text-center">Edit</td>
-                    <td class="text-center">Hapus</td>
+                    <th class="first-column">No.</th>
+                    <th class="text-left">Kelompok Periode</th>
+                    <th class="text-left">Label</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Hapus</th>
+                </tr>
+                <tr>
+                    <td class="first-column" style="width: 10%;"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
+                    {{-- <td class="text-center">Wilayah Kerja</td> --}}
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
                 </tr>
             </thead>
             <tbody>
@@ -64,8 +72,8 @@
                 @foreach ($periodes as $key => $item)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $item->label }}</td>
                         <td>{{ $item->tipe }}</td>
+                        <td>{{ $item->label }}</td>
                         {{-- <td class="text-center">{{ $din->regions->nama }}</td> --}}
                         <td class="text-center">
                             <a href="{{ route('periode.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"

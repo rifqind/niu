@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url('') }}" class="brand-link">
-        <img src="{{ url('') }}/dist/img/karlota-logo.png" alt="Karlota Logo"
+        <img src="{{ url('') }}/images/favicon2.ico" alt="Nothing"
             class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
     </a>
@@ -41,15 +41,15 @@
                             </a>
                         </li>
                         @if (auth()->user()->role === 'admin')
-                        <li class="nav-item">
-                            <a href="{{ route('tabel.create') }}"
-                                class="nav-link {{ Request::is('tabel/create') ? 'active' : '' }}">
-                                <i class="nav-icon fa-solid fa-plus"></i>
-                                <p>
-                                    Tambah Tabel
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="{{ route('tabel.create') }}"
+                                    class="nav-link {{ Request::is('tabel/create') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Tambah Tabel
+                                    </p>
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </li>
@@ -95,7 +95,7 @@
                     {{-- <li class="nav-item {{ Request::is('tabel*') ? 'menu-open' : '' }}"> --}}
                     <li
                         class="nav-item {{ collect([
-                            'tabel/master',
+                            'tabel/master*',
                             'subject*',
                             'column-group*',
                             'column*',
@@ -111,7 +111,7 @@
                     ">
                         <a href=""
                             class="nav-link {{ collect([
-                                'tabel/master',
+                                'tabel/master*',
                                 'subject*',
                                 'column-group*',
                                 'column*',
@@ -176,17 +176,17 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('periode/index') }}"
-                                    class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
-                                    <i class="nav-icon fa-solid far fa-calendar-alt"></i>
-                                    <p> Periode</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ url('periode-group/index') }}"
                                     class="nav-link {{ Request::is('periode-group/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid far fa-calendar-alt"></i>
                                     <p> Kelompok Periode</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('periode/index') }}"
+                                    class="nav-link {{ Request::is('periode/index') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid far fa-calendar-alt"></i>
+                                    <p> Periode</p>
                                 </a>
                             </li>
                         </ul>

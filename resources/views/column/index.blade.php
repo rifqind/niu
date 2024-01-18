@@ -49,15 +49,23 @@
                 {{ session('error') }}
             </div>
         @endif
-        <table class="table table-hover" id="tabel-kolom">
+        <table class="table table-hover table-sorted" id="tabel-kolom">
             <thead>
                 <tr>
-                    <td class="first-column">No.</td>
-                    <td class="text-left">Kelompok Variabel</td>
-                    <td class="text-left">Label</td>
+                    <th class="first-column">No.</th>
+                    <th class="text-left">Kelompok Variabel</th>
+                    <th class="text-left">Label</th>
+                    {{-- <th class="text-center">Wilayah Kerja</th> --}}
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Hapus</th>
+                </tr>
+                <tr>
+                    <td class="first-column" style="width: 10%;"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
+                    <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
-                    <td class="text-center">Edit</td>
-                    <td class="text-center">Hapus</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
                 </tr>
             </thead>
             <tbody>

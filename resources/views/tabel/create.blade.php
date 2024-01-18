@@ -33,11 +33,11 @@
 
         <hr>
         <form action="" id="create-form">
-            <b>Detail Tabel</b>
+            {{-- <b>Detail Tabel</b> --}}
             <div class="form-group">
-                <label for="dinas">Dinas Tabel</label>
+                <label for="dinas">Produsen Data</label>
                 <select name="dinas" id="dinas" class="form-control select2-selection select2bs4" required>
-                    <option value="">-- Pilih Dinas --</option>
+                    <option value="" disabled selected hidden>-- Pilih Dinas --</option>
                     @foreach ($daftar_dinas as $item)
                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                     @endforeach
@@ -56,7 +56,7 @@
 
                 <select name="subjek" id="subjek" class="form-control select2 select2-selection select2bs4"
                     required>
-                    <option value="">-- Pilih Subjek --</option>
+                    <option value="" disabled selected hidden>-- Pilih Subjek --</option>
                     @foreach ($subjects as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -74,7 +74,7 @@
             <div class="form-group">
                 <label for="tipe-row-label">Tipe Row</label>
                 <select name="tipe-row-label" class="form-control" id="tipe-row-label-select" required>
-                    <option value="">-- Pilih Tipe Row --</option>
+                    <option value="" disabled selected hidden>-- Pilih Tipe Row --</option>
                     <option value="1">Wilayah</option>
                     <option value="2">Non - Wilayah</option>
                 </select>
@@ -85,8 +85,7 @@
                 <div class="form-group">
                     <label for="tingkat-label">Tingkatan Wilayah</label>
                     <select name="tingkat-label" class="form-control" id="tingkat-label-select">
-                        <option value="">-- Pilih Tingkatan --</option>
-
+                        <option value="" disabled selected hidden>-- Pilih Tingkatan --</option>
                         <option value="1">Kabupaten</option>
                         <option value="2">Kecamatan</option>
                         <option value="3">Desa</option>
@@ -97,7 +96,7 @@
                     <label for="kab-label">Kabupaten</label>
                     <select name="kab-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
                         id="kab-label-select">
-                        <option value="">-- Pilih Kabupaten --</option>
+                        <option value="" disabled selected hidden>-- Pilih Kabupaten --</option>
                         @foreach ($kabupatens as $kabupaten)
                             <option value="{{ $kabupaten->wilayah_fullcode }}">{{ $kabupaten->label }}</option>
                         @endforeach
@@ -108,7 +107,7 @@
                     <label for="kec-label">Kecamatan</label>
                     <select name="kec-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
                         id="kec-label-select">
-                        {{-- <option value="">-- Pilih Row Label --</option> --}}
+                        {{-- <option value="" disabled selected hidden>-- Pilih Row Label --</option> --}}
 
                     </select>
                 </div>
@@ -116,7 +115,7 @@
                     <label for="desa-label">Desa</label>
                     <select name="desa-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
                         id="desa-label-select">
-                        {{-- <option value="">-- Pilih Row Label --</option> --}}
+                        {{-- <option value="" disabled selected hidden>-- Pilih Row Label --</option> --}}
 
                     </select>
                 </div>
@@ -128,7 +127,7 @@
                 <div class="form-group">
                     <label for="row-label">Row Label</label>
                     <select name="row-label" class="form-control  select2-selection select2bs4" id="row-label-select">
-                        <option value="">-- Pilih Row Label --</option>
+                        <option value="" disabled selected hidden>-- Pilih Row Label --</option>
                         @foreach ($row_labels as $item)
                             <option value="{{ $item->id }}">{{ $item->label }}</option>
                         @endforeach
@@ -167,7 +166,7 @@
                 <label for="column-group">Grup Kolom</label>
                 <select name="column-group" class="form-control select2-selection select2bs4"
                     id="column-group-select" required>
-                    <option value="">-- Pilih Grup Kolom --</option>
+                    <option value="" disabled selected hidden>-- Pilih Grup Kolom --</option>
                     @foreach ($kolom_grup as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
@@ -206,35 +205,37 @@
                 <label for="turtahun-group">Jenis Turunan Tahun</label>
                 <select name="turtahun-group" class="form-control select2-selection select2bs4"
                     id="turtahun-group-select" required>
-                    <option value="">-- Pilih Turunan Tahun / Periode --</option>
+                    <option value="" disabled selected hidden>-- Pilih Turunan Tahun / Periode --</option>
                     @foreach ($turtahun_groups as $item)
                         <option value="{{ $item->id }}">{{ $item->label }}</option>
                     @endforeach
                 </select>
             </div>
 
-            <b>Daftar Turunan Tahun</b>
-            <hr>
-            <table class="table table-hover table-bordered bg-white">
-                <thead class="bg-info">
-                    <tr>
-                        <th scope="col">
-                            No.
-                        </th>
-                        <th scope="col">Tipe</th>
-                        <th scope="col">Label</th>
-                        <th scope="col"><input type="checkbox" id="select-toggle-turtahun"
-                                name="select-toggle-turtahun">
-                            <label for="select-toggle-turtahun"> Pilih Semua</label>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="turtahun-list-body" class="bg-white">
+            <div class="">
+                <b>Daftar Turunan Tahun</b>
+                <hr>
+                <table class="table table-hover table-bordered bg-white">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">
+                                No.
+                            </th>
+                            <th scope="col">Tipe</th>
+                            <th scope="col">Label</th>
+                            {{-- <th scope="col"><input type="checkbox" id="select-toggle-turtahun"
+                                    name="select-toggle-turtahun">
+                                <label for="select-toggle-turtahun"> Pilih Semua</label>
+                            </th> --}}
+                        </tr>
+                    </thead>
+                    <tbody id="turtahun-list-body" class="bg-white">
 
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
 
 
             <button type="button" id="check-create-table" class="btn btn-info">Buat Tabel</button>
@@ -247,6 +248,7 @@
         <!-- Additional JS resources -->
         <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script>
+            const tabelIndex = new URL("{{ route('tabel.index') }}");
             document.addEventListener("DOMContentLoaded", function() {
                 let tipe_row = document.getElementById('tipe-row-label-select');
                 tipe_row.addEventListener("change", function(event) {
@@ -562,13 +564,12 @@
                     yearSelect.add(option);
                 }
 
-                document.getElementsByName("nomor")[0].value = "000/1";
-                document.getElementsByName("judul")[0]
-                    .value = "Judul Tabel";
-                document.getElementsByName("unit")[0].value = "Unit asw";
+                // document.getElementsByName("nomor")[0].value = "000/1";
+                // document.getElementsByName("judul")[0].value = "Judul Tabel";
+                // document.getElementsByName("unit")[0].value = "Unit asw";
                 // $('.select2-selection').trigger('change');
-                $("#dinas").val("2").trigger("change");
-                $("#subjek").val("4").trigger("change");
+                // $("#dinas").val("2").trigger("change");
+                // $("#subjek").val("4").trigger("change");
             });
         </script>
     </x-slot>

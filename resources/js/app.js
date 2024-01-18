@@ -32,6 +32,7 @@ select2();
 
 import FilterMultiSelect from "./filter-multi-select-bundle.min.js";
 FilterMultiSelect($);
+
 // Import your custom scripts here
 
 // Initialize any code that relies on jQuery after the document is ready
@@ -98,6 +99,34 @@ document.addEventListener("DOMContentLoaded", function () {
                 headerCell.classList.contains("th-sort-asc");
 
             sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+        });
+    });
+    document.querySelectorAll(".search-input").forEach((inputField) => {
+        const tableRows = inputField
+            .closest("table")
+            .querySelectorAll("tbody > tr");
+        const headerCell = inputField.closest("td.search-header");
+        const otherHeaderCells = headerCell.closest("tr").children;
+        const columnIndex = Array.from(otherHeaderCells).indexOf(headerCell);
+        const searchableCells = Array.from(tableRows).map(
+            (row) => row.querySelectorAll("td")[columnIndex]
+        );
+
+        inputField.addEventListener("input", () => {
+            const searchQuery = inputField.value.toLowerCase();
+            // console.log(searchQuery);
+            for (const tableCell of searchableCells) {
+                const row = tableCell.closest("tr");
+                const value = tableCell.textContent
+                    .toLowerCase()
+                    .replace(",", "");
+
+                row.style.visibility = null;
+
+                if (value.search(searchQuery) === -1) {
+                    row.style.visibility = "collapse";
+                }
+            }
         });
     });
     // $(".select2bs4-select").select2({

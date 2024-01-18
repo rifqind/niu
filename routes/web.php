@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/tabel/create', [TabelController::class, 'store'])->name('tabel.store');
     Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->name('tabel.adminHandleData');
     
-    Route::get('/tabel/copy/{id}', [TabelController::class, 'copy'])->name('tabel.copy');
+    Route::get('/tabel/master/copy/{id}', [TabelController::class, 'copy'])->name('tabel.copy');
     Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->name('tabel.storeCopy');
     // Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
     

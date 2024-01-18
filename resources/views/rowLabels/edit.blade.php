@@ -24,7 +24,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <form id = "columnGroupForm" method="POST" class="form-horizontal"
+                <form id = "rowLabelsForm" method="POST" class="form-horizontal"
                     action="{{ route('rowLabels.update') }}">
                     @csrf
                     @method('PUT') <!-- Add this line to override the column method -->

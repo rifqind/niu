@@ -32,13 +32,13 @@
 
                     </div>
                     <div class="form-group">
-                        <label for="id_columns_group">Nama Kelompok Kolom</label>
-                        <select name="id_columns_group" id="id_columns_group" class="form-control select2bs4">
-                            <option value="" disabled selected hidden>-- Pilih Kelompok Kolom --</option>
-                            {{-- @foreach ($column_groups as $column_group)
-                                <option value="{{ $column_group->id }}">
-                                    {{ $column_group->label }}</option>
-                            @endforeach --}}
+                        <label for="rowLabels">Nama Kelompok Kolom</label>
+                        <select name="rowLabels" id="rowLabels" class="form-control select2bs4">
+                            <option value="" disabled selected hidden>-- Pilih Kelompok Baris --</option>
+                            @foreach ($rowLabels as $rowLabel)
+                                <option value="{{ $rowLabel->id }}">
+                                    {{ $rowLabel->label }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="ml-auto">

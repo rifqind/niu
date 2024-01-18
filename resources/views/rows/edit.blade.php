@@ -15,16 +15,16 @@
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
-            Update Kolom
+            Update Kelompok Baris
         </li>
     </x-slot>
     <div class="container-fluid">
         <div class="h4">
-            Kolom
+            Kelompok Baris
         </div>
         <div class="card">
             <div class="card-body">
-                <form id = "columnForm" method="POST" class="form-horizontal" action="{{ route('column.update') }}">
+                <form id = "rowsForm" method="POST" class="form-horizontal" action="{{ route('rows.update') }}">
                     @csrf
                     @method('PUT') <!-- Add this line to override the column method -->
                     @if (session('error'))
@@ -34,22 +34,20 @@
                     @endif
 
                     <div class="form-group">
-                        <label for="label">Nama Kolom</label>
-                        <input class="form-control mb-3" name="label" value="{{ $column->label }}"
-                            placeholder="Isi Nama Kolom" required>
+                        <label for="label">Nama Baris</label>
+                        <input class="form-control mb-3" name="label" value="{{ $rows->label }}"
+                            placeholder="Isi Nama Baris" required>
                         <input class="form-control mb-3 d-none" name="id"
-                            value="{{ Illuminate\Support\Facades\Crypt::encrypt($column->id) }}" readonly>
-
+                            value="{{ Illuminate\Support\Facades\Crypt::encrypt($rows->id) }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="id_columns_group">Nama Kelompok Kolom</label>
-                        <select name="id_columns_group" id="id_columns_group" class="form-control select2bs4"
-                            value="{{ $column->id_columns_group }}">
-                            {{-- <option value="">-- Pilih Kelompok Kolom --</option> --}}
-                            @foreach ($column_groups as $column_group)
-                                <option value="{{ $column_group->id }}"
-                                    {{ $column->id_columns_group == $column_group->id ? 'selected' : '' }}>
-                                    {{ $column_group->label }}</option>
+                        <label for="rowLabels">Nama Kelompok Kolom</label>
+                        <select name="rowLabels" id="rowLabels" class="form-control select2bs4">
+                            <option value="{{ $rows->id_rowlabels }}" disabled selected hidden>-- Pilih Kelompok Baris --</option>
+                            @foreach ($rowLabels as $rowLabel)
+                                <option value="{{ $rowLabel->id }}"
+                                    {{ $rows->id_rowlabels == $rowLabel->id ? 'selected' : '' }}>
+                                    {{ $rowLabel->label }}</option>
                             @endforeach
                         </select>
                     </div>

@@ -6,6 +6,7 @@ use App\Models\Column;
 use App\Models\Datacontent;
 use App\Models\Dinas;
 use App\Models\MasterWilayah;
+use App\Models\Notifikasi;
 use App\Models\Region;
 use App\Models\Row;
 use App\Models\Rowlabel;
@@ -237,6 +238,16 @@ class HomeController extends Controller
         #total tabel
         $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
 
+        $notifikasiList = Notifikasi::where('u.id', auth()->user()->id)
+            ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
+            ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
+            ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
+            ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
+            ->get([
+                'notifikasi.*',
+                't.label as judul_tabel'
+            ]);
+
         return view('dashboard', [
             'newTabels' => $newTabels,
             'entriTabels' => $entriTabels,
@@ -244,6 +255,7 @@ class HomeController extends Controller
             'repairTabels' => $repairTabels,
             'finalTabels' => $finalTabels,
             'totalTabels' => $totalTabels,
+            'notifikasiList' => $notifikasiList,
         ]);
     }
 

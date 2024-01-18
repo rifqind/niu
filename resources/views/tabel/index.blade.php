@@ -10,6 +10,21 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <script></script>
         <style type="text/css">
+            .pagination>li {
+                padding-top: 6px;
+                padding-right: 12px;
+                padding-bottom: 6px;
+                padding-left: 12px;
+            }
+
+            .pagination>li.active {
+                color: whitesmoke;
+                background-color: #17a2b8;
+            }
+
+            .pagination>li:hover {
+                cursor: pointer;
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -18,13 +33,7 @@
         <li class="breadcrumb-item active">Index Page</li>
     </x-slot>
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-body bg-info">
-                <h1 class="text-center">Daftar Tabel</h1>
-            </div>
-        </div>
         {{-- <hr> --}}
-       
         <div class="row mb-2">
             @if (session('success'))
                 <div class="alert alert-success temporary-message">
@@ -37,7 +46,34 @@
                 </div>
             @endif
         </div>
-        <table id="tabel" class="table table-bordered table-hover table-sorted">
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div> 
+            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
+                <select class  ="form-control" name="state" id="maxRows">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination">
+                        <li data-page="prev">
+                            <span>
+                                < <span class="sr-only">(current)
+                            </span></span>
+                        </li>
+                        <!--	Here the JS Function Will Add the Rows -->
+                        <li data-page="next" id="prev">
+                            <span> > <span class="sr-only">(current)</span></span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <table id="table-tabel" class="table table-bordered table-hover table-sorted overflow-y-scroll">
             <thead id="header-tabel">
                 <tr scope="col" class="bg-info">
                     <th class="align-middle">#</th>
@@ -111,7 +147,7 @@
             </tbody>
             <tfoot></tfoot>
         </table>
-
+        
     </div>
 
 
@@ -131,6 +167,17 @@
             }
             document.addEventListener('DOMContentLoaded', function() {
                 // console.log({{ Js::from($tables) }});
+               
+                //getPagination('.table-class');
+                //getPagination('table');
+
+                /*					PAGINATION 
+                - on change max rows select options fade out all rows gt option value mx = 5
+                - append pagination list as per numbers of rows / max rows option (20row/5= 4pages )
+                - each pagination li on click -> fade out all tr gt max rows * li num and (5*pagenum 2 = 10 rows)
+                - fade out all tr lt max rows * li num - max rows ((5*pagenum 2 = 10) - 5)
+                - fade in all tr between (maxRows*PageNum) and (maxRows*pageNum)- MaxRows 
+                */
             })
         </script>
     </x-slot>

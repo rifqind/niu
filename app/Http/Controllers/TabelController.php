@@ -10,6 +10,7 @@ use App\Models\Datacontent;
 use App\Models\Dinas;
 use App\Models\MasterDesa;
 use App\Models\MasterWilayah;
+use App\Models\Notifikasi;
 use App\Models\Region;
 use App\Models\Row;
 use App\Models\Tabel;
@@ -137,27 +138,53 @@ class TabelController extends Controller
 
             $tahuns = $tahunObjects->pluck('tahun')->toArray();
             $id_columns = [];
+            $wilayah_fullcodes = [];
             foreach ($datacontents as $datacontent) {
                 // $split = explode("-", $datacontent->label);
                 array_push($id_rows, $datacontent->id_row);
-
                 array_push($id_columns, $datacontent->id_column);
+                array_push($wilayah_fullcodes, $datacontent->wilayah_fullcode);
 
                 // $turtahuns = $split[4];
             }
             $rows = Row::whereIn('id', $id_rows)->get();
             try {
                 //code...
-                $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
+                if ($rows[0]->id == 0) {
+                    // $wilayah_master = MasterWilayah::where('wilayah_fullcode','like',$wilayah_fullcodes[0]);
+                    $wilayah_parent_code = '';
+                    $jenis = "DAFTAR ";
+
+                    $desa = substr($wilayah_fullcodes[0], 7, 3);
+                    $kec = substr($wilayah_fullcodes[0], 4, 3);
+                    $kab = substr($wilayah_fullcodes[0], 2, 2);
+                    // dd($kec);
+                    if ($desa != '000') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 7) . '000';
+                        $jenis = $jenis . "DESA DI ";
+                    } else if ($kec != '000') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 4) . '000' . '000';
+                        $jenis = $jenis . "KECAMATAN DI ";
+                    } else if ($kab != '00') {
+                        $wilayah_parent_code = substr($wilayah_fullcodes[0], 0, 2) . '00' . '000' . '000';
+                        $jenis = $jenis . "KABUPATEN DI ";
+                    }
+                    $rowLabel = $jenis . MasterWilayah::where('wilayah_fullcode', $wilayah_parent_code)->pluck('label')[0];
+                    $rowLabel = strtolower($rowLabel);
+                    $rowLabel = ucwords($rowLabel);
+                } else {
+
+                    $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->pluck('label')[0];
+                }
             } catch (\Exception $e) {
-                // return response()->json(array('data' => $tables));
-                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'data' => $datacontents));
+                return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'rows' => $rows));
             }
             $columns = Column::whereIn('id', $id_columns)->get();
             array_push($table_objects, [
                 'datacontents' => $datacontents,
                 'label' => $table->label,
                 'id' => $table->id,
+                'nama_dinas' => $table->dinas->nama,
                 'rows' => $rows,
                 'row_label' => $rowLabel,
                 'columns' => $columns,
@@ -288,42 +315,63 @@ class TabelController extends Controller
     public function store(Request $request)
     {
         // insert table
-        $newTable = Tabel::create($request->table);
-        $id_dinas = $request->table["id_dinas"];
-        //debatable
-        $wilayah_fc = Dinas::where('id', $id_dinas)->pluck("wilayah_fullcode");
-        $periodes = Turtahun::where('type', $request->periode['periode'])->get();
-        // generate datacontents
-        $data_contents = [];
-        $is_wilayah = $request->rows['tipe_row'] == 1;
-        foreach ($request->rows["rows_selected"] as $row) {
-            foreach ($request->columns["columns"] as $column) {
-                foreach ($periodes as $period) {
+        try {
+            //code...
+            DB::beginTransaction();
+            $newTable = Tabel::create($request->table);
+            $id_dinas = $request->table["id_dinas"];
+            //debatable
+            $wilayah_fc = Dinas::where('id', $id_dinas)->pluck("wilayah_fullcode");
+            // dd($wilayah_fc[0]);
+            $periodes = Turtahun::where('type', $request->periode['periode'])->get();
+            // generate datacontents
+            $data_contents = [];
+            $is_wilayah = $request->rows['tipe_row'] == 1;
+            foreach ($request->rows["rows_selected"] as $row) {
+                foreach ($request->columns["columns"] as $column) {
+                    foreach ($periodes as $period) {
 
-                    // $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
-                    $datacontent = [
-                        'id_tabel' => $newTable->id,
-                        'id_row' =>  $is_wilayah ? 0 : $row,
-                        'id_column' => $column,
-                        'tahun' => $request->periode['tahun'],
-                        'id_turtahun' => $period->id,
-                        'wilayah_fullcode' =>  $is_wilayah ? (string) $row : (string) $wilayah_fc,
+                        // $datacode = $newTable->id . "-" . $row . "-" . $column . "-" . $request->periode["tahun"] . "-" . $period->id;
+                        $datacontent = [
+                            'id_tabel' => $newTable->id,
+                            'id_row' =>  $is_wilayah ? 0 : $row,
+                            'id_column' => $column,
+                            'tahun' => $request->periode['tahun'],
+                            'id_turtahun' => $period->id,
+                            'wilayah_fullcode' =>  $is_wilayah ? (string) $row : (string) $wilayah_fc[0],
 
-                    ];
-                    $datavalue = "";
-                    array_push($data_contents, $datacontent);
+                        ];
+                        $datavalue = "";
+                        array_push($data_contents, $datacontent);
+                    }
                 }
             }
+            $newStatusTables = Statustables::create(
+                [
+                    'id_tabel' => $newTable->id,
+                    'tahun' => $request->periode['tahun'],
+                    'status' => 1
+                ]
+            );
+            Notifikasi::create([
+                'id_statustabel' => $newStatusTables->id,
+                'id_user' => auth()->user()->id,
+                'komentar' => "Admin telah menambahkan tabel baru dengan judul " . $newTable->label,
+            ]);
+            Datacontent::insert($data_contents);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            //throw $th;
+            DB::rollBack();
+
+            // Handle the exception (log it, show a user-friendly message, etc.)
+            // For example, you can log the error:
+            return response()->json($e);
+            // Optionally, you may throw the exception again to be caught by Laravel's exception handler
+            // throw $e;
         }
 
-        Datacontent::insert($data_contents);
-        Statustables::create(
-            [
-                'id_tabel' => $newTable->id,
-                'tahun' => $request->periode['tahun'],
-                'status' => 1
-            ]
-        );
         return response()->json([
             "column" => $request->columns,
             "periode" => $request->periode,
@@ -374,15 +422,30 @@ class TabelController extends Controller
         $firstStatus = Statustables::where('id_tabel', $decryptedId)
             ->first();
         // get data contents by tahun and id
-        $pattern = $decryptedId . '-%-' . $firstStatus->tahun . '-%';
-        $dataContents = Datacontent::where('label', 'like', $pattern)->get();
-        $newDataContents = [];
-        foreach ($dataContents as $record) {
+        // $pattern = $decryptedId . '-%-' . $firstStatus->tahun . '-%';
+        // $dataContents = Datacontent::where('label', 'like', $pattern)->get();
 
-            $splittedData = explode('-', $record->label);
-            $splittedData[3] = $request->tahun;
-            $joinedData = implode('-', $splittedData);
-            array_push($newDataContents, ['label' => $joinedData, 'value' => '']);
+        $oldDataContents = Datacontent::where('id_tabel', $firstStatus->id_tabel)
+            ->where('tahun', $firstStatus->tahun)
+            ->get();
+
+        $newDataContents = [];
+        foreach ($oldDataContents as $record) {
+            // $splittedData = explode('-', $record->label);
+            // $splittedData[3] = $request->tahun;
+            // $joinedData = implode('-', $splittedData);
+            array_push(
+                $newDataContents,
+                [
+                    'value' => '',
+                    'id_tabel' => $record->id_tabel,
+                    'id_row' => $record->id_row,
+                    'id_column' => $record->id_column,
+                    'id_turtahun' => $record->id_turtahun,
+                    'tahun' => $request->tahun,
+                    'wilayah_fullcode' => $record->wilayah_fullcode,
+                ]
+            );
         }
         // add new record in statustabel 
         try {
