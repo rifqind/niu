@@ -115,6 +115,16 @@ document.addEventListener("DOMContentLoaded", function () {
         inputField.addEventListener("input", () => {
             const searchQuery = inputField.value.toLowerCase();
             // console.log(searchQuery);
+            document.querySelectorAll(".table-search tbody tr").forEach((row) => {
+                row.style.display = ""; // Show the row
+            });
+            if (inputField.value === '')  {
+                document.querySelectorAll(".table-search tbody tr").forEach((row, index) => {
+                    if (index >= document.getElementById('maxRows').value) {
+                        row.style.display = "none"; // Show the row
+                    } // Show the row
+                });
+            }
             for (const tableCell of searchableCells) {
                 const row = tableCell.closest("tr");
                 const value = tableCell.textContent

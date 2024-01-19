@@ -272,10 +272,14 @@
                         document.getElementById('desa-group').style.display = "none";
                         // fetch kabupaten
                         let kabupaten = {{ Js::from($kabupatens) }};
-
+                        let provinsi = {
+                            'wilayah_fullcode' : '7100000000',
+                            'label' : 'PROVINSI SULAWESI UTARA',
+                        }
+                        kabupaten.push(provinsi);
                         let nameLabel = 'row';
-                        let kabupaten_html = kabupaten.map((item, key) => {
-                            item.tipe = 'KABUPATEN';
+                        let kabupaten_html = kabupaten.map((item, key, array) => {
+                            item.tipe = (key ===  array.length - 1) ? 'PROVINSI' : 'KABUPATEN';
                             return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                 <th scope="row" class="text-right">
                                     ${key + 1}
@@ -307,6 +311,7 @@
                 });
 
                 $("#kab-label-select").on("select2:select", (event) => {
+                    let parents_kabupaten = $("#kab-label-select option:selected").text();
                     let kabupaten_kode = event.target.value.substring(2, 4);
                     let tingkat_wilayah = document.getElementById('tingkat-label-select').value;
                     let url = `{{ route('/') }}/master/wilayah/kecamatan/${kabupaten_kode}`;
@@ -323,10 +328,14 @@
                         xhr.onload = function() {
                             if (xhr.status >= 200 && xhr.status < 300) {
                                 var response = JSON.parse(xhr.responseText);
-
                                 let nameLabel = 'row';
-                                let kecamatan_html = response.data.map((item, key) => {
-                                    item.tipe = 'KECAMATAN';
+                                let parents = {
+                                    'wilayah_fullcode' : event.target.value,
+                                    'label' : parents_kabupaten
+                                };
+                                response.data.push(parents);
+                                let kecamatan_html = response.data.map((item, key, array) => {
+                                    item.tipe = (key ===  array.length - 1) ? 'KABUPATEN' : 'KECAMATAN';
                                     return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                         <th scope="row" class="text-right">
                                             ${key + 1}
@@ -364,6 +373,7 @@
                 $("#kec-label-select").on("select2:select", (event) => {
                     let kabupaten_kode = event.target.value.substring(2, 4);
                     let kecamatan_kode = event.target.value.substring(4, 7);
+                    let parents_kecamatan = $("#kec-label-select option:selected").text();
                     let url = `{{ route('/') }}/master/wilayah/desa/${kabupaten_kode}/${kecamatan_kode}`;
 
                     let desaHtmlId = "desa-label-select";
@@ -374,10 +384,14 @@
                     xhr.onload = function() {
                         if (xhr.status >= 200 && xhr.status < 300) {
                             var response = JSON.parse(xhr.responseText);
-
                             let nameLabel = 'row';
-                            let desa_html = response.data.map((item, key) => {
-                                item.tipe = 'DESA';
+                            let parents = {
+                                    'wilayah_fullcode' : event.target.value,
+                                    'label' : parents_kecamatan,
+                                };
+                            response.data.push(parents);
+                            let desa_html = response.data.map((item, key, array) => {
+                                item.tipe = (key ===  array.length - 1) ? 'KECAMATAN' : 'DESA';
                                 return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                         <th scope="row" class="text-right">
                                             ${key + 1}

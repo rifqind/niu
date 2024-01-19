@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateTabelRequest;
+use App\Models\Catatan;
 use App\Models\Column;
 use App\Models\ColumnGroup;
 
@@ -356,7 +357,7 @@ class TabelController extends Controller
             Notifikasi::create([
                 'id_statustabel' => $newStatusTables->id,
                 'id_user' => auth()->user()->id,
-                'komentar' => "Admin telah menambahkan tabel baru dengan judul " . $newTable->label,
+                'komentar' => "Admin telah menambahkan tabel baru dengan judul ",
             ]);
             Datacontent::insert($data_contents);
 
@@ -482,7 +483,8 @@ class TabelController extends Controller
                 'sdesc.label as status_desc'
             )
             ->where('statustables.id', $decryptedId)->first();
-
+        
+        $catatans = Catatan::where('id_statustabel', $decryptedId)->first();
 
         $id_tabel = $statusTabel->id_tabel;
         $tahun = $statusTabel->tahun;
@@ -520,9 +522,12 @@ class TabelController extends Controller
                 // $wilayah_master = MasterWilayah::where('wilayah_fullcode','like',$wilayah_fullcodes[0]);
                 $wilayah_parent_code = '';
                 $jenis = "DAFTAR ";
-                $temp = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)->get();
+                $temp = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)
+                    ->orderByRaw("CASE WHEN desa = '000' THEN 1 ELSE 0 END")
+                    ->orderBy('desa')
+                    ->get();
                 $rows = $temp;
-
+                // dd($rows);
                 $desa = substr($wilayah_fullcodes[0], 7, 3);
                 $kec = substr($wilayah_fullcodes[0], 4, 3);
                 $kab = substr($wilayah_fullcodes[0], 2, 2);
@@ -572,6 +577,7 @@ class TabelController extends Controller
             // 'tabels' => $tabels,
             'encryptedId' => $id,
             'tahuns' => $tahuns,
+            'years' => $tahuns[0],
             'rows' => $rows,
             'row_label' => $rowLabel,
             'columns' => $columns,
@@ -580,6 +586,7 @@ class TabelController extends Controller
             'status' => $status,
             'roles' => $roles,
             'status_desc' => $sdesc,
+            'catatans' => $catatans,
         ]);
     }
 
@@ -672,24 +679,53 @@ class TabelController extends Controller
     {
         $data = $request->data;
         $decisions = $request->decisions;
-        // dd($decisions);
-        Statustables::where('id_tabel', $data[0]['id_tabel'])
-            ->where('tahun', $data[0]['tahun'])
-            ->update([
-                'status' => ($decisions == "save") ? '2' : '3'
-            ]);
-        // Update records in a single query
-        foreach ($data as $item) {
+        // dd($request->catatans);
+        try {
+            //code...
+            DB::beginTransaction();
+            foreach ($data as $item) {
 
-            Datacontent::where('id', $item['id'])
+                Datacontent::where('id', $item['id'])
+                    ->update([
+                        'value' => $item['value']
+                    ]);
+            }
+            Statustables::where('id_tabel', $data[0]['id_tabel'])
+                ->where('tahun', $data[0]['tahun'])
                 ->update([
-                    'value' => $item['value']
+                    'status' => ($decisions == "save") ? '2' : '3'
                 ]);
+            $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
+                ->where('tahun', $data[0]['tahun'])
+                ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
+                ->first(['statustables.*', 'status_desc.label as statuslabel']);
+
+            if ($status->status == '3') {
+                # code...
+                Notifikasi::create([
+                    'id_statustabel' => $status->id,
+                    'id_user' => auth()->user()->id,
+                    'komentar' => auth()->user()->name . " [ " . auth()->user()->dinas->nama . " ]" . " telah mengirim tabel dengan judul ",
+                ]);
+            }
+            if ($request->catatans) {
+                # code...
+                $catatan = Catatan::create([
+                    'id_statustabel' => $status->id,
+                    'catatan' => $request->catatans,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            // Handle the exception (log it, show a user-friendly message, etc.)
+            // For example, you can log the error:
+            return response()->json($th);
         }
-        $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
-            ->where('tahun', $data[0]['tahun'])
-            ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
-            ->first(['statustables.*', 'status_desc.label as statuslabel']);
+        // Update records in a single query
+
         return response()->json([
             'data' => $data,
             'status' => $status->status,
@@ -707,11 +743,44 @@ class TabelController extends Controller
         }
         $data = $request->data;
         $decisions = $request->decisions;
-        Statustables::where('id_tabel', $data[0]['id_tabel'])
-            ->where('tahun', $data[0]['tahun'])
-            ->update([
-                'status' => ($decisions == "reject") ? '4' : '5'
-            ]);
+        try {
+            //code...
+            DB::beginTransaction();
+            Statustables::where('id_tabel', $data[0]['id_tabel'])
+                ->where('tahun', $data[0]['tahun'])
+                ->update([
+                    'status' => ($decisions == "reject") ? '4' : '5'
+                ]);
+            $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
+                ->where('tahun', $data[0]['tahun'])
+                ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
+                ->first(['statustables.*', 'status_desc.label as statuslabel']);
+
+            if ($status->status == '4') {
+                # code...
+                Notifikasi::create([
+                    'id_statustabel' => $status->id,
+                    'id_user' => auth()->user()->id,
+                    'komentar' => "Admin telah me-reject data (perlu perbaikan) dengan judul ",
+                ]);
+            } elseif ($status->status == '5') {
+                # code...
+                Notifikasi::create([
+                    'id_statustabel' => $status->id,
+                    'id_user' => auth()->user()->id,
+                    'komentar' => "Admin telah me-finalkan data dengan judul ",
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            // Handle the exception (log it, show a user-friendly message, etc.)
+            // For example, you can log the error:
+            return response()->json($th);
+        }
+
         return response()->json([
             'messages' => 'Berhasil di-' . $decisions
         ]);

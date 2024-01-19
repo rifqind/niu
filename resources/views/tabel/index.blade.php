@@ -73,7 +73,7 @@
                 </nav>
             </div>
         </div>
-        <table id="table-tabel" class="table table-bordered table-hover table-sorted overflow-y-scroll">
+        <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
             <thead id="header-tabel">
                 <tr scope="col" class="bg-info">
                     <th class="align-middle">#</th>

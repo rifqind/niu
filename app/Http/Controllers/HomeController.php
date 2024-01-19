@@ -217,8 +217,43 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $myDinas = auth()->user()->id_dinas;
-        $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
+        //check role
+        if (auth()->user()->role == 'admin') {
+            # code...
+            $id_wilayah = MasterWilayah::getMyWilayahId();
+            $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+            // dd($ourDinas);
+            $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
+
+            $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
+                ->whereIn('d.wilayah_fullcode', $id_wilayah["kabs"])
+                ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
+                ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
+                ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
+                ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
+                ->orderBy('notifikasi.created_at', 'desc')
+                ->get([
+                    'notifikasi.*',
+                    't.label as judul_tabel',
+                    's.tahun as tahundata',
+                ]);
+                // dd($notifikasiList[0]->tahundata);
+        } else {
+            $myDinas = auth()->user()->id_dinas;
+            $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
+            $notifikasiList = Notifikasi::where('u.id', auth()->user()->id)
+                ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
+                ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
+                ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
+                ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
+                ->orderBy('notifikasi.created_at', 'desc')
+                ->get([
+                    'notifikasi.*',
+                    't.label as judul_tabel',
+                    's.tahun as tahundata',
+                ]);
+        }
+
 
         #status 1
         $newTabels = Statustables::whereIn('id_tabel', $myTabels)->where('status', 1)->count();
@@ -238,15 +273,7 @@ class HomeController extends Controller
         #total tabel
         $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
 
-        $notifikasiList = Notifikasi::where('u.id', auth()->user()->id)
-            ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
-            ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
-            ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
-            ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
-            ->get([
-                'notifikasi.*',
-                't.label as judul_tabel'
-            ]);
+
 
         return view('dashboard', [
             'newTabels' => $newTabels,
@@ -333,7 +360,10 @@ class HomeController extends Controller
                 // $wilayah_master = MasterWilayah::where('wilayah_fullcode','like',$wilayah_fullcodes[0]);
                 $wilayah_parent_code = '';
                 $jenis = "DAFTAR ";
-                $temp = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)->get();
+                $temp = MasterWilayah::whereIn('wilayah_fullcode', $wilayah_fullcodes)
+                    ->orderByRaw("CASE WHEN desa = '000' THEN 1 ELSE 0 END")
+                    ->orderBy('desa')
+                    ->get();
                 $rows = $temp;
 
                 $desa = substr($wilayah_fullcodes[0], 7, 3);

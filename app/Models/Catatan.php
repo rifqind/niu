@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notifikasi extends Model
+class Catatan extends Model
 {
     use HasFactory;
-    protected $table = 'Notifikasi';
     protected $guarded = ['id'];
+    public $timestamps = false;
     public function statustabel(){
         return $this->belongsTo(Statustables::class, 'id_statustabel', 'id');
     }
-    public function user(){
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
-
 }

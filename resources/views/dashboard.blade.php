@@ -17,8 +17,8 @@
             <div class="card-body" style="">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-bold mb-2" style="color:#7286a0;">TOTAL TABEL</div>
-                        <div class="h5 text-bold">{{ $totalTabels }} Tabel</div>
+                        <div class="text-bold mb-2" style="color:#7286a0;">JUMLAH TABEL BARU</div>
+                        <div class="h5 text-bold">{{ $newTabels }} Tabel</div>
                     </div>
                     <div class="col-auto align-middle"><i class="fa-solid fa-2x fa-bars-staggered"
                             style="color:#7286a0"></i></div>
@@ -83,13 +83,19 @@
                     PROGRES PENGERJAAN
                 </div>
                 <div class="card-body" style="overflow-y:scroll;">
-                    @foreach ($notifikasiList as $key => $item)
-                        <li class="">
-                            <span class="badge badge-info">{{ $item->created_at }}</span>
-                            {{ $item->komentar }}
-                            <span class="text-bold">{{ $item->judul_tabel }}</span>
-                        </li>
-                    @endforeach
+                    <div class="row">
+                        @foreach ($notifikasiList as $key => $item)
+                            <div class="col-2 mb-3">
+                                <li class="">
+                                    <span class="badge badge-info">{{ $item->created_at }}</span>
+                                </li>
+                            </div>
+                            <div class="col-10 mb-3">
+                                {{ $item->komentar }}
+                                <span class="text-bold">{{ $item->judul_tabel }}</span>, Tahun {{$item->tahundata}}
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,6 +109,10 @@
                         <canvas id="pie-chart" style=""></canvas>
                     </div>
                     <div class="row p-2 justify-content-center">
+                        <div class="text-center small mr-3">
+                            <i class="fa-solid fa-circle" style="color: #7286a0;"></i>
+                            Tabel Baru
+                        </div>
                         <div class="text-center small mr-3">
                             <i class="fa-solid fa-circle" style="color: green;"></i>
                             Rilis
@@ -129,7 +139,7 @@
             document.addEventListener('DOMContentLoaded', function() {
                 $(function() {
                     var Data = [{{ $finalTabels }}, {{ $entriTabels }}, {{ $verifyTabels }},
-                        {{ $repairTabels }}
+                        {{ $repairTabels }}, {{ $newTabels }}
                     ]
                     var Target = $('#pie-chart')
                     const ChartData = {
@@ -137,18 +147,20 @@
                             "Rilis",
                             "Entri",
                             "Periksa",
-                            "Perbaikan"
+                            "Perbaikan",
+                            "Tabel Baru"
                         ],
                         datasets: [{
                             label: "Jumlah Tabel",
                             data: [{{ $finalTabels }}, {{ $entriTabels }}, {{ $verifyTabels }},
-                                {{ $repairTabels }}
+                                {{ $repairTabels }}, {{ $newTabels }}
                             ],
                             backgroundColor: [
                                 "green",
                                 "#03254e",
                                 "#f18f01",
                                 "red",
+                                "#7286a0",
                             ],
                             hoverOffset: 4,
                             borderColor: [
