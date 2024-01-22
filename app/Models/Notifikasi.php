@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Notifikasi extends Model
 {
     use HasFactory;
-    protected $table = 'Notifikasi';
+    protected $table = 'notifikasi';
     protected $guarded = ['id'];
     public function statustabel(){
         return $this->belongsTo(Statustables::class, 'id_statustabel', 'id');
