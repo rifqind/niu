@@ -112,9 +112,9 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="container-fluid">
+    <div class="container">
 
-        <div class="card col-9">
+        <div class="card">
             <div class="card-body">
                 <h3 class="text-bold">{{ $tabel->judul_tabel }}, Tahun {{ $years }}
                     <h4 class="my-0">
@@ -123,115 +123,107 @@
                 </h3>
             </div>
         </div>
-        <div class="row">
-            <div class="col-9">
-                <div class="table-container mb-3">
-                    <div class="row">
-                        <div class="overflow-x-scroll">
-                            <table class="table table-bordered" id="komponen">
-                                <thead class="text-bold text-white bg-info">
-                                    <tr>
-                                        <td rowspan="3" class="align-middle" style="width: 45px;">#</td>
-                                        <td rowspan="3" class="align-middle">{{ $row_label }}</td>
-                                    </tr>
-                                </thead>
-                                <tbody style="background-color: white">
-                                    @foreach ($rows as $key => $row)
-                                        <tr>
-                                            <td class="align-middle pl-2">{{ $key + 1 }}</td>
-                                            <td class="align-middle pl-2">{{ $row->label }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table-data-wrapper">
-                            <table class="table table-bordered" id="rekon-view">
-                                <thead class="text-bold text-white bg-info">
-                                    {{-- <tr>
+        <div class="table-container mb-3">
+            <div class="row">
+                <div class="overflow-x-scroll">
+                    <table class="table table-bordered" id="komponen">
+                        <thead class="text-bold text-white bg-info">
+                            <tr>
+                                <td rowspan="3" class="align-middle" style="width: 45px;">#</td>
+                                <td rowspan="3" class="align-middle">{{ $row_label }}</td>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: white">
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    <td class="align-middle pl-2">{{ $key + 1 }}</td>
+                                    <td class="align-middle pl-2">{{ $row->label }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-data-wrapper">
+                    <table class="table table-bordered" id="rekon-view">
+                        <thead class="text-bold text-white bg-info">
+                            {{-- <tr>
                                         @foreach ($tahuns as $tahun)
                                             <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
                                                 {{ $tahun }}
                                             </td>
                                         @endforeach
                                     </tr> --}}
-                                    <tr>
-                                        @foreach ($tahuns as $tahun)
-                                            @foreach ($turtahuns as $turtahun)
-                                                <td colspan="{{ sizeof($columns) }}" class="text-center">
-                                                    {{ $turtahun->label }}
+                            <tr>
+                                @foreach ($tahuns as $tahun)
+                                    @foreach ($turtahuns as $turtahun)
+                                        <td colspan="{{ sizeof($columns) }}" class="text-center">
+                                            {{ $turtahun->label }}
+                                        </td>
+                                    @endforeach
+                                @endforeach
+                            </tr>
+                            {{-- kolom grup var  --}}
+                            {{-- kolom var  --}}
+
+                            <tr>
+                                @foreach ($turtahuns as $turtahun)
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($columns as $index => $column)
+                                            <td class="text-center">{{ $column->label }}</td>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: white">
+                            @foreach ($rows as $key => $row)
+                                <tr>
+                                    @foreach ($tahuns as $tahun)
+                                        @foreach ($turtahuns as $turtahun)
+                                            @foreach ($columns as $column)
+                                                <td><input type="text" class="form-control input-field text-right"
+                                                        data-id-content=""
+                                                        data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
+                                                        id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                                 </td>
                                             @endforeach
                                         @endforeach
-                                    </tr>
-                                    {{-- kolom grup var  --}}
-                                    {{-- kolom var  --}}
-        
-                                    <tr>
-                                        @foreach ($turtahuns as $turtahun)
-                                            @foreach ($tahuns as $tahun)
-                                                @foreach ($columns as $index => $column)
-                                                    <td class="text-center">{{ $column->label }}</td>
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach
-                                    </tr>
-                                </thead>
-                                <tbody style="background-color: white">
-                                    @foreach ($rows as $key => $row)
-                                        <tr>
-                                            @foreach ($tahuns as $tahun)
-                                                @foreach ($turtahuns as $turtahun)
-                                                    @foreach ($columns as $column)
-                                                        <td><input type="text" class="form-control input-field text-right"
-                                                                data-id-content=""
-                                                                data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
-                                                                id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
-                                                        </td>
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
-                                        </tr>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="justify-content-between row">
-                        <div class="mr-auto">
-                            <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
-                                    class="fas fa-chevron-left"></i> Kembali</a>
-                        </div>
-                        {{-- <div class="ml-auto">
-                        </div> --}}
-                        <div class="ml-auto" id="user-need-prompt">
-                            <a href="#" class="btn btn-primary save-send" id="save-table">Simpan <i
-                                    class="fas fa-save"></i></a>
-                            <a href="#" class="btn btn-success" id="send-modal" data-toggle="modal"
-                                data-target="#sendModal">Kirim <i class="fas fa-paper-plane"></i></a>
-                        </div>
-                        <div class="ml-auto d-none" id="admin-need-prompt">
-                        <a href="#" class="btn btn-danger reject-final" id="reject-table">Reject <i
-                                    class="fas fa-ban"></i></a>
-                            <a href="#" class="btn btn-success reject-final" id="final-table">Final <i
-                                    class="fas fa-flag-checkered"></i></a>
-                        </div>
-                    </div>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-header">
-                        CATATAN
-                    </div>
-                    <div class="card-body">
-                        <textarea name="catatan" class="form-control" id="catatan" rows="5"
-                        placeholder="Masukkan Catatan Jika Perlu" >{{ $catatans->catatan }}</textarea>
-                    </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                CATATAN
+            </div>
+            <div class="card-body">
+                <textarea name="catatan" class="form-control" id="catatan" rows="5" placeholder="Masukkan Catatan Jika Perlu">{{ $catatans ? $catatans->catatan : '' }}</textarea>
+            </div>
+        </div>
+        <div class="container">
+            <div class="justify-content-between row">
+                <div class="mr-auto">
+                    <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
+                            class="fas fa-chevron-left"></i> Kembali</a>
                 </div>
-                
+                {{-- <div class="ml-auto">
+                        </div> --}}
+                <div class="ml-auto" id="user-need-prompt">
+                    <a href="#" class="btn btn-primary save-send" id="save-table">Simpan <i
+                            class="fas fa-save"></i></a>
+                    <a href="#" class="btn btn-success" id="send-modal" data-toggle="modal"
+                        data-target="#sendModal">Kirim <i class="fas fa-paper-plane"></i></a>
+                </div>
+                <div class="ml-auto d-none" id="admin-need-prompt">
+                    <a href="#" class="btn btn-danger reject-final" id="reject-table">Reject <i
+                            class="fas fa-ban"></i></a>
+                    <a href="#" class="btn btn-success reject-final" id="final-table">Final <i
+                            class="fas fa-flag-checkered"></i></a>
+                </div>
             </div>
         </div>
     </div>
@@ -271,6 +263,7 @@
                 }
                 if (roles == "admin") {
                     $(".input-field").prop('disabled', true);
+                    $("#catatan").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
                     if (status != "4") {
                         $("#admin-need-prompt").removeClass("d-none");
@@ -329,7 +322,7 @@
                 let data_json = ({
                     'data': inputValues,
                     'decisions': decisions_type,
-                    'catatans' : catatans,
+                    'catatans': catatans,
                     _token: token,
                 });
 

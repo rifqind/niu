@@ -19,7 +19,7 @@
                 overflow: hidden;
             }
 
-            #komponen td:first-child {
+            #komponen th:first-child {
                 width: 10%;
             }
 
@@ -60,6 +60,12 @@
             .table-data-wrapper table {
                 border-left: 0;
             }
+
+            .table-container {
+                padding-left: 7.5px;
+                padding-right: 7.5px;
+            }
+
             .bg-jos {
                 background-color: #40476d;
             }
@@ -67,10 +73,10 @@
         @vite(['resources/css/app.css'])
     </x-slot>
 
-    <div class="container-fluid" style="padding-left: 2vw; padding-right: 2vw;">
+    <div class="container" style="">
         <div class="card mt-5">
             <div class="card-body bg-jos">
-                <h1 class="text-center text-white">Tabel {{ $tabels->label }}, Tahun {{ $tahun }}</h1>
+                <h1 class="text-center text-white" id="judulTabel">{{ $tabels->label }}, Tahun {{ $tahun }}</h1>
             </div>
         </div>
         <div class="table-container">
@@ -79,8 +85,8 @@
                     <table class="table table-bordered" id="komponen">
                         <thead class="text-bold text-white bg-jos">
                             <tr>
-                                <td rowspan="3" class="align-middle">#</td>
-                                <td rowspan="3" class="align-middle">{{ $row_label }}</td>
+                                <th rowspan="3" class="align-middle">#</th>
+                                <th rowspan="3" class="align-middle">{{ $row_label }}</th>
                             </tr>
                         </thead>
                         <tbody style="background-color: white">
@@ -106,9 +112,9 @@
                             <tr>
                                 @foreach ($tahuns as $tahun)
                                     @foreach ($turtahuns as $turtahun)
-                                        <td colspan="{{ sizeof($columns) }}" class="text-center">
+                                        <th colspan="{{ sizeof($columns) }}" class="text-center">
                                             {{ $turtahun->label }}
-                                        </td>
+                                        </th>
                                     @endforeach
                                 @endforeach
                             </tr>
@@ -119,7 +125,7 @@
                                 @foreach ($turtahuns as $turtahun)
                                     @foreach ($tahuns as $tahun)
                                         @foreach ($columns as $index => $column)
-                                            <td class="text-center">{{ $column->label }}</td>
+                                            <th class="text-center">{{ $column->label }}</th>
                                         @endforeach
                                     @endforeach
                                 @endforeach
@@ -131,9 +137,9 @@
                                     @foreach ($tahuns as $tahun)
                                         @foreach ($turtahuns as $turtahun)
                                             @foreach ($columns as $column)
-                                                <td class="text-center align-middle"
-                                                data-id-content="" data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
-                                                id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
+                                                <td class="text-center align-middle" data-id-content=""
+                                                    data-wilayah-fullcode="{{ $row->wilayah_fullcode }}"
+                                                    id={{ $tabel->id_tabel . '-' . (is_null($row->id) ? $row->wilayah_fullcode : $row->id) . '-' . $column->id . '-' . $tahun . '-' . $turtahun->id }}>
                                                 </td>
                                             @endforeach
                                         @endforeach
@@ -145,22 +151,68 @@
                 </div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 text-bold">Metadata</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <p>Subjek</p>
+                    </div>
+                    <div class="col text-bold">
+                        {{ $tabels->subjects->label }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Produsen Data</p>
+                    </div>
+                    <div class="col text-bold">
+                        {{ $tabels->dinas->nama }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Wilayah Kerja</p>
+                    </div>
+                    <div class="col text-bold">
+                        {{ $tabels->dinas->wilayah->label }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Satuan Data</p>
+                    </div>
+                    <div class="col text-bold">
+                        {{ $tabels->unit }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="justify-content-between row mb-2" style="padding-right: 7.5px">
+            <div class="ml-auto" id="">
+                <a href="#" class="btn btn-primary" id="downloadExcel"><i class="fa-solid fa-circle-down"></i>
+                    Download</a>
+            </div>
+        </div>
     </div>
 
 
     <x-slot name="script">
-        <!-- Additional JS resources -->
-        <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script>
+        <!-- Additional JS resources text-bold -->
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
+        <script src="{{ asset('js/download.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // get data from the form
 
             const dataContents = {{ Js::from($datacontents) }};
-            console.log({
-                dataContents
-            });
+            const judul_tabel = document.getElementById("judulTabel").innerHTML;
+            // console.log({
+            //     dataContents
+            // });
             dataContents.map((content) => {
                 // contentSplitted = content.label.split("-");
                 tableId = content.id_tabel;
@@ -175,13 +227,14 @@
                 // });
                 let inputId = `${tableId}-${rowId==0?wilayah:rowId}-${columnId}-${tahun}-${turtahun}`;
                 // debugn 
-                console.log({
-                    inputId,
-                    content
-                });
                 document.getElementById(inputId).innerHTML = content.value;
                 // document.getElementById(inputId).dataset.idContent = content.id;
             });
+            document.getElementById("downloadExcel").addEventListener("click", function (e) {
+                e.preventDefault();
+                let datas = getReady();
+                downloadExcel(datas, judul_tabel);
+            })
             // $(document).ready(function() {
             document.addEventListener('DOMContentLoaded', function() {
                 var rekonViewTheadHeight = $('#rekon-view thead').height();

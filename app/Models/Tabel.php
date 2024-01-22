@@ -13,4 +13,8 @@ class Tabel extends Model
     public function dinas(){
         return $this->belongsTo(Dinas::class, 'id_dinas', 'id');
     }
+    public function subjects(){
+        return $this->belongsTo(Subject::class, 'id_subjek', 'id');
+    }
+    
 }

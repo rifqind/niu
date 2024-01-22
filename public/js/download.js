@@ -1,8 +1,28 @@
 function getReady() {
+    let colspans = $("#rekon-view thead tr th").attr("colspan");
+    // if (colspans) {
+    colspans = Number(colspans);
+
     let headers = [];
-    $("#rekon-view thead tr th").each(function () {
+    $("#rekon-view thead tr:first-child th").each(function () {
         headers.push($(this).text());
     });
+    headers = headers.map(function (header) {
+        return header.trim();
+    });
+
+    let scndheaders = [];
+    $("#rekon-view thead tr:nth-child(2) th").each(function () {
+        scndheaders.push($(this).text());
+    });
+    let mergedHeaders = [];
+    let pembagi = scndheaders.length / headers.length;
+    for (i = 1; i <= headers.length; i++) {
+        for (j = 1; j <= pembagi; j++) {
+            mergedHeaders.push(headers[i - 1] + "-" + scndheaders[j - 1]);
+        }
+    }
+
     let contents = [];
     $("#rekon-view tbody tr").each(function (index) {
         let data = {};
@@ -10,10 +30,33 @@ function getReady() {
             .find("td")
             .each(function (indeX) {
                 let value = $(this).text();
-                data[headers[indeX]] = value;
+                let numericValue = parseFloat(value);
+                if (!isNaN(numericValue)) {
+                    data[mergedHeaders[indeX]] = numericValue;
+                } else {
+                    data[mergedHeaders[indeX]] = value;
+                }
             });
         contents.push(data);
     });
+    // } else {
+    //     let headers = [];
+    //     $("#rekon-view thead tr th").each(function () {
+    //         headers.push($(this).text());
+    //     });
+    //     let contents = [];
+    //     $("#rekon-view tbody tr").each(function (index) {
+    //         let data = {};
+    //         $(this)
+    //             .find("td")
+    //             .each(function (indeX) {
+    //                 let value = $(this).text();
+    //                 data[headers[indeX]] = value;
+    //             });
+    //         contents.push(data);
+    //     });
+    // }
+
     let komponens = [];
     $("#komponen tbody tr").each(function (index) {
         let data = {};
@@ -34,12 +77,32 @@ function getReady() {
         komponens.forEach(function (row, index) {
             // row.Komponen = row.Komponen.trim();
             for (let key in row) {
-                row[key] = row[key].trim();
+                let numericValue = parseFloat(row[key]);
+
+                // Check if the parsed value is a number
+                if (!isNaN(numericValue)) {
+                    // If it's a number, store the numeric value
+                    row[key] = numericValue;
+                } else {
+                    // If it's not a number, store the original string value
+                    let value = row[key].trim();
+                    row[key] = value;
+                }
             }
         });
         contents.forEach(function (row, index) {
             for (let key in row) {
-                row[key] = row[key].trim();
+                let numericValue = parseFloat(row[key]);
+
+                // Check if the parsed value is a number
+                if (!isNaN(numericValue)) {
+                    // If it's a number, store the numeric value
+                    row[key] = numericValue;
+                } else {
+                    // If it's not a number, store the original string value
+                    let value = row[key].trim();
+                    row[key] = value;
+                }
             }
         });
         let merged = [];
@@ -52,7 +115,17 @@ function getReady() {
         contents.forEach(function (row, index) {
             // row.Komponen = row.Komponen.trim();
             for (let key in row) {
-                row[key] = row[key].trim();
+                let numericValue = parseFloat(row[key]);
+
+                // Check if the parsed value is a number
+                if (!isNaN(numericValue)) {
+                    // If it's a number, store the numeric value
+                    row[key] = numericValue;
+                } else {
+                    // If it's not a number, store the original string value
+                    let value = row[key].trim();
+                    row[key] = value;
+                }
             }
         });
         return contents;
@@ -106,7 +179,7 @@ function fetchDownload(type) {
     });
 }
 
-function downloadExcel(data) {
+function downloadExcel(data, titles) {
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.json_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
@@ -123,27 +196,7 @@ function downloadExcel(data) {
     var a = document.createElement("a");
     var url = URL.createObjectURL(blob);
     a.href = url;
-    const types = $("#select2-type-container").html();
-    const years = $("#select2-year-container").html();
-    const quarters = $("#select2-quarter-container").html();
-    const periods = $("#select2-period-container").html();
-    const datas = $("#select2-data_quarter-container").html();
-    const rincian = $("#select2-select-cat-container").html();
-    a.download =
-        rincian +
-        "-" +
-        types +
-        "-" +
-        years +
-        "-" +
-        "Periode " +
-        quarters +
-        " " +
-        periods +
-        "-" +
-        "Data " +
-        datas +
-        ".xlsx";
+    a.download = titles + ".xlsx";
 
     // Append the link to the document and trigger the download
     document.body.appendChild(a);

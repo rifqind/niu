@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //Home
-Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('/');
+Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
