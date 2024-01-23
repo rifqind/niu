@@ -22,7 +22,7 @@
     </x-slot>
 
     <x-slot name="breadcrumb">
-        <li class="breadcrumb-item active">Edit Table</li>
+        <li class="breadcrumb-item active">Edit Tabel</li>
     </x-slot>
     <div class="container">
         <div class="card">
@@ -38,10 +38,9 @@
         <form action="{{ route('tabel.update', $encryptedId) }}" id="edit-form" method="POST">
             @csrf
             @method('PUT')
-            <b>Detail Tabel</b>
             <div class="form-group">
 
-                <label for="dinas">Dinas Tabel</label>
+                <label for="dinas">Produsen Data</label>
                 <select name="dinas" class="form-control select2-selection select2bs4">
                     <option value="">-- Pilih Dinas --</option>
                     @foreach ($daftar_dinas as $item)

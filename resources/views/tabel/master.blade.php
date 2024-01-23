@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        {{ __('Test') }}
+        Master Tabel
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -51,7 +51,7 @@
                     <th class="align-middle">Tambah Tahun</th>
                     {{-- <th class="align-middle">Status Pengisian</th> --}}
                     {{-- <th class="align-middle">Cek / Ubah Isian</th> --}}
-                    <th class="align-middle">Ubah Struktur</th>
+                    <th class="align-middle">Edit Tabel</th>
                     <th class="align-middle">Hapus</th>
                 </tr>
                 <tr>
@@ -107,14 +107,15 @@
                                 href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-trash text-info"></i></a> --}}
                         <td class="text-center">
-                            <form id="delete-table-form" method="POST"
+                            {{-- <form id="delete-table-form" method="POST"
                                 action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
-                                @csrf
-                                @method('DELETE')
-                                <a href="#" onclick="handleDeleteTable();" class="delete-trash">
+                                @csrf --}}
+                                <a href="#" class="delete-trash" 
+                                data-tabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables']) ]) }}"
+                                data-toggle="modal" data-target="#deleteModal">
                                     <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                                 </a>
-                            </form>
+                            {{-- </form> --}}
                         </td>
                         {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
                         {{-- </td> --}}
@@ -124,7 +125,7 @@
             </tbody>
             <tfoot></tfoot>
         </table>
-
+        @include('tabel.delete-master-modal')
     </div>
 
 
@@ -134,13 +135,6 @@
         <script src="{{ asset('js/public.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
-            const handleDeleteTable = function(encryptedId) {
-                if (confirm('Are you sure you want to delete this subject?')) {
-                    const form = document.getElementById('delete-table-form');
-                    form.submit();
-                }
-
-            }
             document.addEventListener('DOMContentLoaded', function() {
                 // console.log({{ Js::from($tables) }});
                 var temporaryMessages = document.querySelectorAll('.temporary-message');
@@ -156,6 +150,17 @@
                         }, 500);
                     }, 2000));
                 }
+                // $(".delete-trash").on("click", function (e) {
+                //     let id = $(this).data("table");
+                //     $("idHidden").val(id);
+                // });
+                // $("#deleteStatusTabels").on("click", function (e) {
+                //     let id = $("idHidden").val();
+                //     $.ajax({
+                //         type: "POST",
+                //         url: 
+                //     })
+                // })
             })
         </script>
     </x-slot>

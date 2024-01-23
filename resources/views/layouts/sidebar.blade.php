@@ -22,8 +22,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item {{ Request::is('tabel/index', 'tabel/create') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ Request::is('tabel/index', 'tabel/create') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::is('tabel/index', 'tabel/create', 'tabel/deletedList') ? 'menu-open' : '' }}">
+                    <a href="" class="nav-link {{ Request::is('tabel/index', 'tabel/create', 'tabel/deletedList') ? 'active' : '' }}">
                         <i class="nav-icon fa-solid fa-building"></i>
                         <p>
                             Kelola Tabel
@@ -50,13 +50,22 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('tabel.deletedList') }}"
+                                    class="nav-link {{ Request::is('tabel/deletedList') ? 'active' : '' }}">
+                                    <i class="nav-icon fa-solid fa-recycle"></i>
+                                    <p>
+                                        Recycle Bin
+                                    </p>
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </li>
                 @if (auth()->user()->role === 'admin')
                     <li class="nav-item">
                         <a href="{{ url('user/index') }}"
-                            class="nav-link {{ Request::is('user/index') ? 'active' : '' }}">
+                            class="nav-link {{ Request::is('user/index', 'user/create') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-users"></i>
                             <p>Kelola Pengguna</p>
                         </a>

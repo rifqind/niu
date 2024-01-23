@@ -260,12 +260,14 @@
                 if (status == "3" | status == "5") {
                     $(".input-field").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
+                    $("#catatan").prop('disabled', true);
                 }
-                if (roles == "admin") {
+                if (roles == "admin" | roles == "kominfo") {
                     $(".input-field").prop('disabled', true);
                     $("#catatan").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
-                    if (status != "4") {
+                    
+                    if (status == "3") {
                         $("#admin-need-prompt").removeClass("d-none");
                     }
                     if (status == "5") {

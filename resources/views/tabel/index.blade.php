@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        {{ __('Test') }}
+        Index
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -47,7 +47,7 @@
             @endif
         </div>
         <div class="row d-flex justify-content-end align-items-center">
-            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div> 
+            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
             <div class="form-group"> <!--		Show Numbers Of Rows 		-->
                 <select class  ="form-control" name="state" id="maxRows">
                     <option value="5">5</option>
@@ -84,7 +84,9 @@
                     <th class="align-middle">Tahun</th>
                     <th class="align-middle">Status Pengisian</th>
                     <th class="align-middle">Cek / Ubah Isian</th>
-                    <th class="align-middle">Hapus</th>
+                    @if ($role != 'produsen')
+                        <th class="align-middle">Hapus</th>
+                    @endif
                 </tr>
                 <tr>
                     <td class="align-middle search-header">#</td>
@@ -95,7 +97,9 @@
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"></td>
-                    <td class="align-middle search-header"></td>
+                    @if ($role != 'produsen')
+                        <td class="align-middle search-header"></td>
+                    @endif
                 </tr>
             </thead>
             <tbody id="body-tabel" class="bg-white">
@@ -127,27 +131,24 @@
                         {{-- <a
                                 href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-trash text-info"></i></a> --}}
-                        <td class="text-center">
-                            <form id="delete-table-form" method="POST"
-                                action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
-                                @csrf
-                                @method('DELETE')
-                                <a href="#" onclick="handleDeleteTable();" class="delete-trash">
+                        @if ($role != 'produsen')
+                            <td class="text-center">
+                                <a href="#" class="delete-trash"
+                                    data-statustabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}"
+                                    data-toggle="modal" data-target="#deleteStatusModal">
                                     <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                                 </a>
-                            </form>
-                        </td>
+                            </td>
+                        @endif
                         {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
                         {{-- </td> --}}
-
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>
             <tfoot></tfoot>
         </table>
-        
+        @include('tabel.delete-master-modal')
     </div>
 
 
@@ -158,16 +159,40 @@
         <script src="{{ asset('js/tabel.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
-            const handleDeleteTable = function(encryptedId) {
-                if (confirm('Are you sure you want to delete this subject?')) {
-                    const form = document.getElementById('delete-table-form');
-                    form.submit();
-                }
+            // const handleDeleteTable = function(encryptedId) {
+            //     if (confirm('Are you sure you want to delete this subject?')) {
+            //         const form = document.getElementById('delete-table-form');
+            //         form.submit();
+            //     }
 
-            }
+            // }
             document.addEventListener('DOMContentLoaded', function() {
+                $(".delete-trash").on("click", function(e) {
+                    let data = $(this).data("statustabel");
+                    // console.log(data.id);
+                    $("#idHidden").val(data.id);
+                    // console.log($("#idHidden").val());
+                });
+                $("#deleteStatusTabels").on("click", function(e) {
+                    let id = $("#idHidden").val();
+                    console.log(id);
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('tabel.statusDestroy') }}",
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            location.reload();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    })
+                })
                 // console.log({{ Js::from($tables) }});
-               
+
                 //getPagination('.table-class');
                 //getPagination('table');
 

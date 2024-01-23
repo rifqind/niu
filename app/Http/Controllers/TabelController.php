@@ -23,6 +23,7 @@ use App\Models\TurTahunGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\Cast\Array_;
 
 class TabelController extends Controller
@@ -34,19 +35,41 @@ class TabelController extends Controller
     {
         //
         $id_wilayah = MasterWilayah::getMyWilayahId();
+        $this_dinas = auth()->user()->id_dinas;
+        $this_role = auth()->user()->role;
+        $routeName = Route::currentRouteName();
         // dd($id_wilayah["kabs"]);
-        $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
-            ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
-            ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
-            ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
-            ->select(
-                'tabels.*',
-                'dinas.nama as nama_dinas',
-                'statustables.tahun',
-                'sdesc.label as status',
-                'statustables.id as id_statustables'
-            )
-            ->get();
+        if ($this_role == 'produsen') {
+            # code...
+            $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
+                ->where('dinas.id', $this_dinas)
+                ->where('statustables.status', ($routeName != 'tabel.deletedList') ? '<' : '=', '6')
+                ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
+                ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+                ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
+                ->select(
+                    'tabels.*',
+                    'dinas.nama as nama_dinas',
+                    'statustables.tahun',
+                    'sdesc.label as status',
+                    'statustables.id as id_statustables'
+                )
+                ->get();
+        } else {
+            $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
+                ->where('statustables.status', ($routeName != 'tabel.deletedList') ? '<' : '=', '6')
+                ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
+                ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
+                ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
+                ->select(
+                    'tabels.*',
+                    'dinas.nama as nama_dinas',
+                    'statustables.tahun',
+                    'sdesc.label as status',
+                    'statustables.id as id_statustables'
+                )
+                ->get();
+        }
         $table_objects = [];
         foreach ($tables as $table) {
             // $tabels = Statustables::where('id_tabel', $table->id)
@@ -116,6 +139,7 @@ class TabelController extends Controller
 
         return view('tabel.index', [
             'tables' => $table_objects,
+            'role' => $this_role,
 
         ]);
     }
@@ -483,7 +507,7 @@ class TabelController extends Controller
                 'sdesc.label as status_desc'
             )
             ->where('statustables.id', $decryptedId)->first();
-        
+
         $catatans = Catatan::where('id_statustabel', $decryptedId)->first();
 
         $id_tabel = $statusTabel->id_tabel;
@@ -816,6 +840,15 @@ class TabelController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function statusDestroy(Request $request)
+    {
+        $decryptedId = Crypt::decrypt($request->id);
+        $thisStatus = Statustables::where('id', $decryptedId);
+        $thisStatus->update(['status' => '6']);
+        return response()->json($thisStatus);
+    }
+
     public function fetchMasterKecamatan($kab)
     {
         $daftar_kecamatan = MasterWilayah::where('kab', 'like', $kab)->where('kec', 'not like', '000')->where('desa', 'like', '000')->get();
