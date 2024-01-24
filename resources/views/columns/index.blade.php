@@ -9,9 +9,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -28,7 +25,7 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('column.create') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('column.create') }}" class="btn bg-info-fordone">Tambah</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">
                     <form action="{{ route('dinas.search') }}" method="GET">
@@ -38,7 +35,7 @@
                 </div> --}}
             </div>
         </div>
-        <table class="table table-hover" id="tabel-kolom">
+        <table class="table table-hover table-sorted" id="tabel-kolom">
             <thead>
                 <tr>
                     <td class="first-column">No.</td>

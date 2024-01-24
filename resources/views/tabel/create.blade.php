@@ -26,7 +26,7 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body bg-info text-center">
+            <div class="card-body bg-info-fordone text-center">
                 <h2>Buat Tabel</h2>
             </div>
         </div>
@@ -139,7 +139,7 @@
             <hr>
             <div class="row">
                 <table class="table table-hover table-bordered">
-                    <thead class="bg-info">
+                    <thead class="bg-info-fordone">
                         <tr>
                             <th scope="col">
                                 No.
@@ -176,7 +176,7 @@
             <b>Daftar Kolom</b>
             <hr>
             <table class="table table-hover table-bordered bg-white">
-                <thead class="bg-info">
+                <thead class="bg-info-fordone">
                     <tr>
                         <th scope="col">
                             No.
@@ -216,7 +216,7 @@
                 <b>Daftar Turunan Tahun</b>
                 <hr>
                 <table class="table table-hover table-bordered bg-white">
-                    <thead class="bg-info">
+                    <thead class="bg-info-fordone">
                         <tr>
                             <th scope="col">
                                 No.
@@ -238,7 +238,7 @@
             </div>
 
 
-            <button type="button" id="check-create-table" class="btn btn-info">Buat Tabel</button>
+            <button type="button" id="check-create-table" class="btn bg-info-fordone">Buat Tabel</button>
         </form>
 
     </div>

@@ -99,7 +99,21 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             //Initialize Select2 Elements
-
+            document.getElementById("logoutButton").addEventListener("click", function(e) {
+                    console.log("logged out");
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        data: {_token: '{{ csrf_token() }}'},
+                        type: "POST",
+                        success: function(data) {
+                            console.log("wasu");
+                            window.location.href = "{{ route('/')}}";
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    })
+                })
         });
     </script>
     <script src="{{ asset('js/pagination.js') }}"></script>

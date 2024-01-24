@@ -9,9 +9,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -29,7 +26,7 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('column_group.create') }}" class="btn btn-info">Tambah Kelompok Kolom</a>
+                    <a href="{{ route('column_group.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Kelompok Kolom</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">
                     <form action="{{ route('dinas.search') }}" method="GET">
@@ -49,9 +46,9 @@
                 {{ session('error') }}
             </div>
         @endif
-        <table class="table table-hover table-sorted" id="tabel-grup-kolom">
+        <table class="table table-hover table-sorted table-bordered" id="tabel-grup-kolom">
             <thead>
-                <tr>
+                <tr class="bg-info-fordone">
                     <th class="first-column">No.</th>
                     <th class="text-left">Kelompok Variabel</th>
                     <th class="text-center">Edit</th>
@@ -59,7 +56,7 @@
                 </tr>
                 <tr>
                     <td class="first-column" style="width: 10%;"></td>
-                    <td class="text-center search-header" style="width: 30%;"><input type="text" class="search-input form-control"></td>
+                    <td class="text-center search-header" style="width: 70%;"><input type="text" class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center"></td>
                     <td class="text-center"></td>

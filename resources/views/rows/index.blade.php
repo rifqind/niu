@@ -9,9 +9,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -29,7 +26,7 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('rows.create') }}" class="btn btn-info">Tambah Baris</a>
+                    <a href="{{ route('rows.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Baris</a>
                 </div>
             </div>
         </div>
@@ -43,9 +40,9 @@
                 {{ session('error') }}
             </div>
         @endif
-        <table class="table table-hover table-sorted" id="tabel-baris">
+        <table class="table table-hover table-bordered table-sorted" id="tabel-baris">
             <thead>
-                <tr>
+                <tr class="bg-info-fordone">
                     <th class="first-column">No.</th>
                     <th class="text-left">Kelompok Baris</th>
                     <th class="text-left">Label</th>

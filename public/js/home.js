@@ -1,3 +1,82 @@
+function getMainData(datas) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            type: "GET",
+            url: updateDashboardURL.href,
+            data: datas,
+            success: function(response) {
+                resolve(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            },
+        })
+    })
+}
+
+function getChartData(datas) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            type: "GET",
+            url: updateDashboardURL.href,
+            data: datas,
+            success: function(response) {
+                resolve(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            },
+        })
+    })
+}
+
+function getPieChart(finalTabels, entriTabels, verifyTabels, repairTabels, newTabels) {
+    var Data = [finalTabels, entriTabels, verifyTabels, repairTabels, newTabels];
+    var Target = $('#pie-chart');
+
+    const ChartData = {
+        labels: [
+            "Rilis",
+            "Entri",
+            "Periksa",
+            "Perbaikan",
+            "Tabel Baru"
+        ],
+        datasets: [{
+            label: "Jumlah Tabel",
+            data: Data,
+            backgroundColor: [
+                "green",
+                "#03254e",
+                "#f18f01",
+                "red",
+                "#7286a0",
+            ],
+            hoverOffset: 4,
+            borderColor: [
+                "white",
+            ],
+            borderWidth: [1, 1, 1, 1, 1, 1, 1]
+        }]
+    };
+
+    var Charts = new Chart(Target, {
+        type: "doughnut",
+        data: ChartData,
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    position: "bottom",
+                    // font: "'Poppins', sans-serif"
+                }
+            }
+        },
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     $("form").on("submit", function (e) {
         e.preventDefault();

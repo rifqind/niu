@@ -1,5 +1,5 @@
  <table class="table table-bordered table-hover">
-            <thead class="bg-info">
+            <thead class="bg-info-fordone">
                 {{-- kolom tahun --}}
                 <tr>
                     <td rowspan="3">#</td>

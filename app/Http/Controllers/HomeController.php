@@ -167,6 +167,102 @@ class HomeController extends Controller
         return view('tabel-list', compact('tabels', 'counttabels'))->render();
     }
 
+    public function getDashboard(Request $request)
+    {
+        $wilayah = $request->input('wilayah');
+        $years = $request->input('year');
+
+        if (auth()->user()->role != 'produsen') {
+            # code...
+            $id_wilayah = MasterWilayah::getMyWilayahId();
+            $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? $id_wilayah["kabs"] : [$wilayah]) : $id_wilayah["kabs"])
+            ->pluck('id');
+            $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
+            // dd($id_wilayah);
+            $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
+                ->whereIn('d.wilayah_fullcode', $id_wilayah["kabs"])
+                ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
+                ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
+                ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
+                ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
+                ->orderBy('notifikasi.created_at', 'desc')
+                ->get([
+                    'notifikasi.*',
+                    't.label as judul_tabel',
+                    's.tahun as tahundata',
+                    's.status as status'
+                ]);
+            // dd($notifikasiList[0]->tahundata);
+        } else {
+            $myDinas = auth()->user()->id_dinas;
+            $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
+            // dd($myTabels);
+            $notifikasiList = Notifikasi::where('u.id', auth()->user()->id)
+                ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
+                ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
+                ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
+                ->leftJoin('users as u', 'u.id_dinas', '=', 'd.id')
+                ->orderBy('notifikasi.created_at', 'desc')
+                ->get([
+                    'notifikasi.*',
+                    't.label as judul_tabel',
+                    's.tahun as tahundata',
+                    's.status as status',
+                ]);
+        }
+
+        $years_all = Statustables::whereIn('id_tabel', $myTabels)->distinct()->orderBy('tahun')->pluck('tahun');
+        #status 1
+        $newTabels = Statustables::whereIn('id_tabel', $myTabels)
+            ->whereIn('tahun', ($years == "all") ? $years_all : [$years])
+            ->where('status', 1)->count();
+        // dd($newTabels);
+
+
+        #status 2
+        $entriTabels = Statustables::whereIn('id_tabel', $myTabels)
+            ->whereIn('tahun', ($years == "all") ? $years_all : [$years])
+            ->where('status', 2)->count();
+
+        #status 3
+        $verifyTabels = Statustables::whereIn('id_tabel', $myTabels)
+            ->whereIn('tahun', ($years == "all") ? $years_all : [$years])
+            ->where('status', 3)->count();
+
+        #status 4
+        $repairTabels = Statustables::whereIn('id_tabel', $myTabels)
+            ->whereIn('tahun', ($years == "all") ? $years_all : [$years])
+            ->where('status', 4)->count();
+
+        #status 5
+        $finalTabels = Statustables::whereIn('id_tabel', $myTabels)
+            ->whereIn('tahun', ($years == "all") ? $years_all : [$years])
+            ->where('status', 5)->count();
+
+        #total tabel
+        $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
+
+        if ($request->input('chart')) {
+            return response()->json([
+                'newTabels' => $newTabels,
+                'entriTabels' => $entriTabels,
+                'verifyTabels' => $verifyTabels,
+                'repairTabels' => $repairTabels,
+                'finalTabels' => $finalTabels,
+                'totalTabels' => $totalTabels,
+            ]);
+        }
+        return view('update-dashboard', compact(
+            'newTabels',
+            'entriTabels',
+            'verifyTabels',
+            'repairTabels',
+            'finalTabels',
+            'totalTabels',
+            'notifikasiList'
+        ))->render();
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -218,7 +314,7 @@ class HomeController extends Controller
     public function dashboard()
     {
         //check role
-        if (auth()->user()->role == 'admin') {
+        if (auth()->user()->role != 'produsen') {
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
             $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
@@ -236,8 +332,10 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status',
                 ]);
-                // dd($notifikasiList[0]->tahundata);
+            $wilayah = MasterWilayah::getMyWilayah();
+            // dd($notifikasiList[0]->tahundata);
         } else {
             $myDinas = auth()->user()->id_dinas;
             $myTabels = Tabel::where('id_dinas', $myDinas)->pluck('id');
@@ -251,6 +349,7 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status',
                 ]);
         }
 
@@ -273,6 +372,7 @@ class HomeController extends Controller
         #total tabel
         $totalTabels = $newTabels + $entriTabels + $verifyTabels + $repairTabels + $finalTabels;
 
+        $years = Statustables::whereIn('id_tabel', $myTabels)->distinct()->orderBy('tahun')->pluck('tahun');
 
 
         return view('dashboard', [
@@ -283,6 +383,8 @@ class HomeController extends Controller
             'finalTabels' => $finalTabels,
             'totalTabels' => $totalTabels,
             'notifikasiList' => $notifikasiList,
+            'years' => $years,
+            'wilayah' => (auth()->user()->role == 'admin') ? $wilayah["kabs"] : [],
         ]);
     }
 

@@ -25,46 +25,47 @@ function updateError(data) {
     }
 }
 
-function updateTable(users) {
-    $("#tabel-user tbody").empty();
+//gak kepake
+// function updateTable(users) {
+//     $("#tabel-user tbody").empty();
 
-    users.forEach(function (data) {
-        reset_URL.searchParams.set("id", encodeURIComponent(data.id));
+//     users.forEach(function (data) {
+//         reset_URL.searchParams.set("id", encodeURIComponent(data.id));
 
-        $("#tabel-user tbody").append(
-            `
-            <tr>
-            <td>${data.number}</td>
-            <td>${data.username}</td>
-            <td>${data.name}</td>
-            <td>${data.dinas_nama}</td>
-            <td>${data.region_nama}</td>
-            <td class="text-center">${data.noHp}</td>
-            <td class="text-center" id="roles">${data.role}</td>
-            <td class="text-center">
-                <a href="${reset_URL.href}" class="update-pen mx-1"
-                >
-                <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
-                </a>
-                <a href="" class="mx-1 role-update" data-users="${[
-                    (id = data.id),
-                ]}">
-                <i class="role-icon fa-solid" title="Ubah Role" style="color: #1032e0;"></i>
-                </a>
-            </td>
-            <td class="text-center">
-                <a href="" class="delete-trash"
-                    data-users="${[(id = data.id)]}"
-                    data-toggle="modal" data-target="#deleteModal"
-                    >
-                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
-                </a>
-            </td>
-            </Wtr>
-            `
-        );
-    });
-}
+//         $("#tabel-user tbody").append(
+//             `
+//             <tr>
+//             <td>${data.number}</td>
+//             <td>${data.username}</td>
+//             <td>${data.name}</td>
+//             <td>${data.dinas_nama}</td>
+//             <td>${data.region_nama}</td>
+//             <td class="text-center">${data.noHp}</td>
+//             <td class="text-center" id="roles">${data.role}</td>
+//             <td class="text-center">
+//                 <a href="${reset_URL.href}" class="update-pen mx-1"
+//                 >
+//                 <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
+//                 </a>
+//                 <a href="" class="mx-1 role-update" data-users="${[
+//                     (id = data.id),
+//                 ]}">
+//                 <i class="role-icon fa-solid" title="Ubah Role" style="color: #1032e0;"></i>
+//                 </a>
+//             </td>
+//             <td class="text-center">
+//                 <a href="" class="delete-trash"
+//                     data-users="${[(id = data.id)]}"
+//                     data-toggle="modal" data-target="#deleteModal"
+//                     >
+//                     <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+//                 </a>
+//             </td>
+//             </Wtr>
+//             `
+//         );
+//     });
+// }
 
 function changeRoles() {
     $("#tabel-user tbody")
@@ -75,70 +76,74 @@ function changeRoles() {
             if (roles == "produsen") {
                 $(this).find(".role-icon").removeClass("fa-user-tie");
                 $(this).find(".role-icon").addClass("fa-graduation-cap");
-            } else if (roles == "admin") {
+            } else if (roles == "kominfo") {
                 $(this).find(".role-icon").removeClass("fa-graduation-cap");
+                $(this).find(".role-icon").addClass("fa-computer");
+            } else if (roles == "admin") {
+                $(this).find(".role-icon").removeClass("fa-computer");
                 $(this).find(".role-icon").addClass("fa-user-tie");
             }
         });
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     // $(document).ready(function() {
     changeRoles();
-    getPagination('#tabel-user');
-    $("#formSearch").submit(function (e) {
-        // console.log("asu");
-        e.preventDefault();
+    getPagination("#tabel-user");
+    // $("#formSearch").submit(function (e) {
+    //     // console.log("asu");
+    //     e.preventDefault();
 
-        $.ajax({
-            url: $(this).attr("action"),
-            type: "GET",
-            data: $(this).serialize(),
-            beforeSend: function () {
-                $("#spinner-border").removeClass("d-none");
-            },
-            complete: function () {
-                setTimeout(function () {
-                    $("#spinner-border").addClass("d-none");
-                }, 320);
-            },
-            success: function (data) {
-                // console.log(data);
-                updateTable(data.users);
-                changeRoles();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // console.log(errorThrown);
-            },
-        });
-    });
+    //     $.ajax({
+    //         url: $(this).attr("action"),
+    //         type: "GET",
+    //         data: $(this).serialize(),
+    //         beforeSend: function () {
+    //             $("#spinner-border").removeClass("d-none");
+    //         },
+    //         complete: function () {
+    //             setTimeout(function () {
+    //                 $("#spinner-border").addClass("d-none");
+    //             }, 320);
+    //         },
+    //         success: function (data) {
+    //             // console.log(data);
+    //             updateTable(data.users);
+    //             changeRoles();
+    //         },
+    //         error: function (jqXHR, textStatus, errorThrown) {
+    //             // console.log(errorThrown);
+    //         },
+    //     });
+    // });
     $("#resetPassword").on("click", function (e) {
         let id = $("#idHidden").val();
-
-        $.ajax({
-            url: default_URL.href,
-            type: "POST",
-            data: {
-                id: id,
-                _token: tokens,
-            },
-            beforeSend: function () {
-                $("#spinner-border").removeClass("d-none");
-            },
-            complete: function () {
-                setTimeout(function () {
-                    $("#spinner-border").addClass("d-none");
-                }, 320);
-            },
-            success: function (data) {
-                // console.log(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // console.log(errorThrown);
-            },
-        });
+        if (
+            confirm("Apakah Anda yakin akan mereset password untuk akun ini?")
+        ) {
+            $.ajax({
+                url: default_URL.href,
+                type: "POST",
+                data: {
+                    id: id,
+                    _token: tokens,
+                },
+                beforeSend: function () {
+                    $("#spinner-border").removeClass("d-none");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $("#spinner-border").addClass("d-none");
+                    }, 320);
+                },
+                success: function (data) {
+                    // console.log(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(errorThrown);
+                },
+            });
+        }
     });
     $("#deleteUser").on("click", function (e) {
         let id = $("#idHidden").val();
@@ -220,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $(".editButton").on("click", function (e) {
         e.preventDefault();
         var users = $("#form-edit").serialize();
-        // console.log(users);
+        console.log(users);
         $.ajax({
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
@@ -322,8 +327,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     $(".pagination").show();
                 }
-
                 var totalRows = $(table + " tbody tr").length; // numbers of rows
+                if (maxRows > totalRows) {
+                    $("#showPage").text(totalRows);
+                } else {
+                    $("#showPage").text(maxRows);
+                }
+                $("#showTotal").text(totalRows);
                 // console.log(totalRows);
                 $(table + " tbody tr").each(function () {
                     // each TR in  table and not the header

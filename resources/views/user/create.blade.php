@@ -86,6 +86,7 @@
                             <select class="form-control select2bs4" id="role" name="role">
                                 <option value="">-- Pilih peran --</option>
                                 <option value="produsen">Produsen</option>
+                                <option value="kominfo">Kominfo</option>
                                 <option value="admin">Admin</option>
                             </select>
                             <div class="text-danger text-left" id="error-role"></div>
@@ -114,7 +115,7 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <button id="addUsers" class="btn btn-sm btn-info"> <i class="fa-solid fa-save"></i>
+                    <button id="addUsers" class="btn btn-sm bg-info-fordone"> <i class="fa-solid fa-save"></i>
                         Simpan</button>
                 </div>
             </div>

@@ -16,11 +16,11 @@
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
-    <div class="container vh-100 ">
+    <div class="container vh-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             {{-- asu --}}
             <div class="card" style="min-width: 25vw">
-                <div class="card-header h4 text-center">Masuk</div>
+                <div class="card-header h4 text-center text-bold">Aplikasi For D One</div>
                 <form action="{{ route('users.attemptLogin') }}" method="POST" id="formUser">
                     @csrf
                     <div class="card-body">
@@ -41,8 +41,8 @@
                     </div>
                     <div class="card-footer">
                         <div class="text-right">
-                            {{-- <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm btn-info">Daftar</a> --}}
-                            <button id="login" class="btn btn-sm btn-success">Masuk</button>
+                            {{-- <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm bg-info-fordone">Daftar</a> --}}
+                            <button id="login" class="btn bg-success-fordone"><i class="fa-solid fa-right-to-bracket"></i> Masuk</button>
                         </div>
                     </div>
                 </form>

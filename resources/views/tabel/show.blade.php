@@ -10,31 +10,6 @@
 
         <script></script>
         <style type="text/css">
-            .badge-status-satu {
-                background-color: #A6ECE0;
-                color: white;
-            }
-
-            .badge-status-dua {
-                background-color: #086788;
-                color: white;
-            }
-
-            .badge-status-tiga {
-                background-color: #BFAE48;
-                color: white;
-            }
-
-            .badge-status-empat {
-                background-color: #8B1E3F;
-                color: white;
-            }
-
-            .badge-status-lima {
-                background-color: #2F4B26;
-                color: white;
-            }
-
             #komponen {
                 table-layout: fixed;
                 width: 400px;
@@ -127,7 +102,7 @@
             <div class="row">
                 <div class="overflow-x-scroll">
                     <table class="table table-bordered" id="komponen">
-                        <thead class="text-bold text-white bg-info">
+                        <thead class="text-bold text-white bg-info-fordone">
                             <tr>
                                 <td rowspan="3" class="align-middle" style="width: 45px;">#</td>
                                 <td rowspan="3" class="align-middle">{{ $row_label }}</td>
@@ -145,7 +120,7 @@
                 </div>
                 <div class="table-data-wrapper">
                     <table class="table table-bordered" id="rekon-view">
-                        <thead class="text-bold text-white bg-info">
+                        <thead class="text-bold text-white bg-info-fordone">
                             {{-- <tr>
                                         @foreach ($tahuns as $tahun)
                                             <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
@@ -260,12 +235,14 @@
                 if (status == "3" | status == "5") {
                     $(".input-field").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
+                    $("#catatan").prop('disabled', true);
                 }
-                if (roles == "admin") {
+                if (roles == "admin" | roles == "kominfo") {
                     $(".input-field").prop('disabled', true);
                     $("#catatan").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
-                    if (status != "4") {
+                    
+                    if (status == "3") {
                         $("#admin-need-prompt").removeClass("d-none");
                     }
                     if (status == "5") {
