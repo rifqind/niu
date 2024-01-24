@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <input id="idHidden" class="hiddenInput" value="{{ $user->id }}" hidden>
+                        <input id="idHidden" name="id" class="hiddenInput" value="{{ Illuminate\Support\Facades\Crypt::encrypt($user->id) }}" hidden>
                         <div class="col-3 d-flex align-items-center">
                             <label class="mb-0" for="name">Nama</label>
                         </div>

@@ -9,8 +9,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="">Apakah Anda yakin ingin menghapus Tabel tahun ini? Hal ini tidak bisa diulang</label>
-                    <input id="idHidden" class="hiddenInput" hidden>
+                    <label for="">
+                        Apakah Anda yakin ingin menghapus Tabel ini? Menghapus tabel ini, berarti menghapus seluruh
+                        tabel tersebut dan benar-benar tidak bisa dikembalikan
+                    </label>
+                    <input id="idHiddenTabel" class="hiddenInput" hidden>
                 </div>
             </div>
             <div class="modal-footer">
@@ -20,7 +23,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="deleteStatusModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+<div class="modal fade" id="deleteStatusModal" tabindex="-1" role="dia\log" aria-labelledby="deleteModal"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,7 +35,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="">Apakah Anda yakin ingin menghapus Tabel tahun ini? Hal ini tidak bisa diulang</label>
+                    <label for="">Apakah Anda yakin ingin menghapus Tabel tahun ini? Hal ini tidak bisa
+                        diulang</label>
                     <input id="idHidden" class="hiddenInput" hidden>
                 </div>
             </div>

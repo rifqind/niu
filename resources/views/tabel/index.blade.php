@@ -75,7 +75,7 @@
         </div>
         <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
             <thead id="header-tabel">
-                <tr scope="col" class="bg-info">
+                <tr scope="col" class="bg-info-fordone">
                     <th class="align-middle">#</th>
                     <th class="align-middle" style="width: 25%;">Nama Tabel</th>
                     <th class="align-middle" style="width: 20%;">Produsen Data</th>
@@ -166,7 +166,9 @@
             //     }
 
             // }
+            // limitPagging();
             document.addEventListener('DOMContentLoaded', function() {
+                getPagination('#table-tabel');
                 $(".delete-trash").on("click", function(e) {
                     let data = $(this).data("statustabel");
                     // console.log(data.id);

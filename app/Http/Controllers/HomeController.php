@@ -172,12 +172,13 @@ class HomeController extends Controller
         $wilayah = $request->input('wilayah');
         $years = $request->input('year');
 
-        if (auth()->user()->role == 'admin') {
+        if (auth()->user()->role != 'produsen') {
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
-            $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ? [$wilayah] : $id_wilayah["kabs"])
-                ->pluck('id');
+            $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? $id_wilayah["kabs"] : [$wilayah]) : $id_wilayah["kabs"])
+            ->pluck('id');
             $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
+            // dd($id_wilayah);
             $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
                 ->whereIn('d.wilayah_fullcode', $id_wilayah["kabs"])
                 ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
@@ -189,6 +190,7 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status'
                 ]);
             // dd($notifikasiList[0]->tahundata);
         } else {
@@ -205,6 +207,7 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status',
                 ]);
         }
 
@@ -311,7 +314,7 @@ class HomeController extends Controller
     public function dashboard()
     {
         //check role
-        if (auth()->user()->role == 'admin') {
+        if (auth()->user()->role != 'produsen') {
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
             $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
@@ -329,6 +332,7 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status',
                 ]);
             $wilayah = MasterWilayah::getMyWilayah();
             // dd($notifikasiList[0]->tahundata);
@@ -345,6 +349,7 @@ class HomeController extends Controller
                     'notifikasi.*',
                     't.label as judul_tabel',
                     's.tahun as tahundata',
+                    's.status as status',
                 ]);
         }
 

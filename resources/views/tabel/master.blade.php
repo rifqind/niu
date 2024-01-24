@@ -32,16 +32,41 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <div class="mr-1 justify-content-between row">
-                <div class="col-auto ml-auto">
-                    <a href="{{ route('tabel.create') }}" class="btn btn-info"><i class="fas fa-plus"></i> Buat Tabel
+            <div class="mr-1 d-flex justify-content-between row align-items-center">
+                <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span
+                        id="showTotal"></span></div>
+                <div class="form-group"> <!--		Show Numbers Of Rows 		-->
+                    <select class  ="form-control" name="state" id="maxRows">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div class="pagination-container">
+                    <nav>
+                        <ul class="pagination">
+                            <li data-page="prev">
+                                <span>
+                                    < <span class="sr-only">(current)
+                                </span></span>
+                            </li>
+                            <!--	Here the JS Function Will Add the Rows -->
+                            <li data-page="next" id="prev">
+                                <span> > <span class="sr-only">(current)</span></span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-auto ml-auto mb-3">
+                    <a href="{{ route('tabel.create') }}" class="btn bg-info-fordone"><i class="fas fa-plus"></i> Buat Tabel
                         Baru</a>
                 </div>
             </div>
         </div>
-        <table id="tabel" class="table table-bordered table-hover table-sorted">
+        <table id="tabel-master" class="table table-bordered table-hover table-sorted">
             <thead id="header-tabel">
-                <tr class="bg-info">
+                <tr class="bg-info-fordone">
                     <th class="align-middle">#</th>
                     <th class="align-middle" style="width: 25%;">Nama Tabel</th>
                     <th class="align-middle" style="width: 20%;">Produsen Data</th>
@@ -110,11 +135,11 @@
                             {{-- <form id="delete-table-form" method="POST"
                                 action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
                                 @csrf --}}
-                                <a href="#" class="delete-trash" 
-                                data-tabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables']) ]) }}"
+                            <a href="#" class="delete-trash"
+                                data-tabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"
                                 data-toggle="modal" data-target="#deleteModal">
-                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
-                                </a>
+                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                            </a>
                             {{-- </form> --}}
                         </td>
                         {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
@@ -133,10 +158,12 @@
         <!-- Additional JS resources -->
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
+        <script src="{{ asset('js/tabel.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             document.addEventListener('DOMContentLoaded', function() {
                 // console.log({{ Js::from($tables) }});
+                getPagination('#tabel-master');
                 var temporaryMessages = document.querySelectorAll('.temporary-message');
                 temporaryMessages = Array.from(temporaryMessages);
 
@@ -150,6 +177,28 @@
                         }, 500);
                     }, 2000));
                 }
+                $('.delete-trash').on('click', function(e) {
+                    let id = $(this).data('tabel');
+                    $('#idHiddenTabel').val(id.id);
+                })
+                document.getElementById('deleteTabels').addEventListener('click', function(e) {
+                    // console.log('asu');
+                    let id = $('#idHiddenTabel').val();
+                    $.ajax({
+                        url: "{{route('tabel.destroy')}}",
+                        method: "POST",
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}",
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        error: function(data) {
+                            alert(data);
+                        }
+                    })
+                })
                 // $(".delete-trash").on("click", function (e) {
                 //     let id = $(this).data("table");
                 //     $("idHidden").val(id);

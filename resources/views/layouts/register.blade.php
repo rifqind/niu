@@ -58,7 +58,7 @@
             {{-- </section> --}}
 
             <!-- Main content -->
-            <section class="content">
+            <section class="content" style="background-color: #b0d7ff;">
                 {{-- <div class="container-fluid"> --}}
                     {{ $slot }}
                 {{-- </div> --}}

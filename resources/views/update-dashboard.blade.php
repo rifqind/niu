@@ -49,15 +49,15 @@
             </div>
         </div>
     </div>
-    <div class="card col-xl-4 col-l-4 col-md-12 col-sm-12" style="width: 32%; border-left:4px solid red;">
+    <div class="card col-xl-4 col-l-4 col-md-12 col-sm-12" style="width: 32%; border-left:4px solid #8B1E3F;">
         <div class="card-body" style="">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-bold mb-2" style="color:red;">PERLU PERBAIKAN</div>
+                    <div class="text-bold mb-2" style="color:#8B1E3F;">PERLU PERBAIKAN</div>
                     <div class="h5 text-bold">{{ $repairTabels }} Tabel</div>
                 </div>
                 <div class="col-auto align-middle"><i class="fa-solid fa-2x fa-screwdriver-wrench"
-                        style="color:red;"></i></div>
+                        style="color:#8B1E3F;"></i></div>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
                         Diperiksa
                     </div>
                     <div class="text-center small">
-                        <i class="fa-solid fa-circle" style="color: red;"></i>
+                        <i class="fa-solid fa-circle" style="color: #8B1E3F;"></i>
                         Perbaikan
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                     @foreach ($notifikasiList as $key => $item)
                         <div class="col-2 mb-3">
                             <li class="">
-                                <span class="badge badge-info">{{ $item->created_at }}</span>
+                                <span class="badge badges-status" data-status="{{ $item->status }}">{{ $item->created_at }}</span>
                             </li>
                         </div>
                         <div class="col-10 mb-3">

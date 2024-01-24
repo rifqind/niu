@@ -41,9 +41,16 @@
                     <li class="nav-item active mx-3">
                         <a class="nav-link text-white text-bold" href="{{ route('home') }}">Beranda</a>
                     </li>
-                    <li class="nav-item active mx-3">
-                        <a class="nav-link text-white text-bold" href="{{ route('users.login') }}">Masuk</a>
-                    </li>
+                    @guest
+                        <li class="nav-item active mx-3">
+                            <a class="nav-link text-white text-bold" href="{{ route('users.login') }}">Masuk</a>
+                        </li>
+                    @endguest
+                    @auth
+                        <li class="nav-item active mx-3">
+                            <a class="nav-link text-white text-bold" href="{{ route('dashboard') }}">Dashboard</a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </nav>
@@ -84,8 +91,7 @@
     <!-- AdminLTE App -->
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script> --}}
-    <script>
-    </script>
+    <script></script>
     {{ $script }}
 </body>
 

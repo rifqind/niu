@@ -73,8 +73,8 @@
                     <li class="nav-item {{ Request::is('dinas*') ? 'menu-open' : '' }}">
                         <a href="" class="nav-link {{ Request::is('dinas*') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-building"></i>
-                            <p>
-                                Kelola Dinas
+                            <p class="">
+                                Kelola Produsen
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
@@ -84,7 +84,7 @@
                                     class="nav-link {{ Request::is('dinas/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-list-ol"></i>
                                     <p>
-                                        Daftar Dinas
+                                        Daftar Produsen
                                     </p>
                                 </a>
                             </li>
@@ -93,7 +93,7 @@
                                     class="nav-link {{ Request::is('dinas/create') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid fa-plus"></i>
                                     <p>
-                                        Tambah Dinas
+                                        Tambah Produsen
                                     </p>
                                 </a>
                             </li>
@@ -207,6 +207,14 @@
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Edit Profile
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('/') }}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-home"></i>
+                        <p class="text-bold">
+                            Kembali ke Beranda
                         </p>
                     </a>
                 </li>

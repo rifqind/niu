@@ -813,32 +813,42 @@ class TabelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id_status)
+    public function destroy(Request $request)
     {
-        $decryptedId = Crypt::decrypt($id_status);
+        $id = $request->id;
+        $decryptedId = Crypt::decrypt($id);
 
         try {
-            // cek apakah ada tabel statusnya
-            $statusTabel = Statustables::where('id', $decryptedId)->first();
-            $tahun = $statusTabel->tahun;
-            $id_tabel = $statusTabel->id_tabel;
+            DB::beginTransaction();
+            $thisTabel = Tabel::where('id', $decryptedId)->first();
+            $thisStatusTabel = Statustables::where('id_tabel', $decryptedId)->get();
+            $thisDataContents = Datacontent::where('id_tabel', $decryptedId)->get();
+            
+            foreach ($thisDataContents as $value) {
+                # code...
+                $value->delete();
+            }
 
+            // $thisDataContents->delete();
 
+            foreach ($thisStatusTabel as $value) {
+                # code...
+                $value->delete();
+            }
+            // $thisStatusTabel->delete();
+            $thisTabel->delete();
+            DB::commit();
             // hapus tabel status
-            $statusTabel->delete();
-
-            // query datacontent
-            $pattern = $id_tabel . '-%-' . $tahun . '-%';
-            $dataContents = Datacontent::where('label', 'like', $pattern);
-
-            // hapus datacontent
-            $dataContents->delete();
-            // return sukses
-            return redirect(route('tabel.index'))->with('success', 'Berhasil menghapus Tabel !');
-        } catch (\Exception $e) {
-            return response()->json(['status' => $e->getMessage()]);
-            return back()->with('error', $e->getMessage());
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'object' => $th,
+                'message' => 'asu',
+            ]);
         }
+        return response()->json([
+            'messages' => 'Berhasil dihapus'
+        ]);
     }
 
     public function statusDestroy(Request $request)

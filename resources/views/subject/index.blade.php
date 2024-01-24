@@ -9,9 +9,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -28,7 +25,7 @@
             <div class="mr-1 justify-content-between row">
                 <div class="ml-auto mr-1">
                     {{-- tobedestined --}}
-                    <a href="{{ route('subject.create') }}" class="btn btn-info">Tambah</a>
+                    <a href="{{ route('subject.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">
                     <form action="{{ route('dinas.search') }}" method="GET">
@@ -38,9 +35,9 @@
                 </div> --}}
             </div>
         </div>
-        <table class="table table-hover table-sorted" id="tabel-subject">
+        <table class="table table-hover table-bordered table-sorted" id="tabel-subject">
             <thead>
-                <tr>
+                <tr class="bg-info-fordone">
                     <th class="first-column">No.</th>
                     <th class="text-center">Subjek</th>
                     {{-- <th class="text-center">Wilayah Kerja</th> --}}
@@ -49,7 +46,7 @@
                 </tr>
                 <tr>
                     <td class="first-column" style="width: 10%;"></td>
-                    <td class="text-center search-header" style="width: 30%;"><input type="text" class="search-input form-control"></td>
+                    <td class="text-center search-header" style="width: 70%;"><input type="text" class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center"></td>
                     <td class="text-center"></td>

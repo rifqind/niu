@@ -26,7 +26,7 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body bg-info text-center">
+            <div class="card-body bg-info-fordone text-center">
                 <h2>Edit Tabel</h2>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="col text-right">
 
-                    <button type="submit" id="submit-edit-form" class="btn btn-info">Simpan Perubahan</button>
+                    <button type="submit" id="submit-edit-form" class="btn bg-info-fordone">Simpan Perubahan</button>
                 </div>
             </div>
         </form>

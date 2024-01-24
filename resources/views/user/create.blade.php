@@ -115,7 +115,7 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <button id="addUsers" class="btn btn-sm btn-info"> <i class="fa-solid fa-save"></i>
+                    <button id="addUsers" class="btn btn-sm bg-info-fordone"> <i class="fa-solid fa-save"></i>
                         Simpan</button>
                 </div>
             </div>

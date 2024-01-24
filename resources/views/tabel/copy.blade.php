@@ -26,7 +26,7 @@
     </x-slot>
     <div class="container">
         <div class="card">
-            <div class="card-body bg-info text-center">
+            <div class="card-body bg-info-fordone text-center">
                 <h2>{{ $table->label }}</h2>
             </div>
         </div>
@@ -49,7 +49,7 @@
 
             <div class="form-group">
 
-                <button type="submit" id="submit-create-table" class="btn btn-info">Salin Tabel</button>
+                <button type="submit" id="submit-create-table" class="btn bg-info-fordone">Salin Tabel</button>
             </div>
         </form>
 

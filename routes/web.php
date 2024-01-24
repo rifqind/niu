@@ -78,10 +78,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     
     Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->name('tabel.edit');
     Route::post('/tabel/statusDestroy', [TabelController::class, 'statusDestroy'])->name('tabel.statusDestroy');
+    Route::post('/tabel/destroy', [TabelController::class, 'destroy'])->name('tabel.destroy');
 
 });
 
-Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
+// Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
 
 Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabel.getDatacontent');
 
@@ -110,6 +111,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('user/delete', [UserController::class, 'delete'])->name('users.delete');
     Route::post('user/add', [UserController::class, 'addUser'])->name('users.add');
     Route::get('user/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('user/edit', [UserController::class, 'edit'])->name('users.edit');
 });
 Route::get('user/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
 Route::post('user/editProfile', [UserController::class, 'editProfile'])->middleware(['auth', 'verified'])->name('users.editProfile');
