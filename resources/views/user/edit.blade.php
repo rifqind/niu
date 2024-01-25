@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="btn btn-sm btn-success editButton"> <i class="fa-solid fa-check mr-2"></i>Simpan
+                        <div class="btn btn-sm bg-success-fordone editButton"> <i class="fa-solid fa-check mr-2"></i>Simpan
                         </div>
                         <div id="changePassword" class="btn btn-sm btn-warning"> <i
                                 class="fa-solid fa-key mr-2"></i>Ganti Password</div>

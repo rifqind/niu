@@ -106,9 +106,9 @@
                 <div class="row">
                     @foreach ($notifikasiList as $key => $item)
                         <div class="col-2 mb-3">
-                            <li class="">
-                                <span class="badge badges-status" data-status="{{ $item->status }}">{{ $item->created_at }}</span>
-                            </li>
+                            <div class="" style="">
+                                <span class="badge badges-status" data-status="{{ $item->status }}"><div style="">{{ $item->created_at }}</div></span>
+                            </div>
                         </div>
                         <div class="col-10 mb-3">
                             {{ $item->komentar }}

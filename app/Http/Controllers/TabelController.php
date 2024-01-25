@@ -310,7 +310,10 @@ class TabelController extends Controller
     {
         $tabel = Tabel::all();
         $rowLabel = RowLabel::get();
-        $daftar_dinas = Dinas::get();
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        // dd($id_wilayah["kabs"]);
+        $daftar_dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        // $daftar_dinas = Dinas::get();
         $daftar_kolom = Column::get();
         $kolom_grup = ColumnGroup::get();
         $subjects = Subject::all();
@@ -759,7 +762,7 @@ class TabelController extends Controller
 
     public function adminHandleData(Request $request)
     {
-        $isAdmin = auth()->user()->role == "admin";
+        $isAdmin = auth()->user()->role == "admin" |  auth()->user()->role == "kominfo";
         if (!$isAdmin) {
             return response()->json([
                 'error' => 'Operasi ini hanya bisa dilakukan oleh Admin'

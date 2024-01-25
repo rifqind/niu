@@ -185,24 +185,24 @@
                     <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
                             class="fas fa-chevron-left"></i> Kembali</a>
                 </div>
-                {{-- <div class="ml-auto">
-                        </div> --}}
                 <div class="ml-auto" id="user-need-prompt">
-                    <a href="#" class="btn btn-primary save-send" id="save-table">Simpan <i
+                    <button type="button" class="btn bg-info-fordone" data-toggle="modal" data-target="#panduanModal">Panduan <i class="fa-brands fa-stack-overflow"></i></button>
+                    <a href="#" class="btn bg-primary-fordone save-send" id="save-table">Simpan <i
                             class="fas fa-save"></i></a>
-                    <a href="#" class="btn btn-success" id="send-modal" data-toggle="modal"
+                    <a href="#" class="btn bg-success-fordone" id="send-modal" data-toggle="modal"
                         data-target="#sendModal">Kirim <i class="fas fa-paper-plane"></i></a>
                 </div>
                 <div class="ml-auto d-none" id="admin-need-prompt">
                     <a href="#" class="btn btn-danger reject-final" id="reject-table">Reject <i
                             class="fas fa-ban"></i></a>
-                    <a href="#" class="btn btn-success reject-final" id="final-table">Final <i
+                    <a href="#" class="btn bg-success-fordone reject-final" id="final-table">Final <i
                             class="fas fa-flag-checkered"></i></a>
                 </div>
             </div>
         </div>
     </div>
     @include('tabel.update-content-modal')
+    @include('tabel.panduan')
 
     <x-slot name="script">
         <!-- Additional JS resources -->
@@ -241,7 +241,7 @@
                     $(".input-field").prop('disabled', true);
                     $("#catatan").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
-                    
+
                     if (status == "3") {
                         $("#admin-need-prompt").removeClass("d-none");
                     }

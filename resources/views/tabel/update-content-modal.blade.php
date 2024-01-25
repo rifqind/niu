@@ -15,7 +15,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                <button id="send-table" type="button" class="btn btn-sm btn-success save-send">Kirim</button>
+                <button id="send-table" type="button" class="btn btn-sm bg-success-fordone save-send">Kirim</button>
             </div>
         </div>
     </div>

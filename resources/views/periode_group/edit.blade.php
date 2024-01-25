@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="submit" class="btn bg-success-fordone">Simpan</button>
                 </form>
             </div>
         </div>

@@ -20,7 +20,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Periksa Kembali</button>
-                <button type="button" id="submit-create-table" class="btn btn-primary">Kirim Form</button>
+                <button type="button" id="submit-create-table" class="btn bg-primary-fordone">Kirim Form</button>
             </div>
         </div>
     </div>

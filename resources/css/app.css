@@ -46,6 +46,11 @@
     color: whitesmoke;
 }
 
+.bg-primary-fordone {
+    background-color: #2E7AE6;
+    color: whitesmoke;
+}
+
 .badge-status-satu {
     background-color: #7286a0;
     color: whitesmoke;

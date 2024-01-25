@@ -23,7 +23,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                <button id="updateDinas" type="button" class="btn btn-sm btn-success">Simpan</button>
+                <button id="updateDinas" type="button" class="btn btn-sm bg-success-fordone">Simpan</button>
             </div>
         </div>
     </div>
