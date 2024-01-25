@@ -32,7 +32,7 @@
                         <input class="form-control mb-3" name="label" placeholder="Isi Nama Kelompok Kolom" required>
                     </div>
                     <div class="ml-auto">
-                        <button type="submit" id="subject-save" class="btn btn-success">Simpan</button>
+                        <button type="submit" id="subject-save" class="btn bg-success-fordone">Simpan</button>
                 </form>
             </div>
         </div>

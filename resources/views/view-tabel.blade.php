@@ -192,7 +192,7 @@
         </div>
         <div class="justify-content-between row mb-2" style="padding-right: 7.5px">
             <div class="ml-auto" id="">
-                <a href="#" class="btn btn-primary" id="downloadExcel"><i class="fa-solid fa-circle-down"></i>
+                <a href="#" class="btn bg-primary-fordone" id="downloadExcel"><i class="fa-solid fa-circle-down"></i>
                     Download</a>
             </div>
         </div>

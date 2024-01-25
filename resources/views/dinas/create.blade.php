@@ -38,7 +38,7 @@
                     </div>
                 </form>
                 <div class="ml-auto">
-                    <button id="dinas-save" class="btn btn-success">Simpan</button>
+                    <button id="dinas-save" class="btn bg-success-fordone">Simpan</button>
                 </div>
             </div>
         </div>

@@ -49,7 +49,7 @@ function getPieChart(finalTabels, entriTabels, verifyTabels, repairTabels, newTa
                 "green",
                 "#03254e",
                 "#f18f01",
-                "red",
+                "#8B1E3F",
                 "#7286a0",
             ],
             hoverOffset: 4,
