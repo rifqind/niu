@@ -83,10 +83,15 @@
                         <td>{{ $tab['label'] }}</td>
                         <td>{{ $tab['nama_dinas'] }}</td>
                         @if ($tab['status_metavar'] == '0')
-                            <td>Belum Di-input</td>
+                            <td>Belum di-input</td>
                         @else
                             <td>{{ $tab['status_desc'] }}</td>
                         @endif
+                        <td>
+                            <a href="{{ route('metavar.lists', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

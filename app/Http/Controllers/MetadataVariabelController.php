@@ -7,6 +7,7 @@ use App\Models\MetadataVariabel;
 use App\Models\MetadataVariabelStatus;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class MetadataVariabelController extends Controller
 {
@@ -45,6 +46,58 @@ class MetadataVariabelController extends Controller
         ]);
     }
 
+    public function lists(string $id)
+    {
+        $decryptedId = Crypt::decrypt($id);
+        $this_metavar = MetadataVariabel::where('id_tabel', $decryptedId)->get();
+        $judul = Tabel::where('id', $decryptedId)->pluck('label');
+        $satuan = Tabel::where('id', $decryptedId)->pluck('unit');
+        return view('metadata_variabel.list', [
+            'metavars' => $this_metavar,
+            'judul' => $judul,
+            'satuan' => $satuan,
+            'id' => $id,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        //
+        $request->validate([
+            'r101' => 'required',
+            'r102' => 'required',
+            'r103' => 'required',
+            'r104' => 'required',
+            'r105' => 'required',
+            'r106' => 'required',
+            'r107' => 'required',
+            'r108' => 'required',
+            'r109' => 'required',
+            'r110' => 'required',
+            'r111' => 'required',
+            'r112' => 'required',
+        ]);
+        $id_tabel = decrypt($request->id_tabel);
+        $metavar = MetadataVariabel::create([
+            'id_tabel' => $id_tabel,
+            'r101' => $request->r101,
+            'r102' => $request->r102,
+            'r103' => $request->r103,
+            'r104' => $request->r104,
+            'r105' => $request->r105,
+            'r106' => $request->r106,
+            'r107' => $request->r107,
+            'r108' => $request->r108,
+            'r109' => $request->r109,
+            'r110' => $request->r110,
+            'r111' => $request->r111,
+            'r112' => $request->r112,
+        ]);
+        return response()->json([
+            'message' => 'Berhasil',
+            'data' => $metavar,
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -56,10 +109,6 @@ class MetadataVariabelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.

@@ -9,7 +9,23 @@ class MetadataVariabel extends Model
 {
     use HasFactory;
     protected $table = 'metadata_variabel';
-    public function tabel() {
+    public function tabel()
+    {
         return $this->belongsTo(Tabel::class, 'id_tabel', 'id');
     }
+    protected $fillable = [
+        'id_tabel',
+        'r101',
+        'r102',
+        'r103',
+        'r104',
+        'r105',
+        'r106',
+        'r107',
+        'r108',
+        'r109',
+        'r110',
+        'r111',
+        'r112',
+    ];
 }

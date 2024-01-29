@@ -89,6 +89,8 @@ Route::get('fetch/data', [TabelController::class, 'getDatacontent'])->name('tabe
 //metadata-variabel
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('metavar/index', [MetadataVariabelController::class, 'index'])->name('metavar.index');
+    Route::get('metavar/lists/{id}', [MetadataVariabelController::class, 'lists'])->name('metavar.lists');
+    Route::post('metavar/store', [MetadataVariabelController::class, 'store'])->name('metavar.store');
 });
 
 //dinas
