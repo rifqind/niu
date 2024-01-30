@@ -37,12 +37,24 @@
             </div>
             <div class="col-3 text-right">
                 <div class="mr-1">
-                    <a class="btn bg-info-fordone" data-toggle="modal" data-target="#createModal"><i class="fa-solid fa-plus"></i>
+                    <a class="btn bg-info-fordone" data-toggle="modal" data-target="#createModal"><i
+                            class="fa-solid fa-plus"></i>
                         Tambah Metadata Variabel Baru</a>
                 </div>
             </div>
         </div>
-        @include('metadata_variabel.list-tabel')
+        <div id="list-tabels">
+            @include('metadata_variabel.list-tabel')
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ route('metavar.index') }}" class="btn btn-light border"><i class="fas fa-chevron-left"></i>
+                    Kembali</a>
+            </div>
+            <div class="col text-right">
+                <a href="{{ route('metavar.metavarSend' , ['id' => Illuminate\Support\Facades\Crypt::encrypt($metavars[0]->id_tabel)]) }}" class="btn bg-success-fordone">Kirim <i class="fas fa-paper-plane"></i></a>
+            </div>
+        </div>
         @include('metadata_variabel.create-modal')
     </div>
 
@@ -55,10 +67,10 @@
         <script>
             let satuans = {{ Js::from($satuan[0]) }}
             const id = {{ Js::from($id) }}
-            $('#satuan').val(satuans);
-            $('#id_tabel').val(id);
             document.addEventListener('DOMContentLoaded', function() {
-                $("form").on('submit', function(e) {
+                $('#satuan').val(satuans);
+                $('#id_tabel').val(id);
+                $("#form-store").on('submit', function(e) {
                     e.preventDefault();
                     let data = $(this).serialize();
                     $.ajax({
@@ -66,14 +78,106 @@
                         type: "POST",
                         data: data,
                         success: function(data) {
-                            console.log(data);
+                            if (data.hasOwnProperty('error')) {
+                                alert('Server error:', response.error);
+                                alert('Exception message:', response.message);
+                            } else {
+                                $("#createModal").modal('hide');
+                                $("#list-tabels").html(data);
+                            }
+                        },
+                        error: function(data) {
+                            alert(data);
+                        }
+                    })
+                })
+                $(document)
+                    // (".show-edit-button")
+                    .on("click", ".show-edit-button", function(e) {
+                        // Find the closest tr and then find the .this-id element within it
+                        var thisId = $(this).closest('tr').find('.this-id').attr('id');
+                        let shows;
+                        if ($(this).hasClass("show-button")) {
+                            shows = "1";
+                        } else {
+                            shows = "0";
+                        }
+                        $.ajax({
+                            url: "{{ route('metavar.show') }}",
+                            type: "GET",
+                            data: {
+                                id: thisId
+                            },
+                            success: function(data) {
+                                $.each(data, function(key, value) {
+                                    // Check if there is an element with the matching id
+                                    var element = $("#show-" + key);
+                                    $("#show-satuan").val(satuans);
+                                    if (element.length > 0) {
+                                        // Set the value of the form element
+                                        element.val(value);
+                                        if (shows == "1") {
+                                            element.prop('disabled', true);
+                                            element.css('background-color', 'white');
+                                        } else {
+                                            element.prop('disabled', false);
+                                        }
+                                    }
+                                });
+                                if (shows == "1") {
+                                    $("#updateMetavar").addClass('d-none');
+                                } else {
+                                    $("#updateMetavar").removeClass('d-none');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+                    })
+                $("#form-update").on('submit', function(e) {
+                    e.preventDefault();
+                    let data = $(this).serialize();
+                    // console.log(data);
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: "POST",
+                        data: data,
+                        success: function(data) {
+                            // console.log(data);
+                            $("#updateModal").modal('hide');
+                            $("#list-tabels").html(data);
                         },
                         error: function(data) {
                             console.log(data);
                         }
                     })
                 })
-
+                $(document).on("click", ".delete-button", function(e) {
+                    var thisId = $(this).closest('tr').find('.this-id').attr('id');
+                    $("#delete-id").val(thisId);
+                    var thisLabel = $(this).closest('tr').find('.this-label').html();
+                    $("#judul-deleted").html(thisLabel);
+                })
+                $("#deleteMetavar").on("click", function(e) {
+                    let thisId = $("#delete-id").val();
+                    $.ajax({
+                        url: "{{ route('metavar.destroy') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: thisId,
+                        },
+                        success: function(data) {
+                            // console.log(data);
+                            $("#deleteModal").modal('hide');
+                            $("#list-tabels").html(data);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    })
+                })
             })
         </script>
     </x-slot>

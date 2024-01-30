@@ -91,6 +91,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('metavar/index', [MetadataVariabelController::class, 'index'])->name('metavar.index');
     Route::get('metavar/lists/{id}', [MetadataVariabelController::class, 'lists'])->name('metavar.lists');
     Route::post('metavar/store', [MetadataVariabelController::class, 'store'])->name('metavar.store');
+    Route::get('metavar/show', [MetadataVariabelController::class, 'show'])->name('metavar.show');
+    Route::post('metavar/update', [MetadataVariabelController::class, 'update'])->name('metavar.update');
+    Route::post('metavar/destroy', [MetadataVariabelController::class, 'destroy'])->name('metavar.destroy');
+    Route::get('metavar/metavarSend/{id}', [MetadataVariabelController::class, 'metavarSend'])->name('metavar.metavarSend');
 });
 
 //dinas

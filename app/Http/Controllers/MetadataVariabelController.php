@@ -8,6 +8,7 @@ use App\Models\MetadataVariabelStatus;
 use App\Models\Tabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class MetadataVariabelController extends Controller
 {
@@ -63,40 +64,68 @@ class MetadataVariabelController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'r101' => 'required',
-            'r102' => 'required',
-            'r103' => 'required',
-            'r104' => 'required',
-            'r105' => 'required',
-            'r106' => 'required',
-            'r107' => 'required',
-            'r108' => 'required',
-            'r109' => 'required',
-            'r110' => 'required',
-            'r111' => 'required',
-            'r112' => 'required',
-        ]);
         $id_tabel = decrypt($request->id_tabel);
-        $metavar = MetadataVariabel::create([
-            'id_tabel' => $id_tabel,
-            'r101' => $request->r101,
-            'r102' => $request->r102,
-            'r103' => $request->r103,
-            'r104' => $request->r104,
-            'r105' => $request->r105,
-            'r106' => $request->r106,
-            'r107' => $request->r107,
-            'r108' => $request->r108,
-            'r109' => $request->r109,
-            'r110' => $request->r110,
-            'r111' => $request->r111,
-            'r112' => $request->r112,
-        ]);
-        return response()->json([
-            'message' => 'Berhasil',
-            'data' => $metavar,
-        ]);
+        try {
+            //code...
+            DB::beginTransaction();
+            $request->validate([
+                'r101' => 'required',
+                'r102' => 'required',
+                'r103' => 'required',
+                'r104' => 'required',
+                'r105' => 'required',
+                'r106' => 'required',
+                'r107' => 'required',
+                'r108' => 'required',
+                'r109' => 'required',
+                'r110' => 'required',
+                'r111' => 'required',
+                'r112' => 'required',
+            ]);
+            $metavar = MetadataVariabel::create([
+                'id_tabel' => $id_tabel,
+                'r101' => $request->r101,
+                'r102' => $request->r102,
+                'r103' => $request->r103,
+                'r104' => $request->r104,
+                'r105' => $request->r105,
+                'r106' => $request->r106,
+                'r107' => $request->r107,
+                'r108' => $request->r108,
+                'r109' => $request->r109,
+                'r110' => $request->r110,
+                'r111' => $request->r111,
+                'r112' => $request->r112,
+            ]);
+            $check_metavar_status = MetadataVariabelStatus::where('id_tabel', $id_tabel)->first();
+            // dd($check_metavar_status);
+            if (!$check_metavar_status) {
+                # code...
+                $metavar_status = MetadataVariabelStatus::where('id_tabel', $id_tabel)->create([
+                    'id_tabel' => $id_tabel,
+                    'status' => 2,
+                ]);
+            } else {
+                $check_metavar_status->update([
+                    'status' => 2,
+                ]);
+            }
+            DB::commit();
+            $metavars = MetadataVariabel::where('id_tabel', $id_tabel)->get();
+            $satuan = Tabel::where('id', $id_tabel)->pluck('unit');
+            return view('metadata_variabel.list-tabel', compact(
+                'metavars',
+                'satuan'
+            ))->render();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return response()->json([
+                'error' => 'An error occurred while processing the request.',
+                'message' => $th->getMessage(), // Include the exception message
+            ], 500);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -113,9 +142,12 @@ class MetadataVariabelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
         //
+        $decryptedId = decrypt($request->id);
+        $this_metavar = MetadataVariabel::find($decryptedId);
+        return response()->json($this_metavar);
     }
 
     /**
@@ -129,16 +161,69 @@ class MetadataVariabelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
+        $request->validate([
+            'r101' => 'required',
+            'r102' => 'required',
+            'r103' => 'required',
+            'r104' => 'required',
+            'r105' => 'required',
+            'r106' => 'required',
+            'r107' => 'required',
+            'r108' => 'required',
+            'r109' => 'required',
+            'r110' => 'required',
+            'r111' => 'required',
+            'r112' => 'required',
+        ]);
+        $metavar = MetadataVariabel::where('id', $request->id)->update([
+            'id_tabel' => $request->id_tabel,
+            'r101' => $request->r101,
+            'r102' => $request->r102,
+            'r103' => $request->r103,
+            'r104' => $request->r104,
+            'r105' => $request->r105,
+            'r106' => $request->r106,
+            'r107' => $request->r107,
+            'r108' => $request->r108,
+            'r109' => $request->r109,
+            'r110' => $request->r110,
+            'r111' => $request->r111,
+            'r112' => $request->r112,
+        ]);
+        $metavars = MetadataVariabel::where('id_tabel', $request->id_tabel)->get();
+        $satuan = Tabel::where('id', $request->id_tabel)->pluck('unit');
+        // return response()->json("Berhasil");
+        return view('metadata_variabel.list-tabel', compact(
+            'metavars',
+            'satuan'
+        ))->render();
+    }
+
+    public function metavarSend(string $id) {
+        $decryptedId = decrypt($id);
+        $this_metavar_status = MetadataVariabelStatus::where('id_tabel', $decryptedId)->update([
+            'status' => 3,
+        ]);
+        return redirect()->route('metavar.index'); 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
+        $decryptedId = decrypt($request->id);
+        $get_idTabel = MetadataVariabel::where('id', $decryptedId)->pluck('id_tabel');
+        MetadataVariabel::destroy($decryptedId);
+        $metavars = MetadataVariabel::where('id_tabel', $get_idTabel[0])->get();
+        $satuan = Tabel::where('id', $get_idTabel[0])->pluck('unit');
+        return view('metadata_variabel.list-tabel', compact(
+            'metavars',
+            'satuan'
+        ))->render();
     }
 }

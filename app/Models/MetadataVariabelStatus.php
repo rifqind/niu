@@ -9,6 +9,8 @@ class MetadataVariabelStatus extends Model
 {
     use HasFactory;
     protected $table = 'metadata_variabel_status';
+    protected $fillable = ['id_tabel', 'status'];
+    public $timestamps = false;
     public function tabel() {
         return $this->belongsTo(Tabel::class, 'id_tabel', 'id');
     }
