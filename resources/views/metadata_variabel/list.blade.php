@@ -33,7 +33,7 @@
         </div>
         <div class="row mb-2 justify-content-between">
             <div class="col-9">
-                <h4>Tabel : {{ $judul[0] }}</h4>
+                <h4>Tabel : {{ $judul[0] }} : <span>{{ $status_desc [0]}}</span></h4>
             </div>
             <div class="col-3 text-right">
                 <div class="mr-1">
@@ -45,15 +45,6 @@
         </div>
         <div id="list-tabels">
             @include('metadata_variabel.list-tabel')
-        </div>
-        <div class="row">
-            <div class="col">
-                <a href="{{ route('metavar.index') }}" class="btn btn-light border"><i class="fas fa-chevron-left"></i>
-                    Kembali</a>
-            </div>
-            <div class="col text-right">
-                <a href="{{ route('metavar.metavarSend' , ['id' => Illuminate\Support\Facades\Crypt::encrypt($metavars[0]->id_tabel)]) }}" class="btn bg-success-fordone">Kirim <i class="fas fa-paper-plane"></i></a>
-            </div>
         </div>
         @include('metadata_variabel.create-modal')
     </div>
@@ -67,9 +58,51 @@
         <script>
             let satuans = {{ Js::from($satuan[0]) }}
             const id = {{ Js::from($id) }}
+            const roles = {{ Js::from($this_role) }}
+            let status = {{ Js::from($status_metavars) }}
+            if (status.length == 0) {
+                status = 0
+            } else {
+                status = status[0]
+            }
             document.addEventListener('DOMContentLoaded', function() {
                 $('#satuan').val(satuans);
                 $('#id_tabel').val(id);
+                if (roles != "produsen") {
+                    $("#user-need-prompt").addClass("d-none");
+                    if (status == "3") {
+                        $("#admin-need-prompt").removeClass("d-none");
+                    }
+                    if (status == "5") {
+                        $("#final-metavar").addClass("d-none");
+                    }
+                } else {
+                    if (status == "3" | status == "5") {
+                        $("#user-need-prompt").addClass("d-none");
+                    } else {
+                        $("#user-need-prompt").removeClass("d-none");
+                    }
+                }
+                $(document).on("click", ".final-reject", function(e) {
+                    e.preventDefault();
+                    const button = this;
+                    const decisions = this.id;
+                    $.ajax({
+                        url: "{{ route('metavar.adminHandleMetavar') }}",
+                        type: "GET",
+                        data: {
+                            id: id,
+                            decisions: decisions,
+                        },
+                        success: function(data) {
+                            // console.log(data);
+                            window.location.href = "{{ route('metavar.index') }}"
+                        },
+                        error: function(jqxhr, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                })
                 $("#form-store").on('submit', function(e) {
                     e.preventDefault();
                     let data = $(this).serialize();

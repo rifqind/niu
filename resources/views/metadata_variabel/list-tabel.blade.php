@@ -22,6 +22,8 @@
         </tr>
     </thead>
     <tbody id="body-tabel" class="bg-white">
+        <input id="id-metavars" hidden
+            value="{{ sizeof($metavars) > 0 ? Illuminate\Support\Facades\Crypt::encrypt($metavars[0]->id_tabel) : '0' }}">
         @if (sizeof($metavars) > 0)
             @foreach ($metavars as $item => $key)
                 <tr>
@@ -52,9 +54,28 @@
             @endforeach
         @else
             <tr>
-                <td colspan="7" class="text-center">Belum Ada Metadata Variabel</td>
+                <td colspan="8" class="text-center">Belum Ada Metadata Variabel</td>
             </tr>
         @endif
     </tbody>
     <tfoot></tfoot>
 </table>
+<div class="row justify-content-between">
+    <div class="mr-auto px-2">
+        <a href="{{ route('metavar.index') }}" class="btn btn-light border"><i class="fas fa-chevron-left"></i>
+            Kembali</a>
+    </div>
+    <div class="ml-auto mr-2 d-none" id="admin-need-prompt">
+        <a href="#" id="reject-metavar"
+            class="btn final-reject btn-danger {{ sizeof($metavars) > 0 ? '' : 'disabled' }}">Reject <i
+                class="fas fa-ban"></i></a>
+        <a href="#" id="final-metavar"
+            class="btn final-reject bg-success-fordone {{ sizeof($metavars) > 0 ? '' : 'disabled' }}">Final <i
+                class="fas fa-flag-checkered"></i></a>
+    </div>
+    <div class="mr-2 d-none" id="user-need-prompt">
+        <a href="{{ route('metavar.metavarSend', ['id' => sizeof($metavars) > 0 ? Illuminate\Support\Facades\Crypt::encrypt($metavars[0]->id_tabel) : '0']) }}"
+            id="send-metavar" class="btn bg-success-fordone {{ sizeof($metavars) > 0 ? '' : 'disabled' }}">Kirim <i
+                class="fas fa-paper-plane"></i></a>
+    </div>
+</div>

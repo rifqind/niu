@@ -15,7 +15,7 @@
     </x-slot>
 
     <x-slot name="breadcrumb">
-        <li class="breadcrumb-item active">Index Page</li>
+        <li class="breadcrumb-item active">Daftar Tabel</li>
     </x-slot>
     <div class="container-fluid">
         {{-- <hr> --}}
@@ -31,8 +31,9 @@
                 </div>
             @endif
         </div>
-        <div class="row d-flex justify-content-end align-items-center">
-            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
+        <div class="row d-flex justify-content-between align-items-center">
+            <h4 class="col">Daftar Pengisian Metadata per Tabel</h4>
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
             <div class="form-group"> <!--		Show Numbers Of Rows 		-->
                 <select class  ="form-control" name="state" id="maxRows">
                     <option value="5">5</option>
@@ -87,7 +88,7 @@
                         @else
                             <td>{{ $tab['status_desc'] }}</td>
                         @endif
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('metavar.lists', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}">
                                 <i class="fas fa-eye"></i>
                             </a>
@@ -108,7 +109,7 @@
         {{-- <script src="{{ asset('js/tabel.js') }}"></script> --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                getPagination('#table-tabel');
+                getPagination('#table-metadata-variabel', 10);
 
             })
         </script>

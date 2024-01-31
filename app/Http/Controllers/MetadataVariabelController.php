@@ -24,7 +24,11 @@ class MetadataVariabelController extends Controller
 
         if ($this_role == 'produsen') {
             # code...
-            $tabels = Tabel::where('id_dinas', $this_dinas)->get();
+            $tabels = Tabel::where('id_dinas', $this_dinas)
+                ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
+                ->leftJoin('metadata_variabel_status as mtv', 'mtv.id_tabel', '=', 'tabels.id')
+                ->leftJoin('status_desc as sdc', 'sdc.id', '=', 'mtv.status')
+                ->get(['tabels.*', 'dinas.nama as nama_dinas', 'sdc.label as status_desc']);
         } else {
             $tabels = Tabel::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
                 ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
@@ -49,15 +53,24 @@ class MetadataVariabelController extends Controller
 
     public function lists(string $id)
     {
+        $this_role = auth()->user()->role;
         $decryptedId = Crypt::decrypt($id);
         $this_metavar = MetadataVariabel::where('id_tabel', $decryptedId)->get();
+        $this_status_metavar = MetadataVariabelStatus::where('id_tabel', $decryptedId)->pluck('status');
+        $status_desc = MetadataVariabelStatus::where(
+            'id_tabel',
+            $decryptedId
+        )->join('status_desc as sdc', 'sdc.id', '=', 'metadata_variabel_status.status')->pluck('sdc.label as status_desc');
         $judul = Tabel::where('id', $decryptedId)->pluck('label');
         $satuan = Tabel::where('id', $decryptedId)->pluck('unit');
         return view('metadata_variabel.list', [
             'metavars' => $this_metavar,
+            'status_metavars' => $this_status_metavar,
+            'status_desc' => $status_desc,
             'judul' => $judul,
             'satuan' => $satuan,
             'id' => $id,
+            'this_role' => $this_role,
         ]);
     }
 
@@ -202,12 +215,25 @@ class MetadataVariabelController extends Controller
         ))->render();
     }
 
-    public function metavarSend(string $id) {
+    public function metavarSend(string $id)
+    {
         $decryptedId = decrypt($id);
         $this_metavar_status = MetadataVariabelStatus::where('id_tabel', $decryptedId)->update([
             'status' => 3,
         ]);
-        return redirect()->route('metavar.index'); 
+        return redirect()->route('metavar.index');
+    }
+
+    public function adminHandleMetavar(Request $request)
+    {
+        $decryptedId = decrypt($request->id);
+        $decisions = $request->decisions;
+
+        $this_metavar_status = MetadataVariabelStatus::where('id_tabel', $decryptedId)->update([
+            'status' => ($decisions == "reject-metavar") ? 4 : 5,
+        ]);
+
+        return redirect()->route('metavar.index');
     }
 
     /**

@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('metavar/update', [MetadataVariabelController::class, 'update'])->name('metavar.update');
     Route::post('metavar/destroy', [MetadataVariabelController::class, 'destroy'])->name('metavar.destroy');
     Route::get('metavar/metavarSend/{id}', [MetadataVariabelController::class, 'metavarSend'])->name('metavar.metavarSend');
+    Route::get('metavar/adminHandleMetavar', [MetadataVariabelController::class, 'adminHandleMetavar'])->name('metavar.adminHandleMetavar');
 });
 
 //dinas
