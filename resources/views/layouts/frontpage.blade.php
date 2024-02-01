@@ -23,7 +23,9 @@
 
     {{ $head }}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css',
+    // 'resources/js/app.js'
+    ])
 </head>
 
 <body class="hold-transition">
@@ -91,6 +93,14 @@
     <!-- AdminLTE App -->
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script> --}}
+    <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
+    {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
+    <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script></script>
     {{ $script }}
 </body>

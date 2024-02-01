@@ -29,7 +29,8 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('guest')->group(function (){
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/view/{id}/{tahun}', [HomeController::class, 'show'])->name('home.view');
-Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');;
+Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search');
+Route::get('/getMetaVariabel', [HomeController::class, 'getMetaVariabel'])->name('home.getMetaVariabel');
 // });
 
 Route::get('/login', [UserController::class, 'login'])->name('users.login');
@@ -41,7 +42,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard/search', [HomeController::class, 'getDashboard'])->middleware(['auth' , 'verified'])->name('dashboard.search');
+Route::get('/dashboard/search', [HomeController::class, 'getDashboard'])->middleware(['auth', 'verified'])->name('dashboard.search');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,13 +56,13 @@ Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['aut
 
 
 //tabel
-Route::middleware(['auth', 'verified'])->group(function (){
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tabel/index', [TabelController::class, 'index'])->name('tabel.index');
     Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->name('tabel.show');
     Route::put('/tabel/update-content/{id}', [TabelController::class, 'update_content'])->name('tabel.update_content');
-    Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->name('tabel.adminHandleData');
 });
 
+Route::post('/tabel/adminHandleData', [TabelController::class, 'adminHandleData'])->middleware(['auth', 'verified', 'role:admin|kominfo'])->name('tabel.adminHandleData');
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/tabel/master', [TabelController::class, 'master'])->name('tabel.master');
     Route::get('/tabel/create', [TabelController::class, 'create'])->name('tabel.create');
@@ -71,15 +72,14 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Route::get('/tabel/show/{id}', [TabelController::class, 'show'])->name('tabel.show');
     // Route::get('/tabel/create', [TabelController::class, 'create'])->name('tabel.create');
     // Route::post('/tabel/create', [TabelController::class, 'store'])->name('tabel.store');
-    
+
     Route::get('/tabel/master/copy/{id}', [TabelController::class, 'copy'])->name('tabel.copy');
     Route::post('/tabel/copy/{id}', [TabelController::class, 'storeCopy'])->name('tabel.storeCopy');
     // Route::delete('tabel/copy/{id}', [TabelController::class, 'destroy'])->middleware(['auth','verified'])->name('tabel.destroy');
-    
+
     Route::get('/tabel/edit/{id}', [TabelController::class, 'edit'])->name('tabel.edit');
     Route::post('/tabel/statusDestroy', [TabelController::class, 'statusDestroy'])->name('tabel.statusDestroy');
     Route::post('/tabel/destroy', [TabelController::class, 'destroy'])->name('tabel.destroy');
-
 });
 
 // Route::delete('tabel/{id_status}', [TabelController::class, 'destroy'])->name('tabel.destroy');
@@ -91,12 +91,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('metavar/index', [MetadataVariabelController::class, 'index'])->name('metavar.index');
     Route::get('metavar/lists/{id}', [MetadataVariabelController::class, 'lists'])->name('metavar.lists');
     Route::post('metavar/store', [MetadataVariabelController::class, 'store'])->name('metavar.store');
-    Route::get('metavar/show', [MetadataVariabelController::class, 'show'])->name('metavar.show');
     Route::post('metavar/update', [MetadataVariabelController::class, 'update'])->name('metavar.update');
     Route::post('metavar/destroy', [MetadataVariabelController::class, 'destroy'])->name('metavar.destroy');
     Route::get('metavar/metavarSend/{id}', [MetadataVariabelController::class, 'metavarSend'])->name('metavar.metavarSend');
-    Route::get('metavar/adminHandleMetavar', [MetadataVariabelController::class, 'adminHandleMetavar'])->name('metavar.adminHandleMetavar');
 });
+Route::get('metavar/adminHandleMetavar', [MetadataVariabelController::class, 'adminHandleMetavar'])->middleware(['auth', 'verified', 'role:admin|kominfo'])->name('metavar.adminHandleMetavar');
+Route::get('metavar/show', [MetadataVariabelController::class, 'show'])->name('metavar.show');
 
 //dinas
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
@@ -220,7 +220,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/rowLabels/edit/{id}', [RowlabelController::class, 'edit'])->name('rowLabels.edit');
     Route::put('/rowLabels/update', [RowlabelController::class, 'update'])->name('rowLabels.update');
     Route::delete('rowLabels/{id}', [RowlabelController::class, 'destroy'])->name('rowLabels.destroy');
-    
+
     // rows
     Route::get('/api/rows', [RowController::class, 'fetch'])->name('rows.fetch');
     Route::get('/rows/index', [RowController::class, 'index'])->name('rows.index');
@@ -229,7 +229,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/rows/edit/{id}', [RowController::class, 'edit'])->name('rows.edit');
     Route::put('/rows/update', [RowController::class, 'update'])->name('rows.update');
     Route::delete('rows/{id}', [RowController::class, 'destroy'])->name('rows.destroy');
-    
+
 
     // columns
     Route::get('/api/column', [ColumnController::class, 'fetch'])->name('column.fetch');

@@ -58,13 +58,14 @@ function getReady() {
     // }
 
     let komponens = [];
+    let HeadersKomponen = $("#komponen").find("th:nth-child(2)").text();
     $("#komponen tbody tr").each(function (index) {
         let data = {};
         $(this)
             .find("td")
             .each(function (indeX) {
                 let value = $(this).text();
-                data["Komponen"] = value;
+                data[HeadersKomponen] = value;
             });
         komponens.push(data);
     });
@@ -130,6 +131,50 @@ function getReady() {
         });
         return contents;
     }
+}
+
+function getReadyOnGeneral(idTabel) {
+    var elementsToRemove = document.querySelectorAll("td.deleted, th.deleted");
+    // Remove each element
+    elementsToRemove.forEach(function (element) {
+        element.remove();
+    });
+    let headers = [];
+    $(`#${idTabel}`)
+        .find("thead tr:nth-child(1) th")
+        .each(function (e) {
+            headers.push($(this).text());
+        });
+    let contents = [];
+    $(`#${idTabel}`)
+        .find("tbody tr")
+        .each(function (e) {
+            let data = {};
+            $(this)
+                .find("td")
+                .each(function (indeX) {
+                    let value = $(this).text();
+                    data[headers[indeX]] = value;
+                });
+            contents.push(data);
+        });
+    contents.forEach(function (row, index) {
+        // row.Komponen = row.Komponen.trim();
+        for (let key in row) {
+            let numericValue = parseFloat(row[key]);
+
+            // Check if the parsed value is a number
+            if (!isNaN(numericValue)) {
+                // If it's a number, store the numeric value
+                row[key] = numericValue;
+            } else {
+                // If it's not a number, store the original string value
+                let value = row[key].trim();
+                row[key] = value;
+            }
+        }
+    });
+    return contents;
 }
 
 function convertToCSV(jsonData) {

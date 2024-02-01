@@ -32,15 +32,16 @@
             @endif
         </div>
         <div class="row mb-2 justify-content-between">
-            <div class="col-9">
-                <h4>Tabel : {{ $judul[0] }} : <span>{{ $status_desc [0]}}</span></h4>
+            <div class="mr-auto px-2">
+                <h4>Tabel : {{ $judul[0] }} : <span>{{ $status_desc[0] }}</span></h4>
             </div>
-            <div class="col-3 text-right">
-                <div class="mr-1">
-                    <a class="btn bg-info-fordone" data-toggle="modal" data-target="#createModal"><i
-                            class="fa-solid fa-plus"></i>
-                        Tambah Metadata Variabel Baru</a>
-                </div>
+            <div class="ml-auto">
+                <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal" data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>
+            </div>
+            <div class="px-2">
+                <a class="btn bg-info-fordone" data-toggle="modal" data-target="#createModal"><i
+                        class="fa-solid fa-plus"></i>
+                    Tambah Metadata Variabel Baru</a>
             </div>
         </div>
         <div id="list-tabels">
@@ -54,7 +55,6 @@
         <!-- Additional JS resources -->
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
-        {{-- <script src="{{ asset('js/tabel.js') }}"></script> --}}
         <script>
             let satuans = {{ Js::from($satuan[0]) }}
             const id = {{ Js::from($id) }}
@@ -210,6 +210,14 @@
                             alert(errorThrown);
                         }
                     })
+                })
+                $("#downloadMetadataVariabel").on("click", function(e) {
+                    e.preventDefault();
+                    const titles = $("#title-file").val();
+                    console.log(titles);
+                    let datas = getReadyOnGeneral('table-metadata-variabel');
+                    downloadExcel(datas, titles);
+                    window.location.reload();
                 })
             })
         </script>

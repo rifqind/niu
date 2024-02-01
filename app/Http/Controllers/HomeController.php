@@ -6,6 +6,7 @@ use App\Models\Column;
 use App\Models\Datacontent;
 use App\Models\Dinas;
 use App\Models\MasterWilayah;
+use App\Models\MetadataVariabel;
 use App\Models\Notifikasi;
 use App\Models\Region;
 use App\Models\Row;
@@ -176,7 +177,7 @@ class HomeController extends Controller
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
             $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? $id_wilayah["kabs"] : [$wilayah]) : $id_wilayah["kabs"])
-            ->pluck('id');
+                ->pluck('id');
             $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
             // dd($id_wilayah);
             $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
@@ -263,6 +264,28 @@ class HomeController extends Controller
         ))->render();
     }
 
+    public function getMetaVariabel(Request $request)
+    {
+        $id_tabel = $request->id_tabel;
+        // dd($id_tabel);
+        $metavars = MetadataVariabel::join('metadata_variabel_status as mts', 'mts.id_tabel', '=', 'metadata_variabel.id_tabel')
+            ->where('metadata_variabel.id_tabel', $id_tabel)
+            ->where('mts.status', 5)
+            ->get([
+                'metadata_variabel.*'
+            ]);
+        $satuan = Tabel::where('id', $id_tabel)->pluck('unit');
+        if (sizeof($metavars) == 0) {
+            # code...
+            return response()->json([
+                'messages' => 'not',
+            ]);
+        }
+        return view('show-metadata-variabel', compact(
+            'metavars',
+            'satuan',
+        ));
+    }
     /**
      * Show the form for creating a new resource.
      */

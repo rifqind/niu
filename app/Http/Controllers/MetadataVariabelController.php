@@ -160,6 +160,7 @@ class MetadataVariabelController extends Controller
         //
         $decryptedId = decrypt($request->id);
         $this_metavar = MetadataVariabel::find($decryptedId);
+        // dd($decryptedId);
         return response()->json($this_metavar);
     }
 
