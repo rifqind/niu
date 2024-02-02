@@ -24,7 +24,7 @@
     {{ $head }}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}
     @vite(['resources/css/app.css',
-    // 'resources/js/app.js'
+    'resources/js/app.js'
     ])
 </head>
 
@@ -71,7 +71,7 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer ml-0">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+                <b>Version</b> Alpha
             </div>
             <div class="text-center">
                 <strong>Copyright &copy; 2023 <a href="https://sulut.bps.go.id">BPS Provinsi Sulawesi Utara</a></strong>
@@ -93,14 +93,14 @@
     <!-- AdminLTE App -->
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/select2/js/select2.full.min.js"></script> --}}
-    <script src="{{ url('') }}/dist/js/adminlte.min.js"></script>
+    {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
     <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> --}}
+    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
     <script></script>
     {{ $script }}
 </body>

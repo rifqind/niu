@@ -33,7 +33,7 @@
         </div>
         <div class="row mb-2 justify-content-between">
             <div class="mr-auto px-2">
-                <h4>Tabel : {{ $judul[0] }} : <span>{{ $status_desc[0] }}</span></h4>
+                <h4>Tabel : {{ $judul[0] }} : <span>{{ (sizeof($status_desc) > 0) ? $status_desc[0] : 'Kosong'}}</span></h4>
             </div>
             <div class="ml-auto">
                 <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal" data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>

@@ -153,7 +153,23 @@ function getReadyOnGeneral(idTabel) {
             $(this)
                 .find("td")
                 .each(function (indeX) {
-                    let value = $(this).text();
+                    // let value = $(this).text();
+                    let value = "";
+                    // Check if the td has children
+                    if ($(this).children().length > 0) {
+                        // Concatenate text content of child spans with comma
+                        $(this)
+                            .children()
+                            .each(function () {
+                                value += $(this).text() + ",";
+                            });
+                        // Remove the trailing comma
+                        value = value.slice(0, -1);
+                        value = value.replace(/\n|\s+/g, ' ').trim();
+                    } else {
+                        // If no children, get the text content
+                        value = $(this).text();
+                    }
                     data[headers[indeX]] = value;
                 });
             contents.push(data);
@@ -175,6 +191,14 @@ function getReadyOnGeneral(idTabel) {
         }
     });
     return contents;
+}
+
+function GoDownload(idTabel) {
+    // this.preventDefault();
+    const titles = $("#title-file").val();
+    let datas = getReadyOnGeneral(idTabel);
+    downloadExcel(datas, titles);
+    window.location.reload();
 }
 
 function convertToCSV(jsonData) {

@@ -57,10 +57,8 @@ class MetadataVariabelController extends Controller
         $decryptedId = Crypt::decrypt($id);
         $this_metavar = MetadataVariabel::where('id_tabel', $decryptedId)->get();
         $this_status_metavar = MetadataVariabelStatus::where('id_tabel', $decryptedId)->pluck('status');
-        $status_desc = MetadataVariabelStatus::where(
-            'id_tabel',
-            $decryptedId
-        )->join('status_desc as sdc', 'sdc.id', '=', 'metadata_variabel_status.status')->pluck('sdc.label as status_desc');
+        $status_desc = MetadataVariabelStatus::where('id_tabel', $decryptedId)->join('status_desc as sdc', 'sdc.id', '=', 'metadata_variabel_status.status')->pluck('sdc.label as status_desc');
+        // dd($status_desc);
         $judul = Tabel::where('id', $decryptedId)->pluck('label');
         $satuan = Tabel::where('id', $decryptedId)->pluck('unit');
         return view('metadata_variabel.list', [

@@ -22,8 +22,12 @@
             <div class="ml-1 h4 mb-3">
                 Daftar Produsen Data
             </div>
-            <div class="mr-1 justify-content-between row">
-                <div class="ml-auto mr-1">
+            <div class="justify-content-between row">
+                <div class="ml-auto mr-2">
+                    <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal"
+                        data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>
+                </div>
+                <div class="mr-2">
                     <a href="{{ route('dinas.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Produsen Data Baru</a>
                 </div>
                 {{-- <div class="ml-auto mr-1">
@@ -40,8 +44,8 @@
                     <th class="first-column">No.</th>
                     <th class="text-center" style="width: 50%;">Nama Produsen Data</th>
                     <th class="text-center">Wilayah Kerja</th>
-                    <th class="text-center">Edit</th>
-                    <th class="text-center">Hapus</th>
+                    <th class="text-center deleted">Edit</th>
+                    <th class="text-center deleted">Hapus</th>
                 </tr>
                 <tr class="">
                     <td class="search-header"></td>
@@ -57,14 +61,14 @@
                         <td>{{ $din->number }}</td>
                         <td>{{ $din->nama }}</td>
                         <td class="">{{ $din->wilayah->label }}</td>
-                        <td class="text-center">
+                        <td class="text-center deleted">
                             <a href="" class="update-pen"
                             data-dinas="{{ $din->id . ";" . $din->nama . ";" . $din->wilayah_fullcode}}"
                                 data-toggle="modal" data-target="#updateModal">
                                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
                             </a>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center deleted">
                             <a href="" class="delete-trash"
                                 data-dinas="{{ json_encode([
                                     'id' => $din->id,
@@ -107,6 +111,7 @@
         </div>
     </div>
     <x-slot name="script">
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/dinas.js') }}"></script>
         <script>
             const tokens = '{{ csrf_token() }}'

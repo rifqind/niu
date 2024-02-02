@@ -12,6 +12,8 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ url('') }}/plugins/fontawesome-free/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300&display=swap" rel="stylesheet">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -20,6 +22,38 @@
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    <style type="text/css">
+        .bg {
+            animation: slide 3s ease-in-out infinite alternate;
+            background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+            bottom: 0;
+            left: -50%;
+            opacity: .5;
+            position: fixed;
+            right: -50%;
+            top: 0;
+            z-index: .1;
+        }
+
+        .bg2 {
+            animation-direction: alternate-reverse;
+            animation-duration: 4s;
+        }
+
+        .bg3 {
+            animation-duration: 5s;
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(-25%);
+            }
+
+            100% {
+                transform: translateX(25%);
+            }
+        }
+    </style>
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
     {{ $head }}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -58,9 +92,9 @@
             {{-- </section> --}}
 
             <!-- Main content -->
-            <section class="content" style="background-color: #b0d7ff;">
+            <section class="content" {{-- style="background-color: #b0d7ff;" --}}>
                 {{-- <div class="container-fluid"> --}}
-                    {{ $slot }}
+                {{ $slot }}
                 {{-- </div> --}}
             </section>
             <!-- /.content -->

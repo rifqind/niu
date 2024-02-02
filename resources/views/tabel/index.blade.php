@@ -73,6 +73,12 @@
                 </nav>
             </div>
         </div>
+        <div class="row px-2">
+            <div class="ml-auto">
+                <a href="#" class="btn bg-success-fordone mb-2" title="Download" data-target="#downloadModal"
+                    data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i> Download</a>
+            </div>
+        </div>
         <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
             <thead id="header-tabel">
                 <tr scope="col" class="bg-info-fordone">
@@ -83,9 +89,9 @@
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle">Tahun</th>
                     <th class="align-middle">Status Pengisian</th>
-                    <th class="align-middle">Cek / Ubah Isian</th>
+                    <th class="align-middle deleted">Cek / Ubah Isian</th>
                     @if ($role != 'produsen')
-                        <th class="align-middle">Hapus</th>
+                        <th class="align-middle deleted">Hapus</th>
                     @endif
                 </tr>
                 <tr>
@@ -96,9 +102,9 @@
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"></td>
+                    <td class="align-middle search-header deleted"></td>
                     @if ($role != 'produsen')
-                        <td class="align-middle search-header"></td>
+                        <td class="align-middle search-header deleted"></td>
                     @endif
                 </tr>
             </thead>
@@ -119,7 +125,7 @@
                         <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
 
                         <td>{{ $tab['status'] }}</td>
-                        <td>
+                        <td class="text-center deleted">
                             {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
                             <a
                                 href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
@@ -132,7 +138,7 @@
                                 href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-trash text-info"></i></a> --}}
                         @if ($role != 'produsen')
-                            <td class="text-center">
+                            <td class="text-center deleted">
                                 <a href="#" class="delete-trash"
                                     data-statustabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}"
                                     data-toggle="modal" data-target="#deleteStatusModal">
@@ -157,6 +163,7 @@
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script src="{{ asset('js/tabel.js') }}"></script>
+        <script src="{{ asset('js/download.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // const handleDeleteTable = function(encryptedId) {
