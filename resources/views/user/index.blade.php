@@ -110,7 +110,7 @@
                     </td>
 
                 </tr>
-            @endforeach\
+            @endforeach
         </tbody>
         @include('user.modal')
     </table>

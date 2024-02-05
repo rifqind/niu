@@ -1,63 +1,69 @@
 function getMainData(datas) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         $.ajax({
             type: "GET",
             url: updateDashboardURL.href,
             data: datas,
-            success: function(response) {
+            success: function (response) {
                 resolve(response);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 reject(errorThrown);
             },
-        })
-    })
+        });
+    });
 }
 
 function getChartData(datas) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         $.ajax({
             type: "GET",
             url: updateDashboardURL.href,
             data: datas,
-            success: function(response) {
+            success: function (response) {
                 resolve(response);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 reject(errorThrown);
             },
-        })
-    })
+        });
+    });
 }
 
-function getPieChart(finalTabels, entriTabels, verifyTabels, repairTabels, newTabels) {
-    var Data = [finalTabels, entriTabels, verifyTabels, repairTabels, newTabels];
-    var Target = $('#pie-chart');
+function getPieChart(
+    finalTabels,
+    entriTabels,
+    verifyTabels,
+    repairTabels,
+    newTabels
+) {
+    var Data = [
+        finalTabels,
+        entriTabels,
+        verifyTabels,
+        repairTabels,
+        newTabels,
+    ];
+    var Target = $("#pie-chart");
 
     const ChartData = {
-        labels: [
-            "Rilis",
-            "Entri",
-            "Periksa",
-            "Perbaikan",
-            "Tabel Baru"
+        labels: ["Rilis", "Entri", "Periksa", "Perbaikan", "Tabel Baru"],
+        datasets: [
+            {
+                label: "Jumlah Tabel",
+                data: Data,
+                backgroundColor: [
+                    "green",
+                    "#03254e",
+                    "#f18f01",
+                    "#8B1E3F",
+                    "#7286a0",
+                ],
+                hoverOffset: 4,
+                borderColor: ["white"],
+                borderWidth: [1, 1, 1, 1, 1, 1, 1],
+            },
         ],
-        datasets: [{
-            label: "Jumlah Tabel",
-            data: Data,
-            backgroundColor: [
-                "green",
-                "#03254e",
-                "#f18f01",
-                "#8B1E3F",
-                "#7286a0",
-            ],
-            hoverOffset: 4,
-            borderColor: [
-                "white",
-            ],
-            borderWidth: [1, 1, 1, 1, 1, 1, 1]
-        }]
     };
 
     var Charts = new Chart(Target, {
@@ -71,12 +77,35 @@ function getPieChart(finalTabels, entriTabels, verifyTabels, repairTabels, newTa
                     display: false,
                     position: "bottom",
                     // font: "'Poppins', sans-serif"
-                }
-            }
+                },
+            },
         },
     });
 }
-
+function searchYear() {
+    let year = $("#year-select").val();
+    $.ajax({
+        type: "GET",
+        url: getMonitoringURL.href,
+        data: {
+            year: year,
+        },
+        beforeSend: function () {
+            $("#spinner-border").removeClass("d-none");
+        },
+        complete: function () {
+            setTimeout(function () {
+                $("#spinner-border").addClass("d-none");
+            }, 320);
+        },
+        success: function (data) {
+            $("#data").html(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            reject(errorThrown);
+        },
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
     $("form").on("submit", function (e) {
         e.preventDefault();

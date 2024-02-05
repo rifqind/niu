@@ -16,7 +16,7 @@ class RoleCheck
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if (Auth::check() && Auth::user()->role == $role) {
+        if (Auth::check() && in_array(Auth::user()->role, explode('|', $role)) ) {
             return $next($request);
         }
         return abort(403, 'unauthorized');

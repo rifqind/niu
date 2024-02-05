@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .querySelector(`td:nth-child(${column + 1})`)
                 .textContent.toLowerCase()
                 .trim();
-            console.log({ aColText, bColText });
 
             return aColText > bColText ? 1 * dirModifier : -1 * dirModifier;
         });

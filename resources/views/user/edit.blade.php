@@ -77,9 +77,8 @@
                         </div>
                         <div class="col d-flex align-items-center flex-column">
                             <select class="form-control select2bs4" id="iddinas" name="id_dinas">
-                                {{-- <option value="{{ $user->id_dinas }}">{{ $user->dinas->nama }}</option> --}}
                                 @foreach ($dinas as $din)
-                                    <option value="{{ $din->id }}">{{ $din->nama }}</option>
+                                    <option value="{{ $din->id }}" {{ $user->id_dinas == $din->id ? 'selected' : '' }}>{{ $din->nama }}</option>
                                 @endforeach
                             </select>
                             <div class="text-danger text-left" id="error-id_dinas"></div>

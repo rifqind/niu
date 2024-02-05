@@ -43,6 +43,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard/search', [HomeController::class, 'getDashboard'])->middleware(['auth', 'verified'])->name('dashboard.search');
+Route::get('/monitoring', [HomeController::class, 'monitoring'])->middleware(['auth', 'verified', 'role:admin|kominfo'])->name('home.monitoring');
+Route::get('/getMonitoring', [HomeController::class, 'getMonitoring'])->middleware(['auth', 'verified', 'role:admin|kominfo'])->name('home.getMonitoring');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

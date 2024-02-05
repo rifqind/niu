@@ -185,7 +185,7 @@
                     <a href="{{ route('tabel.index') }}" class="btn btn-light border"><i
                             class="fas fa-chevron-left"></i> Kembali</a>
                 </div>
-                <div class="ml-auto" id="user-need-prompt">
+                <div class="ml-auto d-none" id="user-need-prompt">
                     <button type="button" class="btn bg-info-fordone" data-toggle="modal" data-target="#panduanModal">Panduan <i class="fa-brands fa-stack-overflow"></i></button>
                     <a href="#" class="btn bg-primary-fordone save-send" id="save-table">Simpan <i
                             class="fas fa-save"></i></a>
@@ -232,6 +232,9 @@
 
 
                 $("#badges-status").addClass(statusMapping[status]);
+                if (status < 3 | status == "4") {
+                    $("#user-need-prompt").removeClass("d-none");
+                }
                 if (status == "3" | status == "5") {
                     $(".input-field").prop('disabled', true);
                     $("#user-need-prompt").addClass("d-none");
@@ -246,6 +249,7 @@
                         $("#admin-need-prompt").removeClass("d-none");
                     }
                     if (status == "5") {
+                        $("#admin-need-prompt").removeClass("d-none");
                         $("#final-table").addClass("d-none");
                     }
                 }
