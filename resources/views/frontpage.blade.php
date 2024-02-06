@@ -39,6 +39,7 @@
                 <!-- Area Chart -->
                 <div class="col-xl-4 col-lg-7">
                     <form action="{{ route('home.search') }}" id="search-tabel">
+                        @csrf
                         <div class="mb-2">
                             <select multiple name="tahuns[]" id="tahun-select">
                                 @foreach ($tahuns as $tahun)

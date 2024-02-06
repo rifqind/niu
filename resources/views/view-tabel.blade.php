@@ -67,12 +67,7 @@
                 padding-left: 7.5px;
                 padding-right: 7.5px;
             }
-
-            /* .bg-info-fordone {
-                background-color: #40476d;
-            } */
         </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <div class="container" style="">

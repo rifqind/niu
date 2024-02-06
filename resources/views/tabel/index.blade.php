@@ -10,21 +10,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <script></script>
         <style type="text/css">
-            .pagination>li {
-                padding-top: 6px;
-                padding-right: 12px;
-                padding-bottom: 6px;
-                padding-left: 12px;
-            }
-
-            .pagination>li.active {
-                color: whitesmoke;
-                background-color: #17a2b8;
-            }
-
-            .pagination>li:hover {
-                cursor: pointer;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -47,34 +32,10 @@
             @endif
         </div>
         <div class="row d-flex justify-content-end align-items-center">
-            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
-            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
-                <select class  ="form-control" name="state" id="maxRows">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
+            <div class="mr-auto h4 ml-2">
+                Daftar Tabel
             </div>
-            <div class="pagination-container">
-                <nav>
-                    <ul class="pagination">
-                        <li data-page="prev">
-                            <span>
-                                < <span class="sr-only">(current)
-                            </span></span>
-                        </li>
-                        <!--	Here the JS Function Will Add the Rows -->
-                        <li data-page="next" id="prev">
-                            <span> > <span class="sr-only">(current)</span></span>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        <div class="row px-2">
-            <div class="ml-auto">
+            <div class="ml-auto mr-2">
                 <a href="#" class="btn bg-success-fordone mb-2" title="Download" data-target="#downloadModal"
                     data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i> Download</a>
             </div>
@@ -126,17 +87,11 @@
 
                         <td>{{ $tab['status'] }}</td>
                         <td class="text-center deleted">
-                            {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
                             <a
                                 href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
                                 <i class="fas fa-eye text-info"></i>
                             </a>
                         </td>
-
-                        {{-- <td> --}}
-                        {{-- <a
-                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
-                                    class="fas fa-trash text-info"></i></a> --}}
                         @if ($role != 'produsen')
                             <td class="text-center deleted">
                                 <a href="#" class="delete-trash"
@@ -146,8 +101,6 @@
                                 </a>
                             </td>
                         @endif
-                        {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
-                        {{-- </td> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -155,6 +108,32 @@
             <tfoot></tfoot>
         </table>
         @include('tabel.delete-master-modal')
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
+            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
+                <select class  ="form-control" name="state" id="maxRows">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination">
+                        <li data-page="prev">
+                            <span>
+                                < <span class="sr-only">(current)
+                            </span></span>
+                        </li>
+                        <!--	Here the JS Function Will Add the Rows -->
+                        <li data-page="next" id="prev">
+                            <span> > <span class="sr-only">(current)</span></span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
 
@@ -175,7 +154,7 @@
             // }
             // limitPagging();
             document.addEventListener('DOMContentLoaded', function() {
-                getPagination('#table-tabel');
+                getPagination('#table-tabel',10);
                 $(".delete-trash").on("click", function(e) {
                     let data = $(this).data("statustabel");
                     // console.log(data.id);

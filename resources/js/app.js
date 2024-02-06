@@ -13,13 +13,13 @@ import "bootstrap";
 // Import AdminLTE's JavaScript
 import "admin-lte";
 
-// Import SweetAlert2
-import Swal from "sweetalert2";
-window.Swal = Swal;
+// // Import SweetAlert2
+// import Swal from "sweetalert2";
+// window.Swal = Swal;
 
-// Import toastr
-import toastr from "toastr";
-window.toastr = toastr;
+// // Import toastr
+// import toastr from "toastr";
+// window.toastr = toastr;
 
 // Import Select2
 import select2 from "select2";

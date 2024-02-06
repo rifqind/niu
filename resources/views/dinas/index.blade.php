@@ -10,7 +10,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
         </style>
-        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -18,24 +17,17 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row justify-content-between">
-            <div class="ml-1 h4 mb-3">
+        <div class="row mb-2 justify-content-end align-items-center">
+            <div class="ml-2 h4 mr-auto">
                 Daftar Produsen Data
             </div>
-            <div class="justify-content-between row">
-                <div class="ml-auto mr-2">
-                    <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal"
-                        data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>
-                </div>
-                <div class="mr-2">
-                    <a href="{{ route('dinas.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Produsen Data Baru</a>
-                </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('dinas.search') }}" method="GET">
-                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;" placeholder="Cari Dinas"
-                            name="search">
-                    </form>
-                </div> --}}
+            <div class="ml-auto mr-2">
+                <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal"
+                    data-toggle="modal"><i class="fa-solid fa-circle-down"></i></a>
+            </div>
+            <div class="mr-2">
+                <a href="{{ route('dinas.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
+                    Tambah Produsen Data Baru</a>
             </div>
         </div>
         <table class="table table-sorted table-hover table-bordered table-search" id="tabel-dinas">
@@ -49,7 +41,8 @@
                 </tr>
                 <tr class="">
                     <td class="search-header"></td>
-                    <td class="search-header" style="width: 50%;"><input type="text" class="search-input form-control"></td>
+                    <td class="search-header" style="width: 50%;"><input type="text"
+                            class="search-input form-control"></td>
                     <td class="search-header"><input type="text" class="search-input form-control"></td>
                     <td class="search-header"></td>
                     <td class="search-header"></td>
@@ -63,7 +56,7 @@
                         <td class="">{{ $din->wilayah->label }}</td>
                         <td class="text-center deleted">
                             <a href="" class="update-pen"
-                            data-dinas="{{ $din->id . ";" . $din->nama . ";" . $din->wilayah_fullcode}}"
+                                data-dinas="{{ $din->id . ';' . $din->nama . ';' . $din->wilayah_fullcode }}"
                                 data-toggle="modal" data-target="#updateModal">
                                 <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
                             </a>
@@ -81,7 +74,7 @@
                 @endforeach
             </tbody>
         </table>
-        
+
     </div>
     @include('dinas.modal')
     <div class="row d-flex justify-content-end align-items-center">
@@ -118,6 +111,9 @@
             const update_URL = new URL("{{ route('dinas.update') }}")
             const delete_URL = new URL("{{ route('dinas.delete') }}")
             const this_URL = window.location.href
+            document.addEventListener("DOMContentLoaded", function(e) {
+                getPagination("#tabel-dinas", 15)
+            })
         </script>
     </x-slot>
 </x-niu-layout>

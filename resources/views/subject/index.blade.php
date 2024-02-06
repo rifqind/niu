@@ -18,21 +18,13 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row justify-content-between">
-            <div class="ml-1 h4 mb-3">
+        <div class="row mb-2 justify-content-between">
+            <div class="ml-2 h4">
                 Daftar Subjek
             </div>
-            <div class="mr-1 justify-content-between row">
-                <div class="ml-auto mr-1">
-                    {{-- tobedestined --}}
-                    <a href="{{ route('subject.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah</a>
-                </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('dinas.search') }}" method="GET">
-                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;"
-                            placeholder="Cari Dinas" name="search">
-                    </form>
-                </div> --}}
+            <div class="ml-auto mr-2">
+                <a href="{{ route('subject.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
+                    Tambah</a>
             </div>
         </div>
         <table class="table table-hover table-bordered table-sorted" id="tabel-subject">
@@ -46,7 +38,8 @@
                 </tr>
                 <tr>
                     <td class="first-column" style="width: 10%;"></td>
-                    <td class="text-center search-header" style="width: 70%;"><input type="text" class="search-input form-control"></td>
+                    <td class="text-center search-header" style="width: 70%;"><input type="text"
+                            class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center"></td>
                     <td class="text-center"></td>

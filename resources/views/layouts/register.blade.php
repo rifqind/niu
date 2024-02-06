@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="csp-nonce" content="{{ csp_nonce() }}">
     <title>{{ config('app.name', 'Laravel') }} | {{ $title }}</title>
     <link rel="icon" href="{{ url('') }}/images/favicon2.ico">
 
@@ -17,10 +18,6 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <style type="text/css">
         .bg {
@@ -112,11 +109,11 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
+    {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script> --}}
     <!-- Bootstrap 4 -->
-    <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
     <!-- AdminLTE App -->
-    <script>
+    <script> 
         $(document).ready(function() {
             $('.main-footer').css('margin-left', 0);
         })

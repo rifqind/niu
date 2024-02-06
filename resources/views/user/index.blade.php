@@ -33,12 +33,6 @@
                     <a href="{{ route('users.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
                         Tambah Pengguna Baru</a>
                 </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('users.search') }}" method="GET" id="formSearch">
-                        <input id="cariUsers" type="text" class="form-control" style="min-width: 25vw;"
-                            placeholder="Cari Pengguna" name="search">
-                    </form>
-                </div> --}}
             </div>
         </div>
     </div>
@@ -82,7 +76,6 @@
                             class="update-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
                             <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
                         </a>
-                        {{-- @if ($user->role == 'produsen') --}}
                         <a href="" class="mx-1 role-update"
                             data-users="{{ json_encode([
                                 'id' => $user->id,
@@ -92,12 +85,6 @@
                             class="edit-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
                             <i class="fa-solid fa-pencil" title="Edit Pengguna" style="color: #1032e0;"></i>
                         </a>
-                        {{-- @else
-                            <a href=""  class="mx-1 role-update" data-users="{{ json_encode([
-                                'id' => $user->id
-                            ]) }}"><i class="fa-solid fa-user-tie"
-                                    title="Ubah Role" style="color: #1032e0;"></i></a>
-                        @endif --}}
                     </td>
                     <td class="text-center deleted">
                         <a href="" class="delete-trash"
@@ -143,7 +130,6 @@
     <x-slot name="script">
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/user.js') }}"></script>
-        {{-- <script src="{{ asset('js/pagination.js') }}"></script> --}}
         <script>
             const tokens = '{{ csrf_token() }}'
             const reset_URL = new URL("{{ route('users.reset') }}")

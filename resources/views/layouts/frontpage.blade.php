@@ -14,15 +14,10 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/global.js']) --}}
     @vite(['resources/css/app.css',
     'resources/js/app.js'
     ])

@@ -10,7 +10,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
         </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -18,17 +17,13 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row justify-content-between">
-
-            <div class="ml-1 h4 mb-3">
+        <div class="row justify-content-between mb-2">
+            <div class="ml-2 h4">
                 Daftar Baris
             </div>
-            <div class="mr-1 justify-content-between row">
-                <div class="ml-auto mr-1">
-                    {{-- tobedestined --}}
+                <div class="ml-auto mr-2">
                     <a href="{{ route('rows.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Baris</a>
                 </div>
-            </div>
         </div>
         @if (session('success'))
             <div class="alert alert-success temporary-message">
@@ -53,7 +48,6 @@
                     <td class="first-column" style="width: 10%;"></td>
                     <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
                     <td class="text-left search-header" style="width: 20%"><input type="text" class="search-input form-control"></td>
-                    {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                 </tr>
@@ -91,12 +85,9 @@
             </div>
         </div>
     </div>
-    {{-- @include('dinas.modal') --}}
     <x-slot name="script">
         <script>
             const tokens = '{{ csrf_token() }}'
-            // const update_URL = new URL("{{ route('dinas.update') }}")
-            // const delete_URL = new URL("{{ route('dinas.delete') }}")
             const handleDeleteColumn = function(encryptedId) {
                 if (confirm('Are you sure you want to delete this subject?')) {
                     fetch("{{ route('rows.destroy', ['id' => ':id']) }}".replace(':id', encryptedId), {

@@ -33,6 +33,7 @@
 
         <hr>
         <form action="" id="create-form">
+            @csrf
             {{-- <b>Detail Tabel</b> --}}
             <div class="form-group">
                 <label for="dinas">Produsen Data</label>

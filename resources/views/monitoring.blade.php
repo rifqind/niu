@@ -17,6 +17,26 @@
         <li class="breadcrumb-item active">Monitoring Pengisian Data</li>
     </x-slot>
     <div class="container-fluid">
+        <div class="row px-2">
+            <div class="mr-auto h4">
+                Monitoring Pengisian Tabel
+            </div>
+            <div class="ml-auto">
+                <select name="year" class="form-control" id="year-select" onchange="searchYear()">
+                    <option value="all">Pilih Semua</option>
+                    @foreach ($years as $item)
+                        <option value="{{ $item }}">{{ $item }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="ml-2">
+                <a href="#" class="btn bg-success-fordone mb-2" title="Download" data-target="#downloadModal"
+                    data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i> Download</a>
+            </div>
+        </div>
+        <div id="data">
+            @include('monitoring-tabel')
+        </div>
         <div class="row d-flex justify-content-end align-items-center">
             <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
             <div class="form-group"> <!--		Show Numbers Of Rows 		-->
@@ -43,23 +63,6 @@
                     </ul>
                 </nav>
             </div>
-        </div>
-        <div class="row px-2">
-            <div class="ml-auto">
-                <select name="year" class="form-control" id="year-select" onchange="searchYear()">
-                    <option value="all">Pilih Semua</option>
-                    @foreach ($years as $item)
-                        <option value="{{ $item }}">{{ $item }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="ml-2">
-                <a href="#" class="btn bg-success-fordone mb-2" title="Download" data-target="#downloadModal"
-                    data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i> Download</a>
-            </div>
-        </div>
-        <div id="data">
-            @include('monitoring-tabel')
         </div>
     </div>
     <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModal"
