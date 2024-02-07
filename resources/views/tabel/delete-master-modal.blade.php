@@ -62,7 +62,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                <button id="downloadTabel" type="submit" class="btn btn-sm bg-success-fordone" onclick="GoDownload('table-tabel')">Download</button>
+                <button id="downloadTabel" type="submit" class="btn btn-sm bg-success-fordone">Download</button>
             </div>
         </div>
     </div>

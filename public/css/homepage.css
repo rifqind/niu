@@ -1,0 +1,50 @@
+
+#navbar-front {
+    background-color: #a80606;
+}
+
+.red-bg-homepage {
+    background-color: #a80606;
+}
+
+#header-banner-text {
+    margin-top: 40px;
+    color: whitesmoke;
+}
+
+.heading-card {
+    color: #a80606;
+}
+
+.card-large-homepage {
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    color: #333333;
+}
+
+.card-small-homepage {
+    height: auto;
+    color: #333333;
+}
+
+#row-wilayah-homepage {
+    min-width: 50vw;
+}
+
+#list-tabel-card {
+    height: 720px;
+    overflow-y: scroll;
+}
+
+.smalltext-homepage {
+    font-size: 12px;
+}
+
+#subjek-weight {
+    font-weight: 500;
+}
+
+#icon-sidebar {
+    opacity: 0.8;
+}

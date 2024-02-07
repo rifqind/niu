@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
-    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/homepage.css') }}">
+    {{-- <script src="https://kit.fontawesome.com/bf51cd7a13.js" nonce="{{ Vite::cspNonce() }}" crossorigin="anonymous"></script> --}}
+    <script src="{{ asset('js/fontawesome.js') }}"></script>
 
     {{ $head }}
     @vite(['resources/css/app.css',
@@ -32,7 +34,7 @@
             </div>
         </div>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #a80606">
+        <nav class="navbar navbar-expand-lg navbar-light" id="navbar-front">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active mx-3">

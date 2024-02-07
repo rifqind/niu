@@ -8,10 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
-        <style type="text/css">
-        </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -42,10 +38,10 @@
         </div>
         <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
             <thead id="header-tabel">
-                <tr scope="col" class="bg-info-fordone">
+                <tr scope="col" class="bg-info-fordone text-center">
                     <th class="align-middle">#</th>
-                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
-                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
+                    <th class="align-middle table-width-25">Nama Tabel</th>
+                    <th class="align-middle table-width-20">Produsen Data</th>
                     <th class="align-middle">Nama Row</th>
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle">Tahun</th>
@@ -97,7 +93,7 @@
                                 <a href="#" class="delete-trash"
                                     data-statustabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}"
                                     data-toggle="modal" data-target="#deleteStatusModal">
-                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                    <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </td>
                         @endif
@@ -109,7 +105,8 @@
         </table>
         @include('tabel.delete-master-modal')
         <div class="row d-flex justify-content-end align-items-center">
-            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span>
+            </div>
             <div class="form-group"> <!--		Show Numbers Of Rows 		-->
                 <select class  ="form-control" name="state" id="maxRows">
                     <option value="10">10</option>
@@ -139,22 +136,21 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script src="{{ asset('js/tabel.js') }}"></script>
         <script src="{{ asset('js/download.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // const handleDeleteTable = function(encryptedId) {
             //     if (confirm('Are you sure you want to delete this subject?')) {
             //         const form = document.getElementById('delete-table-form');
             //         form.submit();
             //     }
-
-            // }
-            // limitPagging();
             document.addEventListener('DOMContentLoaded', function() {
-                getPagination('#table-tabel',10);
+                getPagination('#table-tabel', 10);
+                $("#downloadTabel").on("click", function(e) {
+                    GoDownload('table-tabel')
+                })
                 $(".delete-trash").on("click", function(e) {
                     let data = $(this).data("statustabel");
                     // console.log(data.id);

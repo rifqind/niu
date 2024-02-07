@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url('') }}" class="brand-link">
-        <img src="{{ url('') }}/images/favicon2.ico" alt="Nothing" class="brand-image img-circle elevation-3"
-            style="opacity: .8">
+        <img src="{{ url('') }}/images/favicon2.ico" id="icon-sidebar" alt="Nothing"
+            class="brand-image img-circle elevation-3">
         <span class="brand-text font-weight-bold">{{ config('app.name', 'Laravel') }}</span>
     </a>
 

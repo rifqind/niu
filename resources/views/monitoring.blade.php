@@ -8,9 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
-        <style type="text/css">
-        </style>
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -22,7 +19,7 @@
                 Monitoring Pengisian Tabel
             </div>
             <div class="ml-auto">
-                <select name="year" class="form-control" id="year-select" onchange="searchYear()">
+                <select name="year" class="form-control" id="year-select">
                     <option value="all">Pilih Semua</option>
                     @foreach ($years as $item)
                         <option value="{{ $item }}">{{ $item }}</option>
@@ -81,8 +78,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button id="downloadMonitoring" type="submit" class="btn btn-sm bg-success-fordone"
-                        onclick="GoDownload('table-monitoring')">Download</button>
+                    <button id="downloadMonitoring" type="submit"
+                        class="btn btn-sm bg-success-fordone">Download</button>
                 </div>
             </div>
         </div>
@@ -90,12 +87,17 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/home.js') }}"></script>
         <script src="{{ asset('js/download.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const getMonitoringURL = new URL("{{ route('home.getMonitoring') }}");
             document.addEventListener('DOMContentLoaded', function() {
+                $('#year-select').on("change", function(e) {
+                    searchYear();
+                })
+                $("#downloadMonitoring").on("click", function(e) {
+                    GoDownload('table-monitoring');
+                })
                 getPagination('#table-monitoring', 10);
 
                 //getPagination('.table-class');

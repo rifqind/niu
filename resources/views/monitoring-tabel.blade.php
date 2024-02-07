@@ -1,14 +1,14 @@
 <table id="table-monitoring" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
     <thead id="header-tabel">
         <tr scope="col" class="bg-info-fordone">
-            <th class="align-middle text-center" style="width: 5%;">#</th>
-            <th class="align-middle text-center" style="width: 35%;">Produsen Data</th>
-            <th class="align-middle text-center" style="width: 8%;">Status Tabel Baru</th>
-            <th class="align-middle text-center" style="width: 8%;">Status Proses Entri</th>
-            <th class="align-middle text-center" style="width: 8%;">Status Diperiksa</th>
-            <th class="align-middle text-center" style="width: 8%;">Status Perbaikan</th>
-            <th class="align-middle text-center" style="width: 8%;">Status Final</th>
-            <th class="align-middle text-center" style="width: 8%;">Tabel Dihapus</th>
+            <th class="align-middle text-center table-width-5">#</th>
+            <th class="align-middle text-center table-width-35">Produsen Data</th>
+            <th class="align-middle text-center table-width-8">Status Tabel Baru</th>
+            <th class="align-middle text-center table-width-8">Status Proses Entri</th>
+            <th class="align-middle text-center table-width-8">Status Diperiksa</th>
+            <th class="align-middle text-center table-width-8">Status Perbaikan</th>
+            <th class="align-middle text-center table-width-8">Status Final</th>
+            <th class="align-middle text-center table-width-8">Tabel Dihapus</th>
         </tr>
         <tr>
             <td class="align-middle text-center search-header">#</td>

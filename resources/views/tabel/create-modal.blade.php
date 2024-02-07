@@ -8,7 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+            <div class="modal-body" id="modal-preview-body">
                 <table id="preview-table" class="table table-bordered table-hover table-responsive">
                     <thead>
 
@@ -25,7 +25,7 @@
         </div>
     </div>
 </div>
-<script>
+<script nonce="{{ Vite::cspNonce() }}">
     document.addEventListener('DOMContentLoaded', function() {
         createTableURL = "{{ route('tabel.store') }}";
         document.getElementById("submit-create-table").addEventListener("click", () => {

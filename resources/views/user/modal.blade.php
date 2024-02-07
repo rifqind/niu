@@ -35,7 +35,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                <button id="downloadUser" type="submit" class="btn btn-sm bg-success-fordone" onclick="GoDownload('tabel-user')">Download</button>
+                <button id="downloadUser" type="submit" class="btn btn-sm bg-success-fordone">Download</button>
             </div>
         </div>
     </div>
