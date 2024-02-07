@@ -51,7 +51,7 @@
             }
         }
     </style>
-    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous" nonce="{{ Vite::cspNonce() }}"></script>
     {{ $head }}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -113,10 +113,12 @@
     <!-- Bootstrap 4 -->
     {{-- <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
     <!-- AdminLTE App -->
-    <script> 
+    <script nonce="{{ Vite::cspNonce() }}">
+    document.addEventListener('DOMContentLoaded', function(e) {
         $(document).ready(function() {
             $('.main-footer').css('margin-left', 0);
         })
+    })
     </script>
     {{ $script }}
 </body>

@@ -16,5 +16,6 @@ class ExtendedPolicies extends Basic
         $this->addDirective(Directive::DEFAULT, 'fonts.gstatic.com');
         $this->addDirective(Directive::CONNECT, 'ka-f.fontawesome.com');
         $this->addDirective(Directive::DEFAULT, 'cdn.jsdelivr.net');
+        // $this->addDirective(Directive::SCRIPT, 'nonce-".Vite::cspNonce()."');
     }
 }
