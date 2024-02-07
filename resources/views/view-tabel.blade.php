@@ -1,5 +1,6 @@
 <x-front-layout>
     <x-slot name="title">
+        View Tabel
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -14,9 +15,10 @@
                 background: #f9fafc;
                 border-right: 1px solid #e6eaf0;
                 vertical-align: top;
-                white-space: nowrap;
+
+                /* white-space: nowrap;
                 text-overflow: ellipsis;
-                overflow: hidden;
+                overflow: hidden; */
             }
 
             #komponen th:first-child {
@@ -30,8 +32,8 @@
                 vertical-align: middle;
                 padding: .1rem;
                 /* white-space: nowrap; */
-                text-overflow: ellipsis;
-                overflow: hidden;
+                /* text-overflow: ellipsis; */
+                overflow: auto;
             }
 
             #rekon-view tbody tr td {
@@ -65,25 +67,20 @@
                 padding-left: 7.5px;
                 padding-right: 7.5px;
             }
-
-            .bg-jos {
-                background-color: #40476d;
-            }
         </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <div class="container" style="">
         <div class="card mt-5">
-            <div class="card-body bg-jos">
-                <h1 class="text-center text-white" id="judulTabel">{{ $tabels->label }}, Tahun {{ $tahun }}</h1>
+            <div class="card-body bg-info-fordone">
+                <h1 class="text-center" id="judulTabel">{{ $tabels->label }}, Tahun {{ $tahun }}</h1>
             </div>
         </div>
         <div class="table-container">
             <div class="row">
                 <div class="overflow-x-scroll">
                     <table class="table table-bordered" id="komponen">
-                        <thead class="text-bold text-white bg-jos">
+                        <thead class="text-bold bg-info-fordone">
                             <tr>
                                 <th rowspan="3" class="align-middle">#</th>
                                 <th rowspan="3" class="align-middle">{{ $row_label }}</th>
@@ -101,7 +98,7 @@
                 </div>
                 <div class="table-data-wrapper">
                     <table class="table table-bordered" id="rekon-view">
-                        <thead class="text-bold text-white bg-jos">
+                        <thead class="text-bold bg-info-fordone">
                             {{-- <tr>
                                 @foreach ($tahuns as $tahun)
                                     <td colspan={{ sizeof($turtahuns) * sizeof($columns) }} class="text-center">
@@ -190,10 +187,28 @@
                 </div>
             </div>
         </div>
-        <div class="justify-content-between row mb-2" style="padding-right: 7.5px">
-            <div class="ml-auto" id="">
-                <a href="#" class="btn bg-primary-fordone" id="downloadExcel"><i class="fa-solid fa-circle-down"></i>
-                    Download</a>
+        <div class="justify-content-between row mb-2 d-none" id="showTabel" style="padding-right: 7.5px">
+            <div class="ml-auto mr-2" id="">
+                <a href="#" class="btn bg-info-fordone" id="showMetavar"><i
+                        class="fa-solid mr-1 fa-book-bookmark"></i>
+                    Metadata Variabel</a>
+            </div>
+            <div class="" id="">
+                <a href="#" class="btn bg-primary-fordone" id="downloadExcel"><i
+                        class="fa-solid mr-1 fa-circle-down"></i>
+                    Download Tabel</a>
+            </div>
+        </div>
+        <div class="justify-content-between row mb-2 d-none" id="showMetadataVariabel" style="padding-right: 7.5px">
+            <div class="ml-auto mr-2" id="">
+                <a href="#" class="btn bg-info-fordone" id="" onclick="window.location.reload()"><i
+                        class="fa-solid mr-1 fa-book-bookmark"></i>
+                    Tabel</a>
+            </div>
+            <div class="" id="">
+                <a href="#" class="btn bg-primary-fordone" id="downloadMetadataVariabel"><i
+                        class="fa-solid mr-1 fa-circle-down"></i>
+                    Download Metadata Variabel</a>
             </div>
         </div>
     </div>
@@ -207,7 +222,7 @@
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // get data from the form
-
+            const id = {{ Js::from($tabels->id) }}
             const dataContents = {{ Js::from($datacontents) }};
             const judul_tabel = document.getElementById("judulTabel").innerHTML;
             // console.log({
@@ -230,7 +245,7 @@
                 document.getElementById(inputId).innerHTML = content.value;
                 // document.getElementById(inputId).dataset.idContent = content.id;
             });
-            document.getElementById("downloadExcel").addEventListener("click", function (e) {
+            document.getElementById("downloadExcel").addEventListener("click", function(e) {
                 e.preventDefault();
                 let datas = getReady();
                 downloadExcel(datas, judul_tabel);
@@ -239,6 +254,45 @@
             document.addEventListener('DOMContentLoaded', function() {
                 var rekonViewTheadHeight = $('#rekon-view thead').height();
                 $('#komponen thead').height(rekonViewTheadHeight);
+                $("#showTabel").removeClass("d-none");
+                $("#showMetavar").on("click", function(e) {
+                    e.preventDefault();
+                    console.log("click");
+                    $.ajax({
+                        url: "{{ route('home.getMetaVariabel') }}",
+                        type: "GET",
+                        data: {
+                            id_tabel: id,
+                        },
+                        beforeSend: function() {
+                            $("#spinner-border").removeClass("d-none");
+                        },
+                        complete: function() {
+                            setTimeout(function() {
+                                $("#spinner-border").addClass("d-none");
+                            }, 320);
+                        },
+                        success: function(data) {
+                            if (typeof data === 'object') {
+                                alert('Belum ada metadata variabel')
+                            } else {
+                                $("#showTabel").addClass("d-none");
+                                $("#showMetadataVariabel").removeClass("d-none");
+                                $(".table-container").html(data);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    })
+                })
+                $("#downloadMetadataVariabel").on("click", function(e) {
+                    e.preventDefault();
+                    let datas = getReadyOnGeneral('table-metadata-variabel');
+                    judul_metadata_variabel = "Metadata Variabel_" + judul_tabel;
+                    downloadExcel(datas, judul_metadata_variabel);
+                    window.location.reload();
+                })
             })
         </script>
     </x-slot>

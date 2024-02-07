@@ -13,45 +13,129 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <script></script>
         <style type="text/css">
+            .login-card .card-body {
+                padding: 85px 60px 60px;
+                padding-top: 85px;
+                padding-right: 60px;
+                padding-bottom: 60px;
+                padding-left: 60px;
+            }
+
+            .login-card-description {
+                font-size: 25px;
+                color: #000;
+                font-weight: normal;
+                margin-bottom: 23px;
+            }
+
+            .cube {
+                position: absolute;
+                top: 80vh;
+                left: 45vw;
+                width: 10px;
+                height: 10px;
+                border: solid 1px #D7D4E4;
+                transform-origin: top left;
+                transform: scale(0) rotate(0deg) translate(-50%, -50%);
+                animation: cube 12s ease-in forwards infinite;
+            }
+
+            .cube:nth-child(2n) {
+                border-color: #FFF;
+            }
+
+            .cube:nth-child(2) {
+                animation-delay: 2s;
+                left: 25vw;
+                top: 40vh;
+            }
+
+            .cube:nth-child(3) {
+                animation-delay: 4s;
+                left: 75vw;
+                top: 50vh;
+            }
+
+            .cube:nth-child(4) {
+                animation-delay: 6s;
+                left: 90vw;
+                top: 10vh;
+            }
+
+            .cube:nth-child(5) {
+                animation-delay: 8s;
+                left: 10vw;
+                top: 85vh;
+            }
+
+            .cube:nth-child(6) {
+                animation-delay: 10s;
+                left: 50vw;
+                top: 10vh;
+            }
+
+            @keyframes cube {
+                from {
+                    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+                    opacity: 1;
+                }
+
+                to {
+                    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+                    opacity: 0;
+                }
+            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
+    <div class="bg"></div>
+    <div class="bg bg2"></div>
+    <div class="bg bg3"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
     <div class="container vh-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="flex-column d-flex justify-content-center align-items-center h-100" style="">
             {{-- asu --}}
-            <div class="card" style="min-width: 25vw">
-                <div class="card-header h4 text-center text-bold">Aplikasi For D One</div>
-                <form action="{{ route('users.attemptLogin') }}" method="POST" id="formUser">
-                    @csrf
-                    <div class="card-body">
-                        <div class="form-group">
-                            <div class="row mx-2">
-                                <label for="username">Username</label>
+            <div class="card shadow login-card" style="width: 50rem; border-radius: 20px;">
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="{{ asset('images/login-try.jpg') }}" alt="login" class="login-card-img"
+                            style="max-width: 100%; max-height: 100%; border-radius: 20px;">
+                    </div>
+                    <div class="col-md-7 d-flex align-items-center">
+                        <div class="card-body">
+                            <div class="brand-wrapper text-center">
+                                <img src="{{ asset('images/Logo Tryhard.png') }}" class="mr-auto"
+                                    style="width: 100px; height: 100px;" alt="logo-login">
                             </div>
-                            <div class="row mx-2 mb-2">
-                                <input type="username" id="username" name="username" class="form-control">
-                            </div>
-                            <div class="row mx-2">
-                                <label for="password">Password</label>
-                            </div>
-                            <div class="row mx-2 mb-2">
-                                <input type="password" id="password" name="password" class="form-control">
-                            </div>
+                            <form action="{{ route('users.attemptLogin') }}" method="POST" id="formUser">
+                                @csrf
+                                <div class="form-group">
+                                    <div class="row mx-2 mb-2">
+                                        <input type="username" id="username" name="username" class="form-control"
+                                            style="width: 20rem;" placeholder="Username">
+                                    </div>
+                                    <div class="row mx-2 mb-2">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            style="width: 20rem;" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="mx-2">
+                                    {{-- <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm bg-info-fordone">Daftar</a> --}}
+                                    <button id="login" class="btn bg-success-fordone" style="width: 20rem;"><i
+                                            class="fa-solid fa-right-to-bracket"></i> Masuk</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="text-right">
-                            {{-- <a id="register" href="{{ route('users.registerNew') }}" class="btn btn-sm bg-info-fordone">Daftar</a> --}}
-                            <button id="login" class="btn bg-success-fordone"><i class="fa-solid fa-right-to-bracket"></i> Masuk</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-    <x-slot name="script">
-        {{-- <script src="{{ asset('js/user.js') }}"></script> --}}
-        <script>
-        </script>
-    </x-slot>
+        <x-slot name="script">
+            {{-- <script src="{{ asset('js/user.js') }}"></script> --}}
+            <script></script>
+        </x-slot>
 </x-register-layout>

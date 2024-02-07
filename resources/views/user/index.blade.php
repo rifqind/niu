@@ -24,16 +24,15 @@
             <div class="ml-1 h4 mb-3">
                 Daftar Pengguna
             </div>
-            <div class="mr-1 justify-content-between row">
-                <div class="ml-auto mr-1">
-                    <a href="{{ route('users.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Pengguna Baru</a>
+            <div class="justify-content-between row">
+                <div class="ml-auto mr-2">
+                    <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal"
+                        data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>
                 </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('users.search') }}" method="GET" id="formSearch">
-                        <input id="cariUsers" type="text" class="form-control" style="min-width: 25vw;"
-                            placeholder="Cari Pengguna" name="search">
-                    </form>
-                </div> --}}
+                <div class="mr-2">
+                    <a href="{{ route('users.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
+                        Tambah Pengguna Baru</a>
+                </div>
             </div>
         </div>
     </div>
@@ -47,8 +46,8 @@
                 <th class="text-center" style="width: 20%;">Wilayah Kerja</th>
                 <th class="text-center">No. HP</th>
                 <th class="text-center">Peran</th>
-                <th class="text-center" style="width: 5%;">Edit</th>
-                <th class="text-center">Hapus</th>
+                <th class="text-center deleted" style="width: 5%;">Edit</th>
+                <th class="text-center deleted">Hapus</th>
             </tr>
             <tr class="">
                 <td class="search-header">#</td>
@@ -58,8 +57,8 @@
                 <td class="search-header"><input type="text" class="search-input form-control"></td>
                 <td class="search-header"><input type="text" class="search-input form-control"></td>
                 <td class="search-header"><input type="text" class="search-input form-control"></td>
-                <td class="search-header"></td>
-                <td class="search-header"></td>
+                <td class="search-header deleted"></td>
+                <td class="search-header deleted"></td>
             </tr>
         </thead>
         <tbody>
@@ -70,31 +69,24 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->dinas->nama }}</td>
                     <td>{{ $user->dinas->wilayah->label }}</td>
-                    <td class="text-center">{{ $user->noHp }}</td>
+                    <td class="text-center">{{ preg_replace('/^0/', '+62', $user->noHp) }}</td>
                     <td class="text-center" id="roles">{{ $user->role }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('users.reset', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id) ]) }}" class="update-pen mx-1"
-                            {{-- data-toggle="modal" data-target="#updateModal" --}}>
+                    <td class="text-center deleted">
+                        <a href="{{ route('users.reset', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id)]) }}"
+                            class="update-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
                             <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
                         </a>
-                        {{-- @if ($user->role == 'produsen') --}}
                         <a href="" class="mx-1 role-update"
                             data-users="{{ json_encode([
                                 'id' => $user->id,
                             ]) }}"><i
                                 class="role-icon fa-solid" title="Ubah Role" style="color: #1032e0;"></i></a>
-                        <a href="{{ route('users.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id)]) }}" class="edit-pen mx-1"
-                            {{-- data-toggle="modal" data-target="#updateModal" --}}>
+                        <a href="{{ route('users.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id)]) }}"
+                            class="edit-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
                             <i class="fa-solid fa-pencil" title="Edit Pengguna" style="color: #1032e0;"></i>
                         </a>
-                        {{-- @else
-                            <a href=""  class="mx-1 role-update" data-users="{{ json_encode([
-                                'id' => $user->id
-                            ]) }}"><i class="fa-solid fa-user-tie"
-                                    title="Ubah Role" style="color: #1032e0;"></i></a>
-                        @endif --}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center deleted">
                         <a href="" class="delete-trash"
                             data-users="{{ json_encode([
                                 'id' => Illuminate\Support\Facades\Crypt::encrypt($user->id),
@@ -136,8 +128,8 @@
         </div>
     </div>
     <x-slot name="script">
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/user.js') }}"></script>
-        {{-- <script src="{{ asset('js/pagination.js') }}"></script> --}}
         <script>
             const tokens = '{{ csrf_token() }}'
             const reset_URL = new URL("{{ route('users.reset') }}")

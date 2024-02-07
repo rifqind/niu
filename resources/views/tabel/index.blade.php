@@ -10,21 +10,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <script></script>
         <style type="text/css">
-            .pagination>li {
-                padding-top: 6px;
-                padding-right: 12px;
-                padding-bottom: 6px;
-                padding-left: 12px;
-            }
-
-            .pagination>li.active {
-                color: whitesmoke;
-                background-color: #17a2b8;
-            }
-
-            .pagination>li:hover {
-                cursor: pointer;
-            }
         </style>
         @vite(['resources/css/app.css'])
     </x-slot>
@@ -47,10 +32,86 @@
             @endif
         </div>
         <div class="row d-flex justify-content-end align-items-center">
-            <div class="mb-3 mx-3">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
+            <div class="mr-auto h4 ml-2">
+                Daftar Tabel
+            </div>
+            <div class="ml-auto mr-2">
+                <a href="#" class="btn bg-success-fordone mb-2" title="Download" data-target="#downloadModal"
+                    data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i> Download</a>
+            </div>
+        </div>
+        <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
+            <thead id="header-tabel">
+                <tr scope="col" class="bg-info-fordone">
+                    <th class="align-middle">#</th>
+                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
+                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
+                    <th class="align-middle">Nama Row</th>
+                    <th class="align-middle">Daftar Kolom</th>
+                    <th class="align-middle">Tahun</th>
+                    <th class="align-middle">Status Pengisian</th>
+                    <th class="align-middle deleted">Cek / Ubah Isian</th>
+                    @if ($role != 'produsen')
+                        <th class="align-middle deleted">Hapus</th>
+                    @endif
+                </tr>
+                <tr>
+                    <td class="align-middle search-header">#</td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    <td class="align-middle search-header deleted"></td>
+                    @if ($role != 'produsen')
+                        <td class="align-middle search-header deleted"></td>
+                    @endif
+                </tr>
+            </thead>
+            <tbody id="body-tabel" class="bg-white">
+                @foreach ($tables as $index => $tab)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $tab['label'] }}</td>
+                        <td>{{ $tab['nama_dinas'] }}</td>
+                        <td>{{ $tab['row_label'] }}</td>
+                        <td>
+                            @foreach ($tab['columns'] as $column)
+                                <span class="badge badge-info">
+                                    {{ $column->label }}
+                                </span>
+                            @endforeach
+                        </td>
+                        <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
+
+                        <td>{{ $tab['status'] }}</td>
+                        <td class="text-center deleted">
+                            <a
+                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
+                                <i class="fas fa-eye text-info"></i>
+                            </a>
+                        </td>
+                        @if ($role != 'produsen')
+                            <td class="text-center deleted">
+                                <a href="#" class="delete-trash"
+                                    data-statustabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}"
+                                    data-toggle="modal" data-target="#deleteStatusModal">
+                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                </a>
+                            </td>
+                        @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+        @include('tabel.delete-master-modal')
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
             <div class="form-group"> <!--		Show Numbers Of Rows 		-->
                 <select class  ="form-control" name="state" id="maxRows">
-                    <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -73,82 +134,6 @@
                 </nav>
             </div>
         </div>
-        <table id="table-tabel" class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
-            <thead id="header-tabel">
-                <tr scope="col" class="bg-info-fordone">
-                    <th class="align-middle">#</th>
-                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
-                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
-                    <th class="align-middle">Nama Row</th>
-                    <th class="align-middle">Daftar Kolom</th>
-                    <th class="align-middle">Tahun</th>
-                    <th class="align-middle">Status Pengisian</th>
-                    <th class="align-middle">Cek / Ubah Isian</th>
-                    @if ($role != 'produsen')
-                        <th class="align-middle">Hapus</th>
-                    @endif
-                </tr>
-                <tr>
-                    <td class="align-middle search-header">#</td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
-                    <td class="align-middle search-header"></td>
-                    @if ($role != 'produsen')
-                        <td class="align-middle search-header"></td>
-                    @endif
-                </tr>
-            </thead>
-            <tbody id="body-tabel" class="bg-white">
-                @foreach ($tables as $index => $tab)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $tab['label'] }}</td>
-                        <td>{{ $tab['nama_dinas'] }}</td>
-                        <td>{{ $tab['row_label'] }}</td>
-                        <td>
-                            @foreach ($tab['columns'] as $column)
-                                <span class="badge badge-info">
-                                    {{ $column->label }}
-                                </span>
-                            @endforeach
-                        </td>
-                        <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
-
-                        <td>{{ $tab['status'] }}</td>
-                        <td>
-                            {{-- <a href="/tables/show/{{ $tab['tabels'][0]->id }}">Lihat</a> --}}
-                            <a
-                                href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
-                                <i class="fas fa-eye text-info"></i>
-                            </a>
-                        </td>
-
-                        {{-- <td> --}}
-                        {{-- <a
-                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
-                                    class="fas fa-trash text-info"></i></a> --}}
-                        @if ($role != 'produsen')
-                            <td class="text-center">
-                                <a href="#" class="delete-trash"
-                                    data-statustabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}"
-                                    data-toggle="modal" data-target="#deleteStatusModal">
-                                    <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
-                                </a>
-                            </td>
-                        @endif
-                        {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
-                        {{-- </td> --}}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot></tfoot>
-        </table>
-        @include('tabel.delete-master-modal')
     </div>
 
 
@@ -157,6 +142,7 @@
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/public.js') }}"></script>
         <script src="{{ asset('js/tabel.js') }}"></script>
+        <script src="{{ asset('js/download.js') }}"></script>
         <script>
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // const handleDeleteTable = function(encryptedId) {
@@ -168,7 +154,7 @@
             // }
             // limitPagging();
             document.addEventListener('DOMContentLoaded', function() {
-                getPagination('#table-tabel');
+                getPagination('#table-tabel',10);
                 $(".delete-trash").on("click", function(e) {
                     let data = $(this).data("statustabel");
                     // console.log(data.id);

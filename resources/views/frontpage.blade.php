@@ -39,6 +39,7 @@
                 <!-- Area Chart -->
                 <div class="col-xl-4 col-lg-7">
                     <form action="{{ route('home.search') }}" id="search-tabel">
+                        @csrf
                         <div class="mb-2">
                             <select multiple name="tahuns[]" id="tahun-select">
                                 @foreach ($tahuns as $tahun)
@@ -135,8 +136,8 @@
         <x-slot name="script">
             {{-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> --}}
             {{-- <script src="{{ asset('js/filter-multi-select-bundle.min.js') }}"></script> --}}
-            <script src="{{ asset('js/home.js') }}"></script>
-            <script>
+            <script src="{{ asset('js/home.js') }}" nonce="{{ Vite::cspNonce() }}"></script>
+            <script nonce="{{ Vite::cspNonce() }}">
                 document.addEventListener('DOMContentLoaded', function() {
                     // alert('asu')
                     $('#dinas-select').filterMultiSelect({

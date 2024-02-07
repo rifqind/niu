@@ -11,17 +11,14 @@
         <script></script>
         <style type="text/css">
         </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <x-slot name="breadcrumb">
-        <li class="breadcrumb-item active">Index Page</li>
+        <li class="breadcrumb-item active">Master Tabel
+        </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row justify-content-between">
-            <div class="ml-1 h4 mb-3">
-                Master Tabel
-            </div>
+        <div class="row mb-2">
             @if (session('success'))
                 <div class="alert alert-success temporary-message">
                     {{ session('success') }}
@@ -32,36 +29,14 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <div class="mr-1 d-flex justify-content-between row align-items-center">
-                <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span
-                        id="showTotal"></span></div>
-                <div class="form-group"> <!--		Show Numbers Of Rows 		-->
-                    <select class  ="form-control" name="state" id="maxRows">
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                    </select>
-                </div>
-                <div class="pagination-container">
-                    <nav>
-                        <ul class="pagination">
-                            <li data-page="prev">
-                                <span>
-                                    < <span class="sr-only">(current)
-                                </span></span>
-                            </li>
-                            <!--	Here the JS Function Will Add the Rows -->
-                            <li data-page="next" id="prev">
-                                <span> > <span class="sr-only">(current)</span></span>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-auto ml-auto mb-3">
-                    <a href="{{ route('tabel.create') }}" class="btn bg-info-fordone"><i class="fas fa-plus"></i> Buat Tabel
-                        Baru</a>
-                </div>
+        </div>
+        <div class="d-flex justify-content-between row align-items-center">
+            <div class="mr-auto h4 ml-2">
+                Master Tabel
+            </div>
+            <div class="ml-auto mr-2 mb-2">
+                <a href="{{ route('tabel.create') }}" class="btn bg-info-fordone"><i class="fas fa-plus"></i> Buat Tabel
+                    Baru</a>
             </div>
         </div>
         <table id="tabel-master" class="table table-bordered table-hover table-sorted">
@@ -74,8 +49,6 @@
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle"> Daftar Tahun</th>
                     <th class="align-middle">Tambah Tahun</th>
-                    {{-- <th class="align-middle">Status Pengisian</th> --}}
-                    {{-- <th class="align-middle">Cek / Ubah Isian</th> --}}
                     <th class="align-middle">Edit Tabel</th>
                     <th class="align-middle">Hapus</th>
                 </tr>
@@ -87,8 +60,6 @@
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"></td>
-                    {{-- <td class="align-middle search-header">Status Pengisian</td> --}}
-                    {{-- <td class="align-middle search-header">Cek / Ubah Isian</td> --}}
                     <td class="align-middle search-header"></td>
                     <td class="align-middle search-header"></td>
                 </tr>
@@ -124,26 +95,14 @@
                             <a
                                 href="{{ route('tabel.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
                                     class="fas fa-cog text-info"></i></a>
-
-                            {{-- <a href="/tables/edit/{{ $tab['id'] }}">Ubah</a> --}}
                         </td>
-                        {{-- <td> --}}
-                        {{-- <a
-                                href="{{ route('tabel.destroy', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"><i
-                                    class="fas fa-trash text-info"></i></a> --}}
                         <td class="text-center">
-                            {{-- <form id="delete-table-form" method="POST"
-                                action="{{ route('tabel.destroy', ['id_status' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
-                                @csrf --}}
                             <a href="#" class="delete-trash"
                                 data-tabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"
                                 data-toggle="modal" data-target="#deleteModal">
                                 <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
                             </a>
-                            {{-- </form> --}}
                         </td>
-                        {{-- <a href="/tables/remove/{{ $tab['tabels'][0]->id }}">Hapus</a> --}}
-                        {{-- </td> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -151,6 +110,33 @@
             <tfoot></tfoot>
         </table>
         @include('tabel.delete-master-modal')
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span>
+            </div>
+            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
+                <select class  ="form-control" name="state" id="maxRows">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination">
+                        <li data-page="prev">
+                            <span>
+                                < <span class="sr-only">(current)
+                            </span></span>
+                        </li>
+                        <!--	Here the JS Function Will Add the Rows -->
+                        <li data-page="next" id="prev">
+                            <span> > <span class="sr-only">(current)</span></span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
 
@@ -163,7 +149,7 @@
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             document.addEventListener('DOMContentLoaded', function() {
                 // console.log({{ Js::from($tables) }});
-                getPagination('#tabel-master');
+                getPagination('#tabel-master', 10);
                 var temporaryMessages = document.querySelectorAll('.temporary-message');
                 temporaryMessages = Array.from(temporaryMessages);
 
@@ -185,7 +171,7 @@
                     // console.log('asu');
                     let id = $('#idHiddenTabel').val();
                     $.ajax({
-                        url: "{{route('tabel.destroy')}}",
+                        url: "{{ route('tabel.destroy') }}",
                         method: "POST",
                         data: {
                             id: id,
@@ -199,17 +185,6 @@
                         }
                     })
                 })
-                // $(".delete-trash").on("click", function (e) {
-                //     let id = $(this).data("table");
-                //     $("idHidden").val(id);
-                // });
-                // $("#deleteStatusTabels").on("click", function (e) {
-                //     let id = $("idHidden").val();
-                //     $.ajax({
-                //         type: "POST",
-                //         url: 
-                //     })
-                // })
             })
         </script>
     </x-slot>

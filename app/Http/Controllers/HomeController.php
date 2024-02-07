@@ -6,6 +6,7 @@ use App\Models\Column;
 use App\Models\Datacontent;
 use App\Models\Dinas;
 use App\Models\MasterWilayah;
+use App\Models\MetadataVariabel;
 use App\Models\Notifikasi;
 use App\Models\Region;
 use App\Models\Row;
@@ -16,6 +17,7 @@ use App\Models\Tabel;
 use App\Models\Turtahun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -176,7 +178,7 @@ class HomeController extends Controller
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
             $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? $id_wilayah["kabs"] : [$wilayah]) : $id_wilayah["kabs"])
-            ->pluck('id');
+                ->pluck('id');
             $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
             // dd($id_wilayah);
             $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
@@ -261,6 +263,88 @@ class HomeController extends Controller
             'totalTabels',
             'notifikasiList'
         ))->render();
+    }
+
+    public function getMetaVariabel(Request $request)
+    {
+        $id_tabel = $request->id_tabel;
+        // dd($id_tabel);
+        $metavars = MetadataVariabel::join('metadata_variabel_status as mts', 'mts.id_tabel', '=', 'metadata_variabel.id_tabel')
+            ->where('metadata_variabel.id_tabel', $id_tabel)
+            ->where('mts.status', 5)
+            ->get([
+                'metadata_variabel.*'
+            ]);
+        $satuan = Tabel::where('id', $id_tabel)->pluck('unit');
+        if (sizeof($metavars) == 0) {
+            # code...
+            return response()->json([
+                'messages' => 'not',
+            ]);
+        }
+        return view('show-metadata-variabel', compact(
+            'metavars',
+            'satuan',
+        ));
+    }
+
+    public function monitoring()
+    {
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+        $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
+
+        $this_monitoring = DB::table('statustables as s')
+            ->join('tabels as t', 't.id', '=', 's.id_tabel')
+            ->join('dinas as d', 'd.id', '=', 't.id_dinas')
+            ->select(
+                'd.nama as nama_dinas',
+                DB::raw('count(case when s.status = 1 then 1 end) as jumlah_satu'),
+                DB::raw('count(case when s.status = 2 then 1 end) as jumlah_dua'),
+                DB::raw('count(case when s.status = 3 then 1 end) as jumlah_tiga'),
+                DB::raw('count(case when s.status = 4 then 1 end) as jumlah_empat'),
+                DB::raw('count(case when s.status = 5 then 1 end) as jumlah_lima'),
+                DB::raw('count(case when s.status = 6 then 1 end) as jumlah_enam')
+            )
+            ->whereIn('t.id_dinas', $ourDinas)
+            ->groupBy('nama_dinas')
+            ->get();
+
+        $years = Statustables::whereIn('id_tabel', $myTabels)->distinct()->orderBy('tahun')->pluck('tahun');
+
+        return view('monitoring', [
+            'this_monitoring' => $this_monitoring,
+            'years' => $years,
+        ]);
+    }
+
+    public function getMonitoring(Request $request)
+    {
+        $years = $request->year;
+        // dd($years);
+        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+        $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
+        $years_all = Statustables::whereIn('id_tabel', $myTabels)->distinct()->orderBy('tahun')->pluck('tahun');
+
+        $this_monitoring = DB::table('statustables as s')
+            ->join('tabels as t', 't.id', '=', 's.id_tabel')
+            ->join('dinas as d', 'd.id', '=', 't.id_dinas')
+            ->select(
+                'd.nama as nama_dinas',
+                DB::raw('count(case when s.status = 1 then 1 end) as jumlah_satu'),
+                DB::raw('count(case when s.status = 2 then 1 end) as jumlah_dua'),
+                DB::raw('count(case when s.status = 3 then 1 end) as jumlah_tiga'),
+                DB::raw('count(case when s.status = 4 then 1 end) as jumlah_empat'),
+                DB::raw('count(case when s.status = 5 then 1 end) as jumlah_lima'),
+                DB::raw('count(case when s.status = 6 then 1 end) as jumlah_enam')
+            )
+            ->whereIn('t.id_dinas', $ourDinas)
+            ->whereIn('s.tahun', ($years == 'all') ? $years_all : [$years])
+            ->groupBy('nama_dinas')
+            ->get();
+
+        return view('monitoring-tabel', compact('this_monitoring'));
     }
 
     /**

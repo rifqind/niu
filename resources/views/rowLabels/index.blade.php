@@ -10,7 +10,6 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <style type="text/css">
         </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -18,22 +17,13 @@
         </li>
     </x-slot>
     <div class="container-fluid">
-        <div class="row justify-content-between">
-
-            <div class="ml-1 h4 mb-3">
+        <div class="row justify-content-between mb-2">
+            <div class="ml-2 h4">
                 Daftar Kelompok Baris
             </div>
-            <div class="mr-1 justify-content-between row">
-                <div class="ml-auto mr-1">
-                    {{-- tobedestined --}}
-                    <a href="{{ route('rowLabels.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i> Tambah Kelompok Baris</a>
-                </div>
-                {{-- <div class="ml-auto mr-1">
-                    <form action="{{ route('dinas.search') }}" method="GET">
-                        <input id="cariDinas" type="text" class="form-control" style="min-width: 25vw;"
-                            placeholder="Cari Dinas" name="search">
-                    </form>
-                </div> --}}
+            <div class="ml-auto mr-2">
+                <a href="{{ route('rowLabels.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
+                    Tambah Kelompok Baris</a>
             </div>
         </div>
         @if (session('success'))
@@ -56,7 +46,8 @@
                 </tr>
                 <tr>
                     <td class="first-column" style="width: 10%;"></td>
-                    <td class="text-center search-header" style="width: 30%;"><input type="text" class="search-input form-control"></td>
+                    <td class="text-center search-header" style="width: 30%;"><input type="text"
+                            class="search-input form-control"></td>
                     {{-- <td class="text-center">Wilayah Kerja</td> --}}
                     <td class="text-center"></td>
                     <td class="text-center"></td>

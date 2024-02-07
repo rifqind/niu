@@ -25,6 +25,7 @@
         <div class="card">
             <div class="card-body">
                 <form id = "DinasForm" method="post" class="form-horizontal">
+                    @csrf
                     <div class="form-group">
                         <label for="nama">Nama Dinas</label>
                         <input class="form-control mb-3" id="nama" placeholder="Isi Nama Dinas">

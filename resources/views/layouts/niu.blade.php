@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="csp-nonce" content="{{ csp_nonce() }}">
     <title>{{ config('app.name', 'Laravel') }} | {{ $title }}</title>
     <link rel="icon" href="{{ url('') }}/images/favicon2.ico">
 
@@ -16,15 +17,13 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ url('') }}/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
 
     {{ $head }}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css',
+     'resources/js/app.js'
+    ])
 </head>
 
 <body class="hold-transition layout-fixed">
@@ -48,20 +47,6 @@
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>
-                            </h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                {{ $breadcrumb }}
-                            </ol>
-                        </div>
-                    </div>
-                </div>
                 <!-- /.container-fluid -->
             </section>
 
@@ -116,9 +101,16 @@
                 })
         });
     </script>
-    <script src="{{ asset('js/pagination.js') }}"></script>
+    <script src="{{ asset('js/pagination.js') }}" nonce="{{ csp_nonce() }}"></script>
+    <script src="{{ asset('js/download.js') }}" nonce="{{ csp_nonce() }}"></script>
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
-    {{-- <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
+    {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
+    <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+
+    <!-- Bootstrap JS -->
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> --}}
+    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
     {{ $script }}
 </body>
 

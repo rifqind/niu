@@ -12,6 +12,7 @@
     <x-slot name="breadcrumb">
     </x-slot>
     <form action="{{ route('dashboard.search') }}" id="search-dashboard">
+        @csrf
         <div class="row mb-2">
             <div class="mr-1">
                 <select name="year" class="form-control" id="year-select">
