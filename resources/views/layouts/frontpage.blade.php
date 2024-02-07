@@ -66,7 +66,7 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer ml-0">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> Alpha
+                <b>Version</b> Beta
             </div>
             <div class="text-center">
                 <strong>Copyright &copy; 2023 <a href="https://sulut.bps.go.id">BPS Provinsi Sulawesi Utara</a></strong>
