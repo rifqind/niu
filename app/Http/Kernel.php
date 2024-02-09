@@ -39,6 +39,8 @@ class Kernel extends HttpKernel
             // \Spatie\Csp\AddCspHeaders::class,
             \App\Http\Middleware\FrameGuard::class,
             \App\Http\Middleware\ViteSecurity::class,
+            \App\Http\Middleware\CorsGuard::class,
+            // \App\Http\Middleware\SecurityOnError::class,
         ],
 
         'api' => [

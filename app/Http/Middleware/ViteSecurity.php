@@ -32,7 +32,11 @@ class ViteSecurity
             'form-action' => "'self'",
             'img-src' => "'self'",
             'media-src' => "'self'",
-            'object-src' => "'none'",
+            'object-src' => "'self'",
+            'frame-src' => "'self'",
+            'frame-ancestors' => "'self'",
+            'font-src' => "'self' fonts.gstatic.com fonts.googleapis.com *.fontawesome.com cdn.jsdelivr.net",
+            'manifest-src' => "'self'",
             // Add other directives as needed
         ];
 
@@ -43,8 +47,28 @@ class ViteSecurity
 
         // Add the CSP header to the response
         $response = $next($request);
-        $response->headers->set('Content-Security-Policy', $cspHeader);
+        if ($response->isClientError() || $response->isServerError()) {
+            $content = $response->getContent();
+            $contentWithNonce = $this->addNonceToInlineScripts($content, $nonce);
 
+            $response->setContent($contentWithNonce);
+        } else {
+            $response->headers->set('Content-Security-Policy', $cspHeader);
+        }
         return $response;
+    }
+
+    protected function addNonceToInlineScripts($content, $nonce)
+    {
+        return preg_replace_callback('/<script(.*?)>(.*?)<\/script>/is', function ($match) use ($nonce) {
+            $attributes = $match[1];
+            $scriptContent = $match[2];
+
+            if (!str_contains($attributes, 'nonce')) {
+                $attributes .= " nonce=\"$nonce\"";
+            }
+
+            return "<script$attributes>$scriptContent</script>";
+        }, $content);
     }
 }

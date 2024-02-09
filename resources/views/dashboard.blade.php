@@ -48,6 +48,9 @@
             document.addEventListener('DOMContentLoaded', function() {
                 getPieChart({{ $finalTabels }}, {{ $entriTabels }}, {{ $verifyTabels }}, {{ $repairTabels }},
                     {{ $newTabels }});
+                    
+                var pieChartsHeight = $('#pie-charts').height();
+                $('#percentage-progress').height(pieChartsHeight);
             })
         </script>
     </x-slot>
