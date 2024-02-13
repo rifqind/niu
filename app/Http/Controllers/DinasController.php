@@ -20,7 +20,7 @@ class DinasController extends Controller
         $id_wilayah = MasterWilayah::getMyWilayahId();
         $kabs = $wilayah["kabs"];
         // dd($id_wilayah["kabs"]);
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         foreach ($dinas as $din) {
             $din->number = $number;
             $number++;
@@ -72,9 +72,25 @@ class DinasController extends Controller
     public function store(Request $request)
     {
         //
+        $levels = $request->tingkat;
+        switch ($levels) {
+            case 0:
+                # code...
+                $wilayah_fullcode = "7100000000";
+                break;
+            case 1:
+                $wilayah_fullcode = $request->kab;
+                break;
+            case 2:
+                $wilayah_fullcode = $request->kec;
+                break;
+            case 3:
+                $wilayah_fullcode = $request->desa;
+                break;
+        }
         $dinas = Dinas::create([
             'nama' => $request->nama,
-            'wilayah_fullcode' => $request->wilayah_fullcode,
+            'wilayah_fullcode' => $wilayah_fullcode,
         ]);
         return response()->json('Berhasil');
     }

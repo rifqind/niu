@@ -8,17 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-
-        <style type="text/css">
-            .select2-container--default .select2-selection--single {
-                height: 38px;
-                line-height: 24px;
-                padding-left: 6px;
-
-                /* You can adjust this value as needed */
-            }
-        </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -106,14 +95,9 @@
     <x-slot name="script">
         <!-- Additional JS resources -->
 
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             // set initial values
-
-
-
-
-
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.getElementById('edit-form');
                 const submitButton = document.getElementById('submit-edit-form');

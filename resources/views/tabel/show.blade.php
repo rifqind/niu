@@ -7,88 +7,20 @@
         <!-- Additional resources here -->
         <meta name="csrf-token" content="content">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <script></script>
-        <style type="text/css">
-            #komponen {
-                table-layout: fixed;
-                width: 400px;
-                /* display: inline-block; */
-                background: #f9fafc;
-                border-right: 1px solid #e6eaf0;
-                vertical-align: top;
-
-                /* white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden; */
-            }
-
-            #komponen td:first-child {
-                width: 10%;
-            }
-
-            #komponen thead,
-            #rekon-view thead {
-                /* min-height: 200px; */
-                /* height: 200px; */
-                vertical-align: middle;
-                padding: .1rem;
-                /* white-space: nowrap; */
-                /* text-overflow: ellipsis; */
-                overflow: auto;
-            }
-
-            #rekon-view tbody tr td {
-                /* padding-right: 1rem; */
-                min-width: 180px;
-            }
-
-            #komponen tbody tr td,
-            #rekon-view tbody tr td {
-                /* height: 20px; */
-                height: 65px;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                /* padding: 0; */
-                /* text-align: left; */
-                /* display: flex; */
-                /* align-content: center; */
-                /* align-items: center; */
-            }
-
-            .table-data-wrapper {
-                /* display: inline-block; */
-                overflow-x: auto;
-                vertical-align: top;
-                width: calc(100% - 400px);
-            }
-
-            .table-data-wrapper table {
-                border-left: 0;
-            }
-
-            .table-container {
-                padding-left: 7.5px;
-                padding-right: 7.5px;
-            }
-        </style>
-        @vite(['resources/css/app.css'])
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/show-tabel.css') }}">
     </x-slot>
 
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">Data Tabel</li>
     </x-slot>
     <!-- Alert container -->
-    <div id="success-alert" class="alert alert-success alert-dismissible fade show" role="alert"
-        style="display: none;">
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show d-none" role="alert">
         <strong>Sukses!</strong> Berhasil menyimpan Perubahan data !
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="container">
-
         <div class="card">
             <div class="card-body">
                 <h3 class="text-bold">{{ $tabel->judul_tabel }}, Tahun {{ $years }}
@@ -104,11 +36,11 @@
                     <table class="table table-bordered" id="komponen">
                         <thead class="text-bold text-white bg-info-fordone">
                             <tr>
-                                <td rowspan="3" class="align-middle" style="width: 45px;">#</td>
+                                <td rowspan="3" class="align-middle table-width-45px">#</td>
                                 <td rowspan="3" class="align-middle">{{ $row_label }}</td>
                             </tr>
                         </thead>
-                        <tbody style="background-color: white">
+                        <tbody>
                             @foreach ($rows as $key => $row)
                                 <tr>
                                     <td class="align-middle pl-2">{{ $key + 1 }}</td>
@@ -150,7 +82,7 @@
                                 @endforeach
                             </tr>
                         </thead>
-                        <tbody style="background-color: white">
+                        <tbody>
                             @foreach ($rows as $key => $row)
                                 <tr>
                                     @foreach ($tahuns as $tahun)
@@ -206,11 +138,12 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js" nonce="{{ Vite::cspNonce() }}"></script>
         {{-- <script src="{{ asset('js/public.js') }}"></script> --}}
-        <script src="{{ asset('js/tabel.js') }}"></script>
-        <script>
+        <script src="{{ asset('js/show-tabel.js') }}"></script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const reject_final_key = new URL("{{ route('tabel.adminHandleData') }}")
+            const just_route = "{{ route('tabel.update_content', $encryptedId) }}";
             const token = "{{ csrf_token() }}"
             // get data from the form
             let status = {{ Js::from($status) }};
@@ -269,91 +202,6 @@
                 })
 
             })
-
-            const handleSaveTable = function(element, buttonInitialText, decisions, catatans) {
-                element.disabled = true;
-
-                element.innerHTML = 'Loading...';
-
-                let decisions_type = (decisions == "save-table") ? "save" : "send";
-                // return 0
-                let inputField = Array.from(document.querySelectorAll('.input-field'));
-
-
-                let inputValues = inputField.map(element => {
-                    let explodedId = element.id.split('-');
-                    // console.log({explodedId})
-
-                    return ({
-                        // get the Id and value of the element 
-                        'id': element.dataset.idContent,
-                        'id_tabel': explodedId[0],
-                        // 'id_row': explodedId[1].length == 10 ? 0 : explodedId[1],
-                        // 'id_column': explodedId[2],
-                        'tahun': explodedId[3],
-                        // 'id_turtahun': explodedId[4],
-                        // 'wilayah_fullcode': element.dataset.wilayah_fullcode,
-                        'value': element.value
-
-                        // assign it to the arrays
-
-                    })
-                });
-                let token = '{{ csrf_token() }}'
-                let data_json = ({
-                    'data': inputValues,
-                    'decisions': decisions_type,
-                    'catatans': catatans,
-                    _token: token,
-                });
-
-                const xhr = new XMLHttpRequest();
-
-                xhr.open('PUT', "{{ route('tabel.update_content', $encryptedId) }}", true);
-
-                xhr.setRequestHeader('Content-Type', 'application/json');
-
-                let jsonData = JSON.stringify(data_json);
-
-                xhr.onload = function() {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        var response = JSON.parse(xhr.responseText);
-                        // console.log('Success:', response);
-                        showSuccessAlert();
-                        setTimeout(hideSuccessAlert, 3000);
-                        element.disabled = false;
-                        element.innerHTML = buttonInitialText;
-                        // console.log(response.status);
-                        $("#badges-status").addClass(statusMapping[response.status]);
-                        $("#badges-status").text(response.status_label);
-                        if (decisions_type == "send") {
-                            window.location.reload();
-                        }
-
-                    } else {
-                        console.error('Error:', xhr.status, xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('Network Error');
-                };
-                xhr.send(jsonData);
-
-            };
-
-
-            // Show the success alert
-            function showSuccessAlert() {
-                var alert = document.getElementById('success-alert');
-                alert.style.display = 'block';
-            }
-
-            // Hide the success alert after a certain time (e.g., 3 seconds)
-            function hideSuccessAlert() {
-                var alert = document.getElementById('success-alert');
-                alert.style.display = 'none';
-            }
-
             // Call the function to show the success alert as needed
             // For example, after saving or updating data
 

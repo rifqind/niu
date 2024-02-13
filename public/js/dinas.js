@@ -1,12 +1,10 @@
 function saveDinas() {
+    let datas = $("#DinasForm").serialize();
+    console.log(datas);
     $.ajax({
         type: "POST",
         url: save_URL.href,
-        data: {
-            nama: $("#nama").val(),
-            wilayah_fullcode: $("#wilayah_fullcode").val(),
-            _token: tokens,
-        },
+        data: datas,
         beforeSend: function () {
             $("#spinner-border").removeClass("d-none");
         },
