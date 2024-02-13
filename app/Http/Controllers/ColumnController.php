@@ -21,8 +21,6 @@ class ColumnController extends Controller
 
         return view('column.index', ['columns' => $columns]);
         // $columns = Column::join('column_groups', 'columns.id_column_group', 'column_groups.id')->select('columns.id', 'columns.label', 'column_groups.label as tipe')->get();
-        $columns = Column::all();
-        return view('columns.index', ['columns' => $columns]);
     }
 
     /**

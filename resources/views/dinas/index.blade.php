@@ -8,8 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <style type="text/css">
-        </style>
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -34,14 +32,14 @@
             <thead>
                 <tr class="bg-info-fordone">
                     <th class="first-column">No.</th>
-                    <th class="text-center" style="width: 50%;">Nama Produsen Data</th>
+                    <th class="text-center tabel-width-50">Nama Produsen Data</th>
                     <th class="text-center">Wilayah Kerja</th>
                     <th class="text-center deleted">Edit</th>
                     <th class="text-center deleted">Hapus</th>
                 </tr>
                 <tr class="">
                     <td class="search-header"></td>
-                    <td class="search-header" style="width: 50%;"><input type="text"
+                    <td class="search-header"><input type="text"
                             class="search-input form-control"></td>
                     <td class="search-header"><input type="text" class="search-input form-control"></td>
                     <td class="search-header"></td>
@@ -58,7 +56,7 @@
                             <a href="" class="update-pen"
                                 data-dinas="{{ $din->id . ';' . $din->nama . ';' . $din->wilayah_fullcode }}"
                                 data-toggle="modal" data-target="#updateModal">
-                                <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                                <i class="fa-solid fa-pen"></i>
                             </a>
                         </td>
                         <td class="text-center deleted">
@@ -67,7 +65,7 @@
                                     'id' => $din->id,
                                 ]) }}"
                                 data-toggle="modal" data-target="#deleteModal">
-                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                <i class="fa-solid fa-trash-can icon-trash-color"></i>
                             </a>
                         </td>
                     </tr>
@@ -104,15 +102,21 @@
         </div>
     </div>
     <x-slot name="script">
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/dinas.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const update_URL = new URL("{{ route('dinas.update') }}")
             const delete_URL = new URL("{{ route('dinas.delete') }}")
             const this_URL = window.location.href
             document.addEventListener("DOMContentLoaded", function(e) {
                 getPagination("#tabel-dinas", 15)
+                // $("#wilayahModal").select2({
+                //     theme : 'bootstrap4',
+                //     width : '100%',
+                // })
+                $("#downloadDinas").on("click", function(e) {
+                    GoDownload('tabel-dinas')
+                })
             })
         </script>
     </x-slot>

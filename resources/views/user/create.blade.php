@@ -11,18 +11,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
-        </style>
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
             Reset Pengguna
         </li>
     </x-slot>
-    <div style="max-width: 50vw;">
+    <div>
         <div class="card mb-3">
             <div class="card-body">
                 <form action="{{ route('users.add') }}" method="POST" id="createUsers">
@@ -124,7 +119,7 @@
     </div>
     <x-slot name="script">
         <script src="{{ asset('js/user.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const add_URL = new URL("{{ route('users.add') }}")
             const this_URL = new URL("{{ route('users.index') }}")
             const tokens = "{{ csrf_token() }}"

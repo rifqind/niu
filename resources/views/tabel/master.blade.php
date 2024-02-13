@@ -8,9 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
-        <style type="text/css">
-        </style>
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -41,10 +38,10 @@
         </div>
         <table id="tabel-master" class="table table-bordered table-hover table-sorted">
             <thead id="header-tabel">
-                <tr class="bg-info-fordone">
+                <tr class="bg-info-fordone text-center">
                     <th class="align-middle">#</th>
-                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
-                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
+                    <th class="align-middle tabel-width-25">Nama Tabel</th>
+                    <th class="align-middle tabel-width-20">Produsen Data</th>
                     <th class="align-middle">Nama Row</th>
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle"> Daftar Tahun</th>
@@ -100,7 +97,7 @@
                             <a href="#" class="delete-trash"
                                 data-tabel="{{ json_encode(['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}"
                                 data-toggle="modal" data-target="#deleteModal">
-                                <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                                <i class="fa-solid fa-trash-can icon-trash-color"></i>
                             </a>
                         </td>
                         </td>
@@ -142,10 +139,8 @@
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-        <script src="{{ asset('js/public.js') }}"></script>
         <script src="{{ asset('js/tabel.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const url_key = new URL('{{ route('tabel.getDatacontent') }}')
             document.addEventListener('DOMContentLoaded', function() {
                 // console.log({{ Js::from($tables) }});

@@ -1,0 +1,17 @@
+.select2-container--default .select2-selection--single {
+    height: 38px;
+    line-height: 24px;
+    padding-left: 6px;
+    width: 100%;
+    
+    /* You can adjust this value as needed */
+}
+
+.th-something {
+    width: 100px;
+}
+
+#modal-preview-body {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}

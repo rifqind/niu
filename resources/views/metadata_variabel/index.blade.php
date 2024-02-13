@@ -8,10 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
-        <style type="text/css">
-        </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -62,10 +58,10 @@
         <table id="table-metadata-variabel"
             class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
             <thead id="header-metadata-variabel">
-                <tr scope="col" class="bg-info-fordone">
+                <tr scope="col" class="bg-info-fordone text-center">
                     <th class="align-middle">#</th>
-                    <th class="align-middle" style="width: 25%;">Nama Tabel</th>
-                    <th class="align-middle" style="width: 20%;">Produsen Data</th>
+                    <th class="align-middle tabel-width-25">Nama Tabel</th>
+                    <th class="align-middle tabel-width-20">Produsen Data</th>
                     <th class="align-middle">Status Metadata Variabel</th>
                     <th class="align-middle">Cek / Ubah Isian</th>
                 </tr>
@@ -98,16 +94,12 @@
             </tbody>
             <tfoot></tfoot>
         </table>
-        {{-- @include('tabel.delete-master-modal') --}}
     </div>
 
 
     <x-slot name="script">
         <!-- Additional JS resources -->
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-        <script src="{{ asset('js/public.js') }}"></script>
-        {{-- <script src="{{ asset('js/tabel.js') }}"></script> --}}
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             document.addEventListener('DOMContentLoaded', function() {
                 getPagination('#table-metadata-variabel', 10);
 

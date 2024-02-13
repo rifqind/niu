@@ -1,0 +1,42 @@
+#box-satu {
+    border-left: 4px solid #7286a0;
+}
+#box-dua {
+    width: 32%;
+    border-left: 4px solid #03254e;
+}
+#box-tiga {
+    width: 32%;
+    border-left: 4px solid #f18f01;
+}
+#box-empat {
+    width: 32%;
+    border-left: 4px solid #8b1e3f;
+}
+#box-lima {
+    border-left: 4px solid green;
+}
+.text-satu {
+    color: #7286a0;
+}
+.text-dua {
+    color: #03254e;
+}
+.text-tiga {
+    color: #f18f01;
+}
+.text-empat {
+    color: #8b1e3f;
+}
+.text-lima {
+    color: green;
+}
+#percentage-progress {
+    width: 100%;
+}
+#card-notifikasi {
+    overflow-y: scroll;
+}
+#p-progress {
+    width: 24.5%;
+}

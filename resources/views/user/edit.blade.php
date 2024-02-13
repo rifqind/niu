@@ -11,18 +11,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <style type="text/css">
-            #tabel-dinas thead {
-                font-weight: bold;
-            }
-
-            .select2-selection__rendered {
-                overflow: hidden !important;
-                /* word-wrap: break-word !important; */
-                /* text-overflow: ellipsis !important; */
-                /* white-space: normal !important; */
-            }
-        </style>
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -35,7 +23,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div style="col-xl-6 col-l-6 col-md-9 col-sm-12 col-xs-12">
+    <div>
         <div class="card mb-3">
             <form action="" id="form-edit">
                 @csrf
@@ -134,7 +122,7 @@
     </div>
     <x-slot name="script">
         <script src="{{ asset('js/user.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const default_URL = new URL("{{ route('users.default') }}")
             const edit_URL = new URL("{{ route('users.editProfile') }}")
             const tokens = "{{ csrf_token() }}"

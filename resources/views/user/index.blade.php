@@ -11,8 +11,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <style type="text/css">
-        </style>
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -27,7 +25,7 @@
             <div class="justify-content-between row">
                 <div class="ml-auto mr-2">
                     <a href="#" class="btn bg-success-fordone" title="Download" data-target="#downloadModal"
-                        data-toggle="modal"><i class="fa-solid mr-1 fa-circle-down"></i></a>
+                        data-toggle="modal"><i class="fa-solid fa-circle-down"></i></a>
                 </div>
                 <div class="mr-2">
                     <a href="{{ route('users.create') }}" class="btn bg-info-fordone"><i class="fa-solid fa-plus"></i>
@@ -41,12 +39,12 @@
             <tr class="bg-info-fordone">
                 <th class="first-column">No.</th>
                 <th class="text-center">Username</th>
-                <th class="text-center" style="width: 15%">Nama</th>
-                <th class="text-center" style="width: 20%">Nama Instansi</th>
-                <th class="text-center" style="width: 20%;">Wilayah Kerja</th>
+                <th class="text-center tabel-width-15">Nama</th>
+                <th class="text-center tabel-width-20">Nama Instansi</th>
+                <th class="text-center tabel-width-20">Wilayah Kerja</th>
                 <th class="text-center">No. HP</th>
                 <th class="text-center">Peran</th>
-                <th class="text-center deleted" style="width: 5%;">Edit</th>
+                <th class="text-center deleted tabel-width-5">Edit</th>
                 <th class="text-center deleted">Hapus</th>
             </tr>
             <tr class="">
@@ -74,16 +72,16 @@
                     <td class="text-center deleted">
                         <a href="{{ route('users.reset', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id)]) }}"
                             class="update-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
-                            <i class="fa-solid fa-lock" title="Reset Password" style="color: #1032e0;"></i>
+                            <i class="fa-solid fa-lock" title="Reset Password"></i>
                         </a>
                         <a href="" class="mx-1 role-update"
                             data-users="{{ json_encode([
                                 'id' => $user->id,
                             ]) }}"><i
-                                class="role-icon fa-solid" title="Ubah Role" style="color: #1032e0;"></i></a>
+                                class="role-icon fa-solid" title="Ubah Role"></i></a>
                         <a href="{{ route('users.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($user->id)]) }}"
                             class="edit-pen mx-1" {{-- data-toggle="modal" data-target="#updateModal" --}}>
-                            <i class="fa-solid fa-pencil" title="Edit Pengguna" style="color: #1032e0;"></i>
+                            <i class="fa-solid fa-pencil" title="Edit Pengguna"></i>
                         </a>
                     </td>
                     <td class="text-center deleted">
@@ -92,7 +90,7 @@
                                 'id' => Illuminate\Support\Facades\Crypt::encrypt($user->id),
                             ]) }}"
                             data-toggle="modal" data-target="#deleteModal">
-                            <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                            <i class="fa-solid fa-trash-can icon-trash-color"></i>
                         </a>
                     </td>
 
@@ -128,13 +126,17 @@
         </div>
     </div>
     <x-slot name="script">
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
         <script src="{{ asset('js/user.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const reset_URL = new URL("{{ route('users.reset') }}")
             const delete_URL = new URL("{{ route('users.delete') }}")
             const roleChange_URL = new URL("{{ route('users.roleChange') }}")
+            document.addEventListener('DOMContentLoaded', function(e) {
+                $("#downloadUser").on("click", function(e) {
+                    GoDownload('tabel-user');
+                })
+            })
         </script>
     </x-slot>
 </x-niu-layout>

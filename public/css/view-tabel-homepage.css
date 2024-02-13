@@ -1,0 +1,63 @@
+#komponen {
+    table-layout: fixed;
+    width: 400px;
+    /* display: inline-block; */
+    background: #f9fafc;
+    border-right: 1px solid #e6eaf0;
+    vertical-align: top;
+
+    /* white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; */
+}
+
+#komponen th:first-child {
+    width: 10%;
+}
+
+#komponen thead,
+#rekon-view thead {
+    /* min-height: 200px; */
+    /* height: 200px; */
+    vertical-align: middle;
+    padding: .1rem;
+    /* white-space: nowrap; */
+    /* text-overflow: ellipsis; */
+    overflow: auto;
+}
+
+#rekon-view tbody tr td {
+    /* padding-right: 1rem; */
+    min-width: 180px;
+}
+
+#komponen tbody tr td,
+#rekon-view tbody tr td {
+    /* height: 20px; */
+    height: 40px;
+    padding: 0;
+    /* text-align: left; */
+    /* display: flex; */
+    /* align-content: center; */
+    /* align-items: center; */
+}
+
+.table-data-wrapper {
+    /* display: inline-block; */
+    overflow-x: auto;
+    vertical-align: top;
+    width: calc(100% - 400px);
+}
+
+.table-data-wrapper table {
+    border-left: 0;
+}
+
+.table-container {
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+}
+
+tbody {
+    background-color: whitesmoke;
+}

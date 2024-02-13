@@ -13,7 +13,7 @@
                     <input class="form-control mb-3" id="namaModal" placeholder="Isi Nama Dinas">
                     <input id="idHidden" class="hiddenInput" hidden>
                     <label for="regions">Wilayah Kerja</label>
-                    <select class="form-control select2bs4 mb-3" id="wilayahModal" style="width: 100%">
+                    <select class="form-control mb-3" id="wilayahModal">
                         <option value="" selected hidden disabled>-- Pilih Wilayah Kerja --</option>
                         @foreach ($kabs as $kab)
                             <option value="{{ $kab->wilayah_fullcode }}">{{ $kab->label }}</option>
@@ -65,7 +65,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
-                <button id="downloadDinas" type="submit" class="btn btn-sm bg-success-fordone" onclick="GoDownload('tabel-dinas')">Download</button>
+                <button id="downloadDinas" type="submit" class="btn btn-sm bg-success-fordone">Download</button>
             </div>
         </div>
     </div>

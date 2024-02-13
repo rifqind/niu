@@ -66,7 +66,7 @@
                     </td>
                     <td class="text-center deleted">
                         <a href="" class="delete-button" data-toggle="modal" data-target="#deleteModal">
-                            <i class="fa-solid fa-trash-can" style="color: #9a091f;"></i>
+                            <i class="fa-solid fa-trash-can icon-trash-color"></i>
                         </a>
                     </td>
                     {{-- tersembunyi --}}

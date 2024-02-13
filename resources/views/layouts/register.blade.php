@@ -19,39 +19,8 @@
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
-    <style type="text/css">
-        .bg {
-            animation: slide 3s ease-in-out infinite alternate;
-            background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-            bottom: 0;
-            left: -50%;
-            opacity: .5;
-            position: fixed;
-            right: -50%;
-            top: 0;
-            z-index: .1;
-        }
-
-        .bg2 {
-            animation-direction: alternate-reverse;
-            animation-duration: 4s;
-        }
-
-        .bg3 {
-            animation-duration: 5s;
-        }
-
-        @keyframes slide {
-            0% {
-                transform: translateX(-25%);
-            }
-
-            100% {
-                transform: translateX(25%);
-            }
-        }
-    </style>
-    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous" nonce="{{ Vite::cspNonce() }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
+    <script src="{{ asset('js/fontawesome.js') }}"></script>
     {{ $head }}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

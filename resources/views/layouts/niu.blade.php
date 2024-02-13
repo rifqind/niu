@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="{{ url('') }}/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
-    <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script>
+    {{-- <script src="https://kit.fontawesome.com/bf51cd7a13.js" crossorigin="anonymous"></script> --}}
+    <script src="{{ asset('js/fontawesome.js') }}" nonce="{{ Vite::cspNonce() }}"></script>
 
     {{ $head }}
     @vite(['resources/css/app.css',
@@ -81,7 +82,7 @@
 
     <!-- jQuery -->
 
-    <script>
+    <script nonce="{{ Vite::cspNonce() }}">
         document.addEventListener("DOMContentLoaded", function() {
             //Initialize Select2 Elements
             document.getElementById("logoutButton").addEventListener("click", function(e) {
@@ -101,8 +102,9 @@
                 })
         });
     </script>
-    <script src="{{ asset('js/pagination.js') }}" nonce="{{ csp_nonce() }}"></script>
-    <script src="{{ asset('js/download.js') }}" nonce="{{ csp_nonce() }}"></script>
+    <script src="{{ asset('js/pagination.js') }}"></script>
+    <script src="{{ asset('js/download.js') }}"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js" nonce="{{ Vite::cspNonce() }}"></script>
     {{-- <script src="{{ url('') }}/dist/js/adminlte.min.js"></script> --}}
     {{-- <script src="{{ url('') }}/plugins/jquery/jquery.min.js"></script>
     <script src="{{ url('') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}

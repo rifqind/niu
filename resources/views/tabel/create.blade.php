@@ -8,17 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-
-        <style type="text/css">
-            .select2-container--default .select2-selection--single {
-                height: 38px;
-                line-height: 24px;
-                padding-left: 6px;
-
-                /* You can adjust this value as needed */
-            }
-        </style>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/tabel-create.css') }}">
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -27,7 +17,7 @@
     <div class="container">
         <div class="card">
             <div class="card-body bg-info-fordone text-center">
-                <h2>Buat Tabel</h2>
+                <h2>Buat Tabel Baru</h2>
             </div>
         </div>
 
@@ -82,7 +72,7 @@
             </div>
 
             {{-- IF tipe row = wilayah --}}
-            <div id="row-wilayah" style="display: none">
+            <div id="row-wilayah" class="d-none">
                 <div class="form-group">
                     <label for="tingkat-label">Tingkatan Wilayah</label>
                     <select name="tingkat-label" class="form-control" id="tingkat-label-select">
@@ -95,7 +85,7 @@
 
                 <div class="form-group" id="kabupaten-group">
                     <label for="kab-label">Kabupaten</label>
-                    <select name="kab-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                    <select name="kab-label" class="form-control select2-selection select2 row-select"
                         id="kab-label-select">
                         <option value="" disabled selected hidden>-- Pilih Kabupaten --</option>
                         @foreach ($kabupatens as $kabupaten)
@@ -106,7 +96,7 @@
 
                 <div class="form-group" id="kecamatan-group">
                     <label for="kec-label">Kecamatan</label>
-                    <select name="kec-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                    <select name="kec-label" class="form-control select2-selection select2 row-select"
                         id="kec-label-select">
                         {{-- <option value="" disabled selected hidden>-- Pilih Row Label --</option> --}}
 
@@ -114,7 +104,7 @@
                 </div>
                 <div class="form-group" id="desa-group">
                     <label for="desa-label">Desa</label>
-                    <select name="desa-label" class="form-control  select2-selection select2bs4" style="width: 100%;"
+                    <select name="desa-label" class="form-control  select2-selection select2 row-select"
                         id="desa-label-select">
                         {{-- <option value="" disabled selected hidden>-- Pilih Row Label --</option> --}}
 
@@ -248,18 +238,25 @@
     <x-slot name="script">
         <!-- Additional JS resources -->
         <script src="{{ asset('js/tabel-create.js') }}"></script>
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const tabelIndex = new URL("{{ route('tabel.index') }}");
             document.addEventListener("DOMContentLoaded", function() {
                 let tipe_row = document.getElementById('tipe-row-label-select');
                 tipe_row.addEventListener("change", function(event) {
 
                     if (event.target.value == 1) {
-                        document.getElementById('row-wilayah').style.display = "block";
-                        document.getElementById('non-wilayah').style.display = "none";
+                        $("#row-wilayah").removeClass("d-none");
+                        $("#row-wilayah").addClass("d-block");
+                        $("#non-wilayah").addClass("d-none");
+                        $("#non-wilayah").removeClass("d-block");
+                        $(".row-select").select2({
+                            'width' : '100%',
+                        })
                     } else {
-                        document.getElementById('row-wilayah').style.display = "none";
-                        document.getElementById('non-wilayah').style.display = "block";
+                        $("#row-wilayah").removeClass("d-block");
+                        $("#row-wilayah").addClass("d-none");
+                        $("#non-wilayah").removeClass("d-none");
+                        $("#non-wilayah").addClass("d-block");
                     }
                 });
 
@@ -268,19 +265,22 @@
 
                     if (event.target.value == 1) {
                         // kabupaten
-                        document.getElementById('kabupaten-group').style.display = "none";
-                        document.getElementById('kecamatan-group').style.display = "none";
-                        document.getElementById('desa-group').style.display = "none";
+                        $("#kabupaten-group").removeClass("d-block");
+                        $("#kecamatan-group").removeClass("d-block");
+                        $("#desa-group").removeClass("d-block");
+                        $("#kabupaten-group").addClass("d-none");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
                         // fetch kabupaten
                         let kabupaten = {{ Js::from($kabupatens) }};
                         let provinsi = {
-                            'wilayah_fullcode' : '7100000000',
-                            'label' : 'PROVINSI SULAWESI UTARA',
+                            'wilayah_fullcode': '7100000000',
+                            'label': 'PROVINSI SULAWESI UTARA',
                         }
                         kabupaten.push(provinsi);
                         let nameLabel = 'row';
                         let kabupaten_html = kabupaten.map((item, key, array) => {
-                            item.tipe = (key ===  array.length - 1) ? 'PROVINSI' : 'KABUPATEN';
+                            item.tipe = (key === array.length - 1) ? 'PROVINSI' : 'KABUPATEN';
                             return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                 <th scope="row" class="text-right">
                                     ${key + 1}
@@ -298,16 +298,23 @@
 
 
                     } else if (event.target.value == 2) {
-                        document.getElementById('kabupaten-group').style.display = "block";
-                        document.getElementById('kecamatan-group').style.display = "none";
-                        document.getElementById('desa-group').style.display = "none";
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-block");
+                        $("#desa-group").removeClass("d-block");
+                        $("#kabupaten-group").addClass("d-block");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
 
                         // fetch 
 
                     } else {
-                        document.getElementById('kabupaten-group').style.display = "block";
-                        document.getElementById('kecamatan-group').style.display = "block";
-                        document.getElementById('desa-group').style.display = "none";
+                        
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-none");
+                        $("#desa-group").removeClass("d-block");
+                        $("#kabupaten-group").addClass("d-block");
+                        $("#kecamatan-group").addClass("d-block");
+                        $("#desa-group").addClass("d-none");
                     }
                 });
 
@@ -331,12 +338,13 @@
                                 var response = JSON.parse(xhr.responseText);
                                 let nameLabel = 'row';
                                 let parents = {
-                                    'wilayah_fullcode' : event.target.value,
-                                    'label' : parents_kabupaten
+                                    'wilayah_fullcode': event.target.value,
+                                    'label': parents_kabupaten
                                 };
                                 response.data.push(parents);
                                 let kecamatan_html = response.data.map((item, key, array) => {
-                                    item.tipe = (key ===  array.length - 1) ? 'KABUPATEN' : 'KECAMATAN';
+                                    item.tipe = (key === array.length - 1) ? 'KABUPATEN' :
+                                        'KECAMATAN';
                                     return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                         <th scope="row" class="text-right">
                                             ${key + 1}
@@ -387,12 +395,12 @@
                             var response = JSON.parse(xhr.responseText);
                             let nameLabel = 'row';
                             let parents = {
-                                    'wilayah_fullcode' : event.target.value,
-                                    'label' : parents_kecamatan,
-                                };
+                                'wilayah_fullcode': event.target.value,
+                                'label': parents_kecamatan,
+                            };
                             response.data.push(parents);
                             let desa_html = response.data.map((item, key, array) => {
-                                item.tipe = (key ===  array.length - 1) ? 'KECAMATAN' : 'DESA';
+                                item.tipe = (key === array.length - 1) ? 'KECAMATAN' : 'DESA';
                                 return `<tr onclick="handleCheckRow('${nameLabel}-${key}')">
                                         <th scope="row" class="text-right">
                                             ${key + 1}
@@ -505,7 +513,7 @@
                                     ${periodeArray.map(item => `<th colspan="${column_keyValuePair.length}" class="text-center align-middle">${item}</td>`).join('')}
                                     </tr>
                                     <tr>
-                                        ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th style="width:100px">${item2.label}</th>`).join('')).join('')}
+                                        ${periodeArray.map(item1 => column_keyValuePair.map(item2 => `<th class="th-something">${item2.label}</th>`).join('')).join('')}
                                 </tr>
                             `;
                             const tbodyHTML = rowsArray.map((rowItem, index) => {

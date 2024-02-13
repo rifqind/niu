@@ -8,10 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <script></script>
-        <style type="text/css">
-        </style>
-        @vite(['resources/css/app.css'])
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -50,7 +46,7 @@
     </div>
     <x-slot name="script">
         {{-- <script src="{{ asset('js/Subject.js') }}"></script> --}}
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('subject.store') }}")
         </script>

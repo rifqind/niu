@@ -8,8 +8,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
-        <style type="text/css">
-        </style>
     </x-slot>
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item active">
@@ -46,10 +44,10 @@
                     <th class="text-center">Hapus</th>
                 </tr>
                 <tr>
-                    <td class="first-column" style="width: 10%;"></td>
-                    <td class="text-left search-header" style="width: 20%"><input type="text"
+                    <td class="first-column tabel-width-10"></td>
+                    <td class="text-left search-header tabel-width-20"><input type="text"
                             class="search-input form-control"></td>
-                    <td class="text-left search-header" style="width: 20%"><input type="text"
+                    <td class="text-left search-header tabel-width-20"><input type="text"
                             class="search-input form-control"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -64,7 +62,7 @@
                         <td>{{ $item->label }}</td>
                         <td class="text-center">
                             <a href="{{ route('column.edit', ['id' => Illuminate\Support\Facades\Crypt::encrypt($item->id)]) }}"
-                                <i class="fa-solid fa-pen" style="color: #1032e0;"></i>
+                                <i class="fa-solid fa-pen"></i>
                             </a>
                         </td>
                         <td class="text-center">
@@ -73,8 +71,7 @@
                                 class="delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn"><i class="fa-solid fa-trash-can"
-                                        style="color: #9a091f;"></i></button>
+                                <button type="submit" class="btn"><i class="fa-solid fa-trash-can icon-trash-color"></i></button>
                             </form>
 
                         </td>
@@ -89,7 +86,7 @@
         </div>
     </div>
     <x-slot name="script">
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const handleDeleteColumn = function(encryptedId) {
                 if (confirm('Are you sure you want to delete this subject?')) {
