@@ -21,17 +21,20 @@
                     </select> --}}
                     <form id = "DinasUpdateForm" class="form-horizontal mb-3">
                         @csrf
-                        <input id="idHidden" class="hiddenInput" hidden>
+                        <input id="idHidden" class="hiddenInput" name="id" hidden>
                         <label for="nama">Nama Produsen Data</label>
-                        <input class="form-control mb-3" name="nama" id="nama" placeholder="Isi Nama Produsen Data">
+                        <input class="form-control" name="nama" id="nama" placeholder="Isi Nama Produsen Data">
+                        <div id="error-nama" class="text-danger mb-3"></div>
                         <div class="mb-3">
                             <label for="tingkat-label">Tingkatan Wilayah</label>
-                            <select name="tingkat" class="form-control select2bs4" id="tingkat-label-select">
+                            <select name="tingkat" class="form-control row-select" id="tingkat-label-select">
                                 <option value="" disabled selected hidden>-- Pilih Tingkatan --</option>
-                                <option value="0">PROVINSI</option>
-                                <option value="1">KABUPATEN</option>
+                                @if (auth()->user()->dinas->wilayah_fullcode == '7100000000')
+                                    <option value="0">PROVINSI</option>
+                                @endif
+                                <option value="1">KABUPATEN/KOTA</option>
                                 <option value="2">KECAMATAN</option>
-                                <option value="3">DESA</option>
+                                <option value="3">DESA/KELURAHAN</option>
                             </select>
                         </div>
                         <div class="mb-3 d-none" id="kabupaten-group">
@@ -85,7 +88,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModal" aria-hidden="true">
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModal"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">

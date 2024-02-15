@@ -23,12 +23,16 @@
                 <form id = "DinasForm" method="post" class="form-horizontal mb-3">
                     @csrf
                     <label for="nama">Nama Produsen Data</label>
-                    <input class="form-control mb-3" name="nama" id="nama" placeholder="Isi Nama Produsen Data">
+                    <input class="form-control" name="nama" id="nama" placeholder="Isi Nama Produsen Data">
+                    <div id="error-nama" class="text-danger mb-3"></div>
+                    <div name="wilayah_fullcode" class="d-none">x</div>
                     <div class="mb-3">
                         <label for="tingkat-label">Tingkatan Wilayah</label>
                         <select name="tingkat" class="form-control select2bs4" id="tingkat-label-select">
                             <option value="" disabled selected hidden>-- Pilih Tingkatan --</option>
-                            <option value="0">PROVINSI</option>
+                            @if (auth()->user()->dinas->wilayah_fullcode == '7100000000')
+                                <option value="0">PROVINSI</option>
+                            @endif
                             <option value="1">KABUPATEN</option>
                             <option value="2">KECAMATAN</option>
                             <option value="3">DESA</option>
@@ -74,24 +78,24 @@
                         $("#kecamatan-group").addClass("d-none");
                         $("#desa-group").addClass("d-none");
                         $(".row-select").select2({
-                            'width' : '100%',
-                            'theme' : 'bootstrap4'
+                            'width': '100%',
+                            'theme': 'bootstrap4'
                         })
                     } else if (e.target.value == "2") {
                         $("#kabupaten-group").removeClass("d-none");
                         $("#kecamatan-group").removeClass("d-none");
                         $("#desa-group").addClass("d-none");
                         $(".row-select").select2({
-                            'width' : '100%',
-                            'theme' : 'bootstrap4'
+                            'width': '100%',
+                            'theme': 'bootstrap4'
                         })
                     } else if (e.target.value == "3") {
                         $("#kabupaten-group").removeClass("d-none");
                         $("#kecamatan-group").removeClass("d-none");
                         $("#desa-group").removeClass("d-none");
                         $(".row-select").select2({
-                            'width' : '100%',
-                            'theme' : 'bootstrap4'
+                            'width': '100%',
+                            'theme': 'bootstrap4'
                         })
                     } else if (e.target.value == "0") {
                         $("#kabupaten-group").addClass("d-none");

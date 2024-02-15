@@ -19,10 +19,19 @@ function saveDinas() {
             window.location.href = this_URL;
         },
 
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+        error: function (data) {
+            // alert(data.responseJSON.errors.nama);
+            $("#error-nama").text(data.responseJSON.errors.nama);
         },
     });
+}
+
+function updateError(data) {
+    if (data) {
+        $(`#error-${data.field}`).text(data.error);
+    } else {
+        $(`#error-${data.field}`).text("");
+    }
 }
 
 function updateTable(dinas) {
@@ -83,18 +92,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // $(".update-pen").on("click", function (e)
     $("#updateDinas").on("click", function (e) {
-        let id = $("#idHidden").val();
-        let nama = $("#namaModal").val();
-        let wilayah_fullcode = $("#wilayahModal").val();
+        let datas = $("#DinasUpdateForm").serialize();
+        // console.log(datas);
         $.ajax({
             type: "POST",
             url: update_URL.href,
-            data: {
-                id: id,
-                nama: nama,
-                wilayah_fullcode: wilayah_fullcode,
-                _token: tokens,
-            },
+            data: datas,
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
             },
@@ -107,21 +110,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 // alert(data);
                 location.reload();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(errorThrown);
+            error: function (data) {
+                $("#error-nama").text(data.responseJSON.errors.nama);
             },
         });
     });
 
     $("#deleteDinas").on("click", function (e) {
-        let id = $("#idHidden").val();
+        let datas = $("#DinasUpdateForm").serialize();
+        // console.log(datas);
         $.ajax({
             type: "POST",
             url: delete_URL.href,
-            data: {
-                id: id,
-                _token: tokens,
-            },
+            data: datas,
             beforeSend: function () {
                 $("#spinner-border").removeClass("d-none");
             },
@@ -141,78 +142,91 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     $(document).on("click", ".delete-trash", function (e) {
         // Your click event handling code here
-        let check = $("#cariDinas").val();
-        if (check != "") {
-            let dinas = $(this).data("dinas");
-            $("#idHidden").val(dinas);
-        } else {
-            e.preventDefault();
-            let dinas = $(this).data("dinas");
-            console.log(dinas);
-            //change value modal
-            $("#idHidden").val(dinas.id);
-        }
-    });
-
-    $(document).on("click", ".update-pen", function (e) {
-        // Your click event handling code here
-        let check = $("#cariDinas").val();
-        if (check != "") {
-            let dinas = $(this).data("dinas");
-            let split_dinas = dinas.split(/\s*,\s*/);
-            let id = split_dinas[0];
-            let nama = split_dinas[1];
-            let wilayah_fullcode = split_dinas[2];
-            $("#idHidden").val(id);
-            $("#namaModal").val(nama);
-            $("#wilayahModal").val(wilayah_fullcode);
-            $(`#wilayahModal option[value='${wilayah_fullcode}']`).prop(
-                "selected",
-                true
-            );
-            $("#wilayahModal").trigger("change");
-        } else {
-            e.preventDefault();
-            let dinas = $(this).data("dinas");
-            console.log(dinas);
-            //change value modal
-            $("#idHidden").val(dinas.id);
-            $("#namaModal").val(dinas.nama);
-            $("#wilayahModal").val(dinas.wilayah_fullcode);
-            $(`#wilayahModal option[value='${dinas.wilayah_fullcode}']`).prop(
-                "selected",
-                true
-            );
-            $("#wilayahModal").trigger("change");
-        }
+        let dinas = $(this).data("dinas");
+        $("#idHidden").val(dinas.id);
     });
     $(document).on("click", ".update-pen", function (e) {
         // Your click event handling code here
-        let check = $("#cariDinas").val();
-        // if (check != "") {
         let dinas = $(this).data("dinas");
         let split_dinas = dinas.split(/\s*;\s*/);
         let id = split_dinas[0];
         let nama = split_dinas[1];
         let wilayah_fullcode = split_dinas[2];
+        let kabupaten_kode = wilayah_fullcode.substring(2, 4);
+        let kecamatan_kode = wilayah_fullcode.substring(4, 7);
+        let desa_kode = wilayah_fullcode.substring(7, 10);
+        // console.log({
+        //     kabupaten_kode,
+        //     kecamatan_kode,
+        //     desa_kode,
+        // });
         $("#idHidden").val(id);
-        $("#namaModal").val(nama);
-        $("#wilayahModal").val(wilayah_fullcode);
-        $(`#wilayahModal option[value='${wilayah_fullcode}']`).prop("selected", true);
-        $("#wilayahModal").trigger("change");
-        // } else {
-        //     e.preventDefault();
-        //     let dinas = $(this).data("dinas");
-        //     console.log(dinas);
-        //     //change value modal
-        //     $("#idHidden").val(dinas.id);
-        //     $("#namaModal").val(dinas.nama);
-        //     $("#wilayahModal").val(dinas.wilayah_fullcode);
-        //     $(`#wilayahModal option[value='${dinas.wilayah_fullcode}']`).prop(
-        //         "selected",
-        //         true
-        //     );
-        //     $("#wilayahModal").trigger("change");
-        // }
+        $("#nama").val(nama);
+        if (kabupaten_kode != "00") {
+            if (kecamatan_kode == "000") {
+                $("#tingkat-label-select").val(1);
+                $("#tingkat-label-select option[value=1]").prop(
+                    "selected",
+                    true
+                );
+                $("#tingkat-label-select").trigger("change");
+                $("#tingkat-label-select").trigger("select2:select");
+
+                $("#kab-label-select").val(wilayah_fullcode);
+                $(`#kab-label-select option[value=${wilayah_fullcode}]`).prop(
+                    "selected",
+                    true
+                );
+                $("#kab-label-select").trigger("change");
+            } else {
+                if (desa_kode == "000") {
+                    $("#tingkat-label-select").val(2);
+                    $("#tingkat-label-select option[value=2]").prop(
+                        "selected",
+                        true
+                    );
+                    $("#tingkat-label-select").trigger("change");
+                    $("#tingkat-label-select").trigger("select2:select");
+
+                    $("#kab-label-select").val(
+                        "71" + kabupaten_kode + "000000"
+                    );
+                    $(
+                        `#kab-label-select option[value=${
+                            "71" + kabupaten_kode + "000000"
+                        }]`
+                    ).prop("selected", true);
+                    $("#kab-label-select").trigger("change");
+                    $("#kab-label-select").trigger({
+                        type: "select2:select",
+                    });
+                } else {
+                    $("#tingkat-label-select").val(3);
+                    $("#tingkat-label-select option[value=3]").prop(
+                        "selected",
+                        true
+                    );
+                    $("#tingkat-label-select").trigger("change");
+                    $("#tingkat-label-select").trigger("select2:select");
+
+                    $("#kab-label-select").val(
+                        "71" + kabupaten_kode + "000000"
+                    );
+                    $(
+                        `#kab-label-select option[value=${
+                            "71" + kabupaten_kode + "000000"
+                        }]`
+                    ).prop("selected", true);
+                    $("#kab-label-select").trigger("change");
+                    $("#kab-label-select").trigger({
+                        type: "select2:select",
+                    });
+                }
+            }
+        } else {
+            $("#tingkat-label-select").val(0);
+            $("#tingkat-label-select option[value=0]").prop("selected", true);
+            $("#tingkat-label-select").trigger("change");
+        }
     });
 });
