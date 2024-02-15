@@ -39,8 +39,7 @@
                 </tr>
                 <tr class="">
                     <td class="search-header"></td>
-                    <td class="search-header"><input type="text"
-                            class="search-input form-control"></td>
+                    <td class="search-header"><input type="text" class="search-input form-control"></td>
                     <td class="search-header"><input type="text" class="search-input form-control"></td>
                     <td class="search-header"></td>
                     <td class="search-header"></td>
@@ -54,7 +53,7 @@
                         <td class="">{{ $din->wilayah->label }}</td>
                         <td class="text-center deleted">
                             <a href="" class="update-pen"
-                                data-dinas="{{ $din->id . ';' . $din->nama . ';' . $din->wilayah_fullcode }}"
+                                data-dinas="{{ Illuminate\Support\Facades\Crypt::encrypt($din->id) . ';' . $din->nama . ';' . $din->wilayah_fullcode }}"
                                 data-toggle="modal" data-target="#updateModal">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
@@ -62,7 +61,7 @@
                         <td class="text-center deleted">
                             <a href="" class="delete-trash"
                                 data-dinas="{{ json_encode([
-                                    'id' => $din->id,
+                                    'id' => Illuminate\Support\Facades\Crypt::encrypt($din->id),
                                 ]) }}"
                                 data-toggle="modal" data-target="#deleteModal">
                                 <i class="fa-solid fa-trash-can icon-trash-color"></i>
@@ -103,6 +102,7 @@
     </div>
     <x-slot name="script">
         <script src="{{ asset('js/dinas.js') }}"></script>
+        <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const update_URL = new URL("{{ route('dinas.update') }}")
@@ -110,10 +110,54 @@
             const this_URL = window.location.href
             document.addEventListener("DOMContentLoaded", function(e) {
                 getPagination("#tabel-dinas", 15)
-                // $("#wilayahModal").select2({
-                //     theme : 'bootstrap4',
-                //     width : '100%',
-                // })
+                $("#updateModal").on("show.bs.modal", function(e) {
+                    $(".row-select").select2({
+                        'width': '100%',
+                        'theme': 'bootstrap4'
+                    })
+                })
+                $("#tingkat-label-select").on("select2:select", function(e) {
+                    if (e.target.value == "1") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                        $(".row-select").select2({
+                            'width' : '100%',
+                            'theme' : 'bootstrap4'
+                        })
+                    } else if (e.target.value == "2") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                        $(".row-select").select2({
+                            'width' : '100%',
+                            'theme' : 'bootstrap4'
+                        })
+                    } else if (e.target.value == "3") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-none");
+                        $("#desa-group").removeClass("d-none");
+                        $(".row-select").select2({
+                            'width' : '100%',
+                            'theme' : 'bootstrap4'
+                        })
+                    } else if (e.target.value == "0") {
+                        $("#kabupaten-group").addClass("d-none");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                    }
+                })
+                $("#kab-label-select").on("select2:select", function(e) {
+                    let kabupaten_kode = e.target.value.substring(2, 4);
+                    let url = `{{ route('/') }}/master/wilayah/kecamatan/${kabupaten_kode}`;
+                    handleFetchKecamatan(url);
+                })
+                $("#kec-label-select").on("select2:select", function(e) {
+                    let kabupaten_kode = e.target.value.substring(2, 4);
+                    let kecamatan_kode = e.target.value.substring(4, 7);
+                    let url = `{{ route('/') }}/master/wilayah/desa/${kabupaten_kode}/${kecamatan_kode}`;
+                    handleFetchDesa(url);
+                })
                 $("#downloadDinas").on("click", function(e) {
                     GoDownload('tabel-dinas')
                 })

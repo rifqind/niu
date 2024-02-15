@@ -113,7 +113,7 @@ function handleFetchKecamatan(url) {
         if (xhr.status >= 200 && xhr.status < 300) {
             var response = JSON.parse(xhr.responseText);
             let placeholderText =
-                '<option value="">--- Pilih Kecamatan ---</option>';
+                '<option value="" disabled selected hidden>--- Pilih Kecamatan ---</option>';
             const tableBodyHtml = response.data.map((item, key) => {
                 return `<option value="${item.wilayah_fullcode}">${item.label}</option>`;
             });
@@ -141,7 +141,7 @@ function handleFetchDesa(url) {
             var response = JSON.parse(xhr.responseText);
             console.log("Success:", response.data);
             let placeholderText =
-                '<option value="">--- Pilih Desa ---</option>';
+                '<option value="" disabled selected hidden>--- Pilih Desa ---</option>';
             const tableBodyHtml = response.data.map((item, key) => {
                 return `<option value="${item.wilayah_fullcode}">${item.label}</option>`;
             });

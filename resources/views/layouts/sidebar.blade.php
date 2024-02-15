@@ -217,7 +217,7 @@
                                     <p> Baris</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ url('periode-group/index') }}"
                                     class="nav-link {{ Request::is('periode-group/index') ? 'active' : '' }}">
                                     <i class="nav-icon fa-solid far fa-calendar-alt"></i>
@@ -230,7 +230,7 @@
                                     <i class="nav-icon fa-solid far fa-calendar-alt"></i>
                                     <p> Periode</p>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                 @endif

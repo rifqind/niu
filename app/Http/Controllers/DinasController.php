@@ -6,6 +6,8 @@ use App\Models\Dinas;
 use App\Models\MasterWilayah;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
 
 class DinasController extends Controller
 {
@@ -20,7 +22,7 @@ class DinasController extends Controller
         $id_wilayah = MasterWilayah::getMyWilayahId();
         $kabs = $wilayah["kabs"];
         // dd($id_wilayah["kabs"]);
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         foreach ($dinas as $din) {
             $din->number = $number;
             $number++;
@@ -72,9 +74,30 @@ class DinasController extends Controller
     public function store(Request $request)
     {
         //
+        $levels = $request->tingkat;
+        switch ($levels) {
+            case 0:
+                # code...
+                $wilayah_fullcode = (auth()->user()->dinas->wilayah_fullcode = "7100000000") ? "7100000000" : "";
+                break;
+            case 1:
+                $wilayah_fullcode = $request->kab;
+                break;
+            case 2:
+                $wilayah_fullcode = $request->kec;
+                break;
+            case 3:
+                $wilayah_fullcode = $request->desa;
+                break;
+        }
+        $request->merge(['wilayah_fullcode' => $wilayah_fullcode]);
+        $request->validate([
+            'nama' => ['required', 'string', 'unique:'.Dinas::class],
+            'wilayah_fullcode' => ['required', 'string', 'max:10', 'min:10']
+        ]);
         $dinas = Dinas::create([
             'nama' => $request->nama,
-            'wilayah_fullcode' => $request->wilayah_fullcode,
+            'wilayah_fullcode' => $wilayah_fullcode,
         ]);
         return response()->json('Berhasil');
     }
@@ -102,10 +125,31 @@ class DinasController extends Controller
     {
         //
         $id = $request->id;
-
-        Dinas::where('id', $id)->update([
+        $decryptedId = Crypt::decrypt($id);
+        $levels = $request->tingkat;
+        switch ($levels) {
+            case 0:
+                # code...
+                $wilayah_fullcode = (auth()->user()->dinas->wilayah_fullcode = "7100000000") ? "7100000000" : "";
+                break;
+            case 1:
+                $wilayah_fullcode = $request->kab;
+                break;
+            case 2:
+                $wilayah_fullcode = $request->kec;
+                break;
+            case 3:
+                $wilayah_fullcode = $request->desa;
+                break;
+        }
+        $request->merge(['wilayah_fullcode' => $wilayah_fullcode]);
+        $request->validate([
+            'nama' => ['required', 'string', Rule::unique('dinas')->ignore($decryptedId)],
+            'wilayah_fullcode' => ['required', 'string', 'max:10', 'min:10']
+        ]);
+        Dinas::where('id', $decryptedId)->update([
             'nama' => $request->nama,
-            'wilayah_fullcode' => $request->wilayah_fullcode,
+            'wilayah_fullcode' => $wilayah_fullcode,
         ]);
         return response()->json('Berhasil');
     }
@@ -117,7 +161,8 @@ class DinasController extends Controller
     {
         //
         $id = $request->id;
-        Dinas::destroy($id);
+        $decryptedId = Crypt::decrypt($id);
+        Dinas::destroy($decryptedId);
         return response()->json('Berhasil Hapus');
     }
 }

@@ -83,6 +83,9 @@ body {
 .table-width-15 {
     width: 15%;
 }
+.table-width-45px {
+    width: 45px;
+}
 
 .icon-trash-color {
     color: #9a091f;

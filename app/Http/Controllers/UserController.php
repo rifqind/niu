@@ -51,7 +51,7 @@ class UserController extends Controller
     public function create()
     {
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         return view('user.create', [
             'dinas' => $dinas,
         ]);
@@ -160,7 +160,7 @@ class UserController extends Controller
             $user = auth()->user();
         }
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         return view('user.edit', [
             'user' => $user,
             'dinas' => $dinas,

@@ -41,8 +41,7 @@ class TabelController extends Controller
         // dd($id_wilayah["kabs"]);
         if ($this_role == 'produsen') {
             # code...
-            $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
-                ->where('dinas.id', $this_dinas)
+            $tables = Statustables::where('dinas.id', $this_dinas)
                 ->where('statustables.status', ($routeName != 'tabel.deletedList') ? '<' : '=', '6')
                 ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
                 ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
@@ -56,7 +55,7 @@ class TabelController extends Controller
                 )
                 ->get();
         } else {
-            $tables = Statustables::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
+            $tables = Statustables::whereIn('dinas.wilayah_fullcode', MasterWilayah::getDinasWilayah())
                 ->where('statustables.status', ($routeName != 'tabel.deletedList') ? '<' : '=', '6')
                 ->join('tabels', 'statustables.id_tabel', '=', 'tabels.id')
                 ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
@@ -146,18 +145,15 @@ class TabelController extends Controller
     public function master()
     {
         //
-        $tables = Tabel::get();
-        // return response()->json(array('data' => $tables));
+        $tables = Tabel::leftJoin('dinas', 'dinas.id', '=', 'tabels.id_dinas')
+            ->whereIn('dinas.wilayah_fullcode', MasterWilayah::getDinasWilayah())
+            ->get(['tabels.*']);
+        // $tables = Tabel::get();
+        // dd($tables);
         $table_objects = [];
         $daftar_region = Region::get();
         foreach ($tables as $table) {
-            // $tabels = Statustables::where('id_tabel', $table->id)
-            //     ->join('tabels AS t', 'statustables.id_tabel', '=', 't.id')
-            //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
-            //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
-            //     ->get();
             $datacontents = Datacontent::where('id_tabel', $table->id)->get();
-
             $id_rows = [];
             $tahunObjects = Statustables::where('id_tabel', $table->id)->select('tahun')->distinct()->get();
 
@@ -227,44 +223,6 @@ class TabelController extends Controller
 
         ]);
     }
-    public function test()
-    {
-        //
-        $tables = Tabel::all();
-        $table_objects = [];
-        $daftar_region = Region::get();
-        foreach ($tables as $table) {
-            $tabels = Tabel::where('id', $table->id)->get();
-            $data = Datacontent::where('label', 'LIKE', $table->id . '%')->get();
-
-            $id_rows = [];
-            $id_columns = [];
-            foreach ($data as $dat) {
-                $split = explode("-", $dat->label);
-                array_push($id_rows, $split[1]);
-                array_push($id_columns, $split[2]);
-                $tahun = $split[3];
-                $turtahuns = $split[4];
-            }
-            $rows = Row::whereIn('id', $id_rows)->get();
-            $rowLabel = RowLabel::where('id', $rows[0]->id_rowlabels)->get();
-            $columns = Column::whereIn('id', $id_columns)->get();
-            array_push($table_objects, [
-                'datacontents' => $data,
-                'tabels' => $tabels,
-                'rows' => $rows,
-                'row_label' => $rowLabel,
-                'columns' => $columns,
-                'tahun' => $tahun,
-                'turtahuns' => $turtahuns,
-            ]);
-        }
-
-
-        return view('tabel.index', [
-            'tables' => $table_objects,
-        ]);
-    }
 
     public function getDatacontent(Request $request)
     {
@@ -312,7 +270,7 @@ class TabelController extends Controller
         $rowLabel = RowLabel::get();
         $id_wilayah = MasterWilayah::getMyWilayahId();
         // dd($id_wilayah["kabs"]);
-        $daftar_dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', $id_wilayah["kabs"])->get();
+        $daftar_dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         // $daftar_dinas = Dinas::get();
         $daftar_kolom = Column::get();
         $kolom_grup = ColumnGroup::get();
@@ -626,43 +584,14 @@ class TabelController extends Controller
         $tabel = Tabel::where('id', $decryptedId)->first();
         // search for id row label
         $data_contents = DataContent::where('id_tabel', 'like', $decryptedId)->first();
-        // $splittedData = explode("-", $data_contents->label);
-        // $id_row = $splittedData[1];
-
-        // // search for id column group
-        // $id_column = $splittedData[2];
-
-        // //search for turtahun
-        // $id_turtahun = $splittedData[4];
-
-
-
-        // $rowLabel = RowLabel::get();
-        // $row_label = Rowlabel::where('id', $id_row)->first();
-        $daftar_dinas = Dinas::get();
-        // $daftar_kolom = Column::get();
-        // $kolom_grup = ColumnGroup::get();
-        // $column = Column::where('id', $id_column)->first();
+        $daftar_dinas = Dinas::whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         $subjects = Subject::all();
-        // $turtahun_groups = TurTahunGroup::all();
-        // $turtahun = Turtahun::where('id', $id_turtahun)->first();
-
-        // $row_list = $this->get_rows_by_row_labels(1);
 
         return view('tabel.edit', [
             'tabel' => $tabel,
             'encryptedId' => $id,
-            // 'row_labels' => $rowLabel,
-            // 'row_label' => $row_label,
             'daftar_dinas' => $daftar_dinas,
-            // 'daftar_kolom' => $daftar_kolom,
-            // 'column' => $column,
-            // 'turtahun_groups' => $turtahun_groups,
-            // 'turtahun' => $turtahun,
-            // // 'row_list' => $row_list,
-            // 'kolom_grup' => $kolom_grup,
             'subjects' => $subjects,
-
         ]);
     }
 
@@ -826,7 +755,7 @@ class TabelController extends Controller
             $thisTabel = Tabel::where('id', $decryptedId)->first();
             $thisStatusTabel = Statustables::where('id_tabel', $decryptedId)->get();
             $thisDataContents = Datacontent::where('id_tabel', $decryptedId)->get();
-            
+
             foreach ($thisDataContents as $value) {
                 # code...
                 $value->delete();

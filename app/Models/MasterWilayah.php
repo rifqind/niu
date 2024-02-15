@@ -46,6 +46,16 @@ class MasterWilayah extends Model
         return $wilayah;
     }
 
+    public static function getDinasWilayah() {
+        if (auth()->user()->dinas->wilayah_fullcode == "7100000000") {
+            # code...
+            $lists = MasterWilayah::pluck('wilayah_fullcode');
+        } else {
+            $lists = MasterWilayah::where('kab', auth()->user()->dinas->wilayah->kab)->pluck('wilayah_fullcode');
+        }
+        return $lists;
+    }
+
     public static function getMyWilayahId()
     {
         if (auth()->user()->dinas->wilayah_fullcode == "7100000000") {

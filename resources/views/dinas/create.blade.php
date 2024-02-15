@@ -16,21 +16,45 @@
     </x-slot>
     <div class="container-fluid">
         <div class="h4">
-            DINAS
+            PRODUSEN DATA
         </div>
         <div class="card">
             <div class="card-body">
-                <form id = "DinasForm" method="post" class="form-horizontal">
+                <form id = "DinasForm" method="post" class="form-horizontal mb-3">
                     @csrf
-                    <div class="form-group">
-                        <label for="nama">Nama Dinas</label>
-                        <input class="form-control mb-3" id="nama" placeholder="Isi Nama Dinas">
-                        <label for="regions">Wilayah Kerja</label>
-                        <select class="form-control select2bs4 mb-3" id="wilayah_fullcode">
-                            <option value="" disabled selected hidden>-- Pilih Wilayah Kerja --</option>
+                    <label for="nama">Nama Produsen Data</label>
+                    <input class="form-control" name="nama" id="nama" placeholder="Isi Nama Produsen Data">
+                    <div id="error-nama" class="text-danger mb-3"></div>
+                    <div name="wilayah_fullcode" class="d-none">x</div>
+                    <div class="mb-3">
+                        <label for="tingkat-label">Tingkatan Wilayah</label>
+                        <select name="tingkat" class="form-control select2bs4" id="tingkat-label-select">
+                            <option value="" disabled selected hidden>-- Pilih Tingkatan --</option>
+                            @if (auth()->user()->dinas->wilayah_fullcode == '7100000000')
+                                <option value="0">PROVINSI</option>
+                            @endif
+                            <option value="1">KABUPATEN</option>
+                            <option value="2">KECAMATAN</option>
+                            <option value="3">DESA</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 d-none" id="kabupaten-group">
+                        <label for="kab-label">Kabupaten</label>
+                        <select name="kab" class="form-control row-select" id="kab-label-select">
+                            <option value="" disabled selected hidden>-- Pilih Kabupaten --</option>
                             @foreach ($kabs as $kab)
                                 <option value="{{ $kab->wilayah_fullcode }}">{{ $kab->label }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3 d-none" id="kecamatan-group">
+                        <label for="kec-label">Kecamatan</label>
+                        <select name="kec" class="form-control row-select" id="kec-label-select">
+                        </select>
+                    </div>
+                    <div class="mb-3 d-none" id="desa-group">
+                        <label for="desa-label">Desa</label>
+                        <select name="desa" class="form-control row-select" id="desa-label-select">
                         </select>
                     </div>
                 </form>
@@ -42,12 +66,54 @@
     </div>
     <x-slot name="script">
         <script src="{{ asset('js/dinas.js') }}"></script>
+        <script src="{{ asset('js/tabel-create.js') }}"></script>
         <script nonce="{{ Vite::cspNonce() }}">
             const tokens = '{{ csrf_token() }}'
             const save_URL = new URL("{{ route('dinas.store') }}")
             const this_URL = "{{ url('dinas/index') }}"
             document.addEventListener("DOMContentLoaded", function() {
-                // $("#regions").select2()
+                $("#tingkat-label-select").on("select2:select", function(e) {
+                    if (e.target.value == "1") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                        $(".row-select").select2({
+                            'width': '100%',
+                            'theme': 'bootstrap4'
+                        })
+                    } else if (e.target.value == "2") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                        $(".row-select").select2({
+                            'width': '100%',
+                            'theme': 'bootstrap4'
+                        })
+                    } else if (e.target.value == "3") {
+                        $("#kabupaten-group").removeClass("d-none");
+                        $("#kecamatan-group").removeClass("d-none");
+                        $("#desa-group").removeClass("d-none");
+                        $(".row-select").select2({
+                            'width': '100%',
+                            'theme': 'bootstrap4'
+                        })
+                    } else if (e.target.value == "0") {
+                        $("#kabupaten-group").addClass("d-none");
+                        $("#kecamatan-group").addClass("d-none");
+                        $("#desa-group").addClass("d-none");
+                    }
+                })
+                $("#kab-label-select").on("select2:select", function(e) {
+                    let kabupaten_kode = e.target.value.substring(2, 4);
+                    let url = `{{ route('/') }}/master/wilayah/kecamatan/${kabupaten_kode}`;
+                    handleFetchKecamatan(url);
+                })
+                $("#kec-label-select").on("select2:select", function(e) {
+                    let kabupaten_kode = e.target.value.substring(2, 4);
+                    let kecamatan_kode = e.target.value.substring(4, 7);
+                    let url = `{{ route('/') }}/master/wilayah/desa/${kabupaten_kode}/${kecamatan_kode}`;
+                    handleFetchDesa(url);
+                })
             })
         </script>
     </x-slot>
