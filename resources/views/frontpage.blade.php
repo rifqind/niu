@@ -46,11 +46,11 @@
                                 <div class="card-large-homepage">
                                     @foreach ($kabs as $kab)
                                         <div class="row my-2" id="row-wilayah-homepage">
-                                            <input type="checkbox" id="{{ 'dinas-' . $kab->wilayah_fullcode }}"
-                                                class="ml-3" name="wilayah[]" value="{{ $kab->wilayah_fullcode }}">
+                                            <input type="checkbox" id="{{ 'dinas-' . $kab['wilayah_fullcode'] }}"
+                                                class="ml-3" name="wilayah[]" value="{{ $kab['wilayah_fullcode'] }}">
                                             <label class="ml-3 mb-0 click-to-check text-capitalize"
-                                                data-target="{{ 'dinas-' . $kab->wilayah_fullcode }}">
-                                                {{ $kab->label }}
+                                                data-target="{{ 'dinas-' . $kab['wilayah_fullcode'] }}">
+                                                {{ $kab['label'] }}
                                             </label>
                                         </div>
                                     @endforeach
@@ -69,7 +69,7 @@
                                         <div class="col-sm-12">
                                             <select multiple name="dinas[]" id="dinas-select" class="form-control">
                                                 @foreach ($dinas as $din)
-                                                    <option value="{{ $din->id }}">{{ $din->nama }}</option>
+                                                    <option value="{{ $din['id'] }}">{{ $din['nama'] }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -87,10 +87,10 @@
                                 <div class="card-large-homepage">
                                     @foreach ($subjects as $subject)
                                         <div class="row my-2">
-                                            <input type="checkbox" id="{{ 'subject-' . $subject->id }}" class="ml-3"
-                                                name="subject[]" value="{{ $subject->id }}">
+                                            <input type="checkbox" id="{{ 'subject-' . $subject['id'] }}" class="ml-3"
+                                                name="subject[]" value="{{ $subject['id'] }}">
                                             <label class="col ml-3 mb-0 click-to-check"
-                                                data-target="{{ 'subject-' . $subject->id }}">{{ $subject->label }}</label>
+                                                data-target="{{ 'subject-' . $subject['id'] }}">{{ $subject['label'] }}</label>
                                         </div>
                                     @endforeach
                                 </div>

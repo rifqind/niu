@@ -30,7 +30,7 @@ class MetadataVariabelController extends Controller
                 ->leftJoin('status_desc as sdc', 'sdc.id', '=', 'mtv.status')
                 ->get(['tabels.*', 'dinas.nama as nama_dinas', 'sdc.label as status_desc']);
         } else {
-            $tabels = Tabel::whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])
+            $tabels = Tabel::whereIn('dinas.wilayah_fullcode', MasterWilayah::getDinasWilayah())
                 ->join('dinas', 'tabels.id_dinas', '=', 'dinas.id')
                 ->leftJoin('metadata_variabel_status as mtv', 'mtv.id_tabel', '=', 'tabels.id')
                 ->leftJoin('status_desc as sdc', 'sdc.id', '=', 'mtv.status')

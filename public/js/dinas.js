@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // $(".update-pen").on("click", function (e)
     $("#updateDinas").on("click", function (e) {
         let datas = $("#DinasUpdateForm").serialize();
-        // console.log(datas);
+        console.log(datas);
         $.ajax({
             type: "POST",
             url: update_URL.href,

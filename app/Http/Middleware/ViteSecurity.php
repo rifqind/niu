@@ -30,7 +30,7 @@ class ViteSecurity
             'connect-src' => "'self' ka-f.fontawesome.com",
             // 'default-src' => "default-src 'self' fonts.gstatic.com cdn.jsdelivr.net",
             'form-action' => "'self'",
-            'img-src' => "'self'",
+            'img-src' => "'self' data:",
             'media-src' => "'self'",
             'object-src' => "'self'",
             'frame-src' => "'self'",
