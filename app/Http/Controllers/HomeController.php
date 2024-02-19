@@ -55,7 +55,10 @@ class HomeController extends Controller
                 'subjects.label as nama_subjects'
             ]);
         $dinas = [];
+        $provs = [];
         $kabs = [];
+        $kecs = [];
+        $desa = [];
         $subjects = [];
         foreach ($tabels as $tabel) {
             # code...
@@ -67,22 +70,72 @@ class HomeController extends Controller
             $partOfText = explode(' ', $text);
             array_shift($partOfText);
             $modifiedText = implode(' ', $partOfText);
-            $kabs[] = [
-                'label' => $modifiedText,
-                'wilayah_fullcode' => $tabel->kode_wilayah,
-            ];
+
+            $kode = $tabel->kode_wilayah;
+            $kabupaten_kode = substr($kode, 2, 2);
+            $kecamatan_kode = substr($kode, 4, 3);
+            $desa_kode = substr($kode, 7, 3);
+            if ($kabupaten_kode != '00') {
+                $kab_label = MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                    ->where('kec', 'like', '000')->value('label');
+                $partOfText = explode(' ', $kab_label);
+                array_shift($partOfText);
+                $modifiedKabLabel = implode(' ', $partOfText);
+                $kabs[] = [
+                    'label' => $modifiedKabLabel,
+                    'wilayah_fullcode' => MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                        ->where('kec', 'like', '000')->value('wilayah_fullcode')
+                ];
+
+                if ($kecamatan_kode != '000') {
+                    $kec_label = MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                        ->where('kec', 'like', $kecamatan_kode)->value('label');
+                    $partOfText = explode(' ', $kec_label);
+                    array_shift($partOfText);
+                    $modifiedKecLabel = implode(' ', $partOfText);
+                    $kecs[] = [
+                        'label' => $modifiedKecLabel,
+                        'parent_code' => $kabupaten_kode,
+                        'wilayah_fullcode' => MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                            ->where('kec', 'like', $kecamatan_kode)->value('wilayah_fullcode'),
+                    ];
+
+                    if ($desa_kode != '000') {
+                        $desa[] = [
+                            'label' => $modifiedText,
+                            'parent_code' => $kabupaten_kode.$kecamatan_kode,
+                            'wilayah_fullcode' => $kode,
+                        ];
+                    }
+                }
+            }
+            // $kabs[] = [
+            //     'label' => $modifiedText,
+            //     'wilayah_fullcode' => $tabel->kode_wilayah,
+            // ];
             $subjects[] = [
                 'id' => $tabel->id_subjects,
                 'label' => $tabel->nama_subjects,
             ];
         }
+        $provs[] = [
+            'label' => 'SULAWESI UTARA',
+            'wilayah_fullcode' => '7100000000'
+        ];
+        $kabs = array_unique($kabs, SORT_REGULAR);
+        $kecs = array_unique($kecs, SORT_REGULAR);
+        $desa = array_unique($desa, SORT_REGULAR);
+        $wilayahs = array_merge($provs, $kabs);
+        $subjects = array_unique($subjects, SORT_REGULAR);
         // $subjects = Subject::all();
         $tahuns = Statustables::where('status', 5)->distinct()->get('tahun');
-
         $countfinals = Statustables::where('status', 5)->count();
         $counttabels = $tabels->count();
         return view('frontpage', [
-            'kabs' => $kabs,
+            // 'kabs' => $kabs,
+            'kecs' => $kecs,
+            'desa' => $desa,
+            'wilayahs' => $wilayahs,
             'dinas' => $dinas,
             'tabels' => $tabels,
             'subjects' => $subjects,
@@ -94,7 +147,20 @@ class HomeController extends Controller
 
     public function getSearch(Request $request)
     {
-        $wilayah = $request->input('wilayah', []);
+        $kecs = $request->input('kecs', []);
+        $desa = $request->input('desa', []);
+        if ($kecs) {
+            # code...
+            if ($desa) {
+                # code...
+                $wilayah = $desa;
+            } else {
+                $wilayah = $kecs;
+            }
+        } else {
+            $wilayah = $request->input('wilayah', []);
+        }
+
         $dinas = $request->input('dinas', []);
         $subject = $request->input('subject', []);
         $tahuns = $request->input('tahuns', []);
