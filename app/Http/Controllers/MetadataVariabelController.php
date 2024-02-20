@@ -55,6 +55,8 @@ class MetadataVariabelController extends Controller
     {
         $this_role = auth()->user()->role;
         $decryptedId = Crypt::decrypt($id);
+        $master_metavar = MetadataVariabel::distinct()->get(['r101']);
+        // dd($master_metavar);
         $this_metavar = MetadataVariabel::where('id_tabel', $decryptedId)->get();
         $this_status_metavar = MetadataVariabelStatus::where('id_tabel', $decryptedId)->pluck('status');
         $status_desc = MetadataVariabelStatus::where('id_tabel', $decryptedId)->join('status_desc as sdc', 'sdc.id', '=', 'metadata_variabel_status.status')->pluck('sdc.label as status_desc');
@@ -69,6 +71,7 @@ class MetadataVariabelController extends Controller
             'satuan' => $satuan,
             'id' => $id,
             'this_role' => $this_role,
+            'master_metavar' => $master_metavar,
         ]);
     }
 
@@ -159,6 +162,16 @@ class MetadataVariabelController extends Controller
         $decryptedId = decrypt($request->id);
         $this_metavar = MetadataVariabel::find($decryptedId);
         // dd($decryptedId);
+        return response()->json($this_metavar);
+    }
+
+    public function fetchMaster(Request $request) {
+        $decryptedId = decrypt($request->id);
+        // dd($decryptedId);
+        $this_metavar =  ($decryptedId != '0') ? MetadataVariabel::find($decryptedId) : "not";
+        if ($this_metavar !== "not") {
+            unset($this_metavar->id_tabel);
+        }
         return response()->json($this_metavar);
     }
 

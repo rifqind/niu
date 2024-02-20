@@ -65,6 +65,11 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
+                                <div class="text-center card-overlay" id="spinner-kecamatan">
+                                    <div class="spinner-border text-info" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
                                 <div class="card-small-homepage">
                                     @foreach ($kecs as $kec)
                                         <div class="row my-2 d-none row-wilayah-homepage"
@@ -88,9 +93,14 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
+                                <div class="text-center card-overlay" id="spinner-desa">
+                                    <div class="spinner-border text-info" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
                                 <div class="card-small-homepage">
                                     @foreach ($desa as $des)
-                                        <div class="row my-2 row-wilayah-homepage" id="{{ $des['wilayah_fullcode'] }}">
+                                        <div class="row my-2 d-none row-wilayah-homepage" id="{{ $des['wilayah_fullcode'] }}">
                                             <input type="checkbox" id="{{ 'dinas-' . $des['wilayah_fullcode'] }}"
                                                 class="ml-3 desa-checkbox" name="desa[]"
                                                 value="{{ $des['wilayah_fullcode'] }}">

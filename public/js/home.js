@@ -24,18 +24,18 @@ function searchYear() {
 }
 function findKecamatan(array, parent) {
     let kecamatan = [];
-    for (let i = 0; i < array.length; i++) {
-        if (array[i].parent_code == parent) {
-            kecamatan.push(array[i]);
+    for (let key in array) {
+        if (array.hasOwnProperty(key) && array[key].parent_code === parent) {
+            kecamatan.push(array[key]);
         }
     }
     return kecamatan;
 }
 function findDesa(array, parent) {
     let desa = [];
-    for (let i = 0; i < array.length; i++) {
-        if (array[i].parent_code == parent) {
-            desa.push(array[i]);
+    for (let key in array) {
+        if (array.hasOwnProperty(key) && array[key].parent_code === parent) {
+            desa.push(array[key]);
         }
     }
     return desa;
@@ -45,12 +45,26 @@ function handleCheckKabsProvs(targetId, isChecked) {
     let this_code = $("#" + targetId).val();
     let kabupaten_kode = this_code.substring(2, 4);
     let kecamatan = findKecamatan(kecamatan_kode, kabupaten_kode);
-
-    if (!isChecked && kabupaten_kode != "00" && kecamatan.length > 0) {
-        $("#card-kecs").removeClass("d-none");
-        count_kabupaten.push(kabupaten_kode);
+    if (!isChecked) {
+        kecamatan.forEach(function (item) {
+            count_kabupaten.push(item.parent_code);
+        });
     } else {
-        count_kabupaten = count_kabupaten.filter(item => item !== kabupaten_kode);
+        let removeKecamatan = [];
+        kecamatan.forEach(function (item) {
+            removeKecamatan.push(item.parent_code);
+        });
+        count_kabupaten = count_kabupaten.filter(
+            (item) => !removeKecamatan.includes(item)
+        );
+    }
+    // count_kabupaten.push(kecamatan);
+    // if (!isChecked && kabupaten_kode != "00" && kecamatan.length > 0) {
+        let checks = (kabupaten_kode != "00" && count_kabupaten.length > 0)
+    if (checks) {
+        $("#card-kecs").removeClass("d-none");
+        // count_kabupaten.push(kabupaten_kode);
+    } else {
         $("#card-kecs").addClass("d-none");
         $("#card-desa").addClass("d-none");
         $(".kecs-checkbox").each(function (e) {
@@ -69,14 +83,32 @@ function handleCheckKabsProvs(targetId, isChecked) {
             }
         }
     });
+    setTimeout(() => {
+        $("#spinner-kecamatan").toggleClass("d-none", checks);
+    }, 320);
 }
+var count_kecamatan = [];
 function handleCheckKecs(targetId, isChecked) {
     let this_code = $("#" + targetId).val();
     let kecamatan_kode = this_code.substring(2, 4);
     let kecamatan_identifier = this_code.substring(2, 7);
     let desa = findDesa(desa_kode, kecamatan_identifier);
-
-    if (!isChecked && kecamatan_kode != "00" && desa.length > 0) {
+    if (!isChecked) {
+        desa.forEach(function (item) {
+            count_kecamatan.push(item.parent_code);
+        });
+    } else {
+        let removeDesa = [];
+        desa.forEach(function (item) {
+            removeDesa.push(item.parent_code);
+        });
+        count_kecamatan = count_kecamatan.filter(
+            (item) => !removeDesa.includes(item)
+        );
+    }
+    // console.log(desa);
+    let checks = (kecamatan_kode != "00" && count_kecamatan.length > 0);
+    if (checks) {
         $("#card-desa").removeClass("d-none");
     } else {
         $("#card-desa").addClass("d-none");
@@ -93,6 +125,9 @@ function handleCheckKecs(targetId, isChecked) {
             }
         }
     });
+    setTimeout(() => {
+        $("#spinner-desa").toggleClass("d-none", checks);
+    }, 320);
 }
 document.addEventListener("DOMContentLoaded", function () {
     $("form").on("submit", function (e) {
