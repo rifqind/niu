@@ -51,7 +51,8 @@ class TabelController extends Controller
                     'dinas.nama as nama_dinas',
                     'statustables.tahun',
                     'sdesc.label as status',
-                    'statustables.id as id_statustables'
+                    'statustables.id as id_statustables',
+                    'statustables.updated_at as status_updated',
                 )
                 ->get();
         } else {
@@ -65,7 +66,8 @@ class TabelController extends Controller
                     'dinas.nama as nama_dinas',
                     'statustables.tahun',
                     'sdesc.label as status',
-                    'statustables.id as id_statustables'
+                    'statustables.id as id_statustables',
+                    'statustables.updated_at as status_updated',
                 )
                 ->get();
         }
@@ -131,6 +133,7 @@ class TabelController extends Controller
                 // 'turtahuns' => $turtahuns,
                 'status' => $table->status,
                 'id_statustables' => $table->id_statustables,
+                'status_updated' => $table->status_updated,
             ]);
         }
 
@@ -465,7 +468,8 @@ class TabelController extends Controller
                 'statustables.tahun',
                 'statustables.status as status',
                 'statustables.id as id_statustables',
-                'sdesc.label as status_desc'
+                'sdesc.label as status_desc',
+                'statustables.updated_at as status_updated',
             )
             ->where('statustables.id', $decryptedId)->first();
 

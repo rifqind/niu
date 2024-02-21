@@ -55,7 +55,7 @@ class MetadataVariabelController extends Controller
     {
         $this_role = auth()->user()->role;
         $decryptedId = Crypt::decrypt($id);
-        $master_metavar = MetadataVariabel::distinct()->get(['r101']);
+        $master_metavar = MetadataVariabel::selectRaw('MIN(id) as id, r101')->groupBy('r101')->get();
         // dd($master_metavar);
         $this_metavar = MetadataVariabel::where('id_tabel', $decryptedId)->get();
         $this_status_metavar = MetadataVariabelStatus::where('id_tabel', $decryptedId)->pluck('status');

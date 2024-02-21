@@ -52,7 +52,8 @@ class HomeController extends Controller
                 'master_wilayah.wilayah_fullcode as kode_wilayah',
                 'master_wilayah.label as nama_regions',
                 'subjects.id as id_subjects',
-                'subjects.label as nama_subjects'
+                'subjects.label as nama_subjects',
+                'statustables.updated_at as status_updated',
             ]);
         $dinas = [];
         $provs = [];
@@ -244,7 +245,8 @@ class HomeController extends Controller
                 'tabels.*',
                 'dinas.nama as nama_dinas',
                 'master_wilayah.label as nama_regions',
-                'subjects.label as nama_subjects'
+                'subjects.label as nama_subjects',
+                'statustables.updated_at as status_updated',
             ]);
 
 

@@ -86,7 +86,7 @@
                             id: id,
                         },
                         success: function(data) {
-                            // console.log(data);
+                            console.log(data);
                             if (data != "not") {
                                 $.each(data, function(key, value) {
                                     var element = $("#" + key);

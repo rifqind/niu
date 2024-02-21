@@ -24,8 +24,9 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="text-bold">{{ $tabel->judul_tabel }}, Tahun {{ $years }}
-                    <h4 class="my-0">
+                    <h4 class="my-0 d-flex">
                         <span class="badge" id="badges-status"> {{ $status_desc }}</span>
+                        <span class="ml-auto text-right small" id=""> Terakhir diupdate : {{ $tabel->status_updated }}</span>
                     </h4>
                 </h3>
             </div>
