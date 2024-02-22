@@ -33,7 +33,9 @@ Route::get('/search', [HomeController::class, 'getSearch'])->name('home.search')
 Route::get('/getMetaVariabel', [HomeController::class, 'getMetaVariabel'])->name('home.getMetaVariabel');
 // });
 
-Route::get('/login', [UserController::class, 'login'])->name('users.login');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [UserController::class, 'login'])->name('users.login');
+});
 Route::post('/attempted', [UserController::class, 'attemptLogin'])->name('users.attemptLogin');
 // Route::get('/register', [UserController::class, 'register'])->name('users.registerNew');
 // Route::post('user/store', [UserController::class, 'store'])->name('users.store');
@@ -47,9 +49,10 @@ Route::get('/monitoring', [HomeController::class, 'monitoring'])->middleware(['a
 Route::get('/getMonitoring', [HomeController::class, 'getMonitoring'])->middleware(['auth', 'verified', 'role:admin|kominfo'])->name('home.getMonitoring');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/attemptLogout', [UserController::class, 'attemptLogout'])->name('users.logout');
 });
 
 //Home

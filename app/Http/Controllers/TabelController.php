@@ -273,7 +273,7 @@ class TabelController extends Controller
         $rowLabel = RowLabel::get();
         $id_wilayah = MasterWilayah::getMyWilayahId();
         // dd($id_wilayah["kabs"]);
-        $daftar_dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
+        $daftar_dinas = Dinas::orderBy('wilayah_fullcode')->orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         // $daftar_dinas = Dinas::get();
         $daftar_kolom = Column::get();
         $kolom_grup = ColumnGroup::get();

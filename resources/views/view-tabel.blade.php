@@ -141,7 +141,7 @@
         </div>
         <div class="justify-content-between row mb-2 d-none mr-1" id="showMetadataVariabel">
             <div class="ml-auto mr-2" id="">
-                <a href="#" class="btn bg-info-fordone" id="" onclick="window.location.reload()"><i
+                <a href="#" class="btn bg-info-fordone" id=""><i
                         class="fa-solid mr-1 fa-book-bookmark"></i>
                     Tabel</a>
             </div>
@@ -162,8 +162,10 @@
         <script nonce="{{ Vite::cspNonce() }}">
             const url_key = new URL("{{ route('tabel.getDatacontent') }}");
             const meta_key = new URL("{{ route('home.getMetaVariabel') }}");
+            const meta_show = "{{ route('metavar.show') }}";
             const id = {{ Js::from($tabels->id) }}
             const dataContents = {{ Js::from($datacontents) }};
+            let satuans = {{ Js::from($tabels->unit) }}
         </script>
     </x-slot>
 </x-front-layout>

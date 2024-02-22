@@ -29,31 +29,6 @@
         </div>
         <div class="row d-flex justify-content-between align-items-center">
             <h4 class="col">Daftar Pengisian Metadata per Tabel</h4>
-            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
-            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
-                <select class  ="form-control" name="state" id="maxRows">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-            <div class="pagination-container">
-                <nav>
-                    <ul class="pagination">
-                        <li data-page="prev">
-                            <span>
-                                < <span class="sr-only">(current)
-                            </span></span>
-                        </li>
-                        <!--	Here the JS Function Will Add the Rows -->
-                        <li data-page="next" id="prev">
-                            <span> > <span class="sr-only">(current)</span></span>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
         </div>
         <table id="table-metadata-variabel"
             class="table table-bordered table-hover table-sorted table-search overflow-y-scroll">
@@ -94,6 +69,32 @@
             </tbody>
             <tfoot></tfoot>
         </table>
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="mb-3 mx-3 ml-auto">Menampilkan <span id="showPage"></span> dari <span id="showTotal"></span></div>
+            <div class="form-group"> <!--		Show Numbers Of Rows 		-->
+                <select class  ="form-control" name="state" id="maxRows">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination">
+                        <li data-page="prev">
+                            <span>
+                                < <span class="sr-only">(current)
+                            </span></span>
+                        </li>
+                        <!--	Here the JS Function Will Add the Rows -->
+                        <li data-page="next" id="prev">
+                            <span> > <span class="sr-only">(current)</span></span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
 

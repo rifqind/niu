@@ -13,14 +13,14 @@
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
     </x-slot>
-    <div class="bg"></div>
+    {{-- <div class="bg"></div>
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
     <div class="cube"></div>
     <div class="cube"></div>
     <div class="cube"></div>
     <div class="cube"></div>
-    <div class="cube"></div>
+    <div class="cube"></div> --}}
     <div class="container vh-100">
         <div class="flex-column d-flex justify-content-center align-items-center h-100">
             {{-- asu --}}

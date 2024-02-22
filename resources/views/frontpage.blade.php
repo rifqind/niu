@@ -44,17 +44,26 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div class="card-large-homepage">
-                                    @foreach ($wilayahs as $wilayah)
-                                        <div class="row my-2 row-wilayah-homepage" id="">
-                                            <input type="checkbox" id="{{ 'dinas-' . $wilayah['wilayah_fullcode'] }}"
-                                                class="ml-3 kabs-checkbox" name="wilayah[]"
-                                                value="{{ $wilayah['wilayah_fullcode'] }}">
-                                            <label class="ml-3 mb-0 click-to-check-kabs-prov text-capitalize"
-                                                data-target="{{ 'dinas-' . $wilayah['wilayah_fullcode'] }}">
-                                                {{ $wilayah['label'] }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                    @if (sizeof($wilayahs) > 0)
+                                        @foreach ($wilayahs as $wilayah)
+                                            <div class="row my-2 row-wilayah-homepage" id="">
+                                                <input type="checkbox"
+                                                    id="{{ 'dinas-' . $wilayah['wilayah_fullcode'] }}"
+                                                    class="ml-3 kabs-checkbox" name="wilayah[]"
+                                                    value="{{ $wilayah['wilayah_fullcode'] }}">
+                                                <label class="ml-3 mb-0 click-to-check-kabs-prov text-capitalize"
+                                                    data-target="{{ 'dinas-' . $wilayah['wilayah_fullcode'] }}">
+                                                    {{ $wilayah['label'] }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                    <div class="row my-2 row-wilayah-homepage" id="">
+                                        <label class="ml-3 mb-0 click-to-check-kabs-prov text-capitalize"
+                                            data-target=""> Data belum ada yang final
+                                        </label>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -100,7 +109,8 @@
                                 </div>
                                 <div class="card-small-homepage">
                                     @foreach ($desa as $des)
-                                        <div class="row my-2 d-none row-wilayah-homepage" id="{{ $des['wilayah_fullcode'] }}">
+                                        <div class="row my-2 d-none row-wilayah-homepage"
+                                            id="{{ $des['wilayah_fullcode'] }}">
                                             <input type="checkbox" id="{{ 'dinas-' . $des['wilayah_fullcode'] }}"
                                                 class="ml-3 desa-checkbox" name="desa[]"
                                                 value="{{ $des['wilayah_fullcode'] }}">
