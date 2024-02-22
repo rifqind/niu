@@ -1,6 +1,6 @@
 <x-niu-layout>
     <x-slot name="title">
-        {{ __('Test') }}
+        Create Tabel
     </x-slot>
     <x-slot name="head">
         <!-- Additional resources here -->
@@ -492,12 +492,17 @@
                             const periodeArray = Array.from(tdElements).map(function(td) {
                                 return td.innerHTML; // Return the inner HTML content of each td element
                             });
-                            const tdElementRows = document.querySelectorAll('#row-list-body tr td:nth-child(3)');
-
+                            // const tdElementRows = document.querySelectorAll('#row-list-body tr td:nth-child(3)');
+                            const tdElementRows =  Array.from(document.querySelectorAll('#row-list-body tr td:nth-child(4) input:checked'))
+                                                    .map(function(checkedInput) {
+                                                        return checkedInput.parentElement.parentElement.querySelector('td:nth-child(3)');
+                                                    });
+                            
                             // Use the map method to create an array from the inner HTML content of the selected td elements
                             const rowsArray = Array.from(tdElementRows).map(function(td) {
                                 return td.innerHTML; // Return the inner HTML content of each td element
                             });
+                            console.log(rowsArray);
 
 
 

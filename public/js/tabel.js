@@ -59,29 +59,4 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     });
-       
-    $('#rekon-view').on('paste', 'input', function (e) {
-        const $this = $(this);
-        // let panjang_ndas = $('thead').children().length
-        $.each(e.originalEvent.clipboardData.items, function (i, v) {
-            if (v.type === 'text/plain') {
-                v.getAsString(function (text) {
-                    var x = $this.closest('td').index(),
-                        y = $this.closest('tr').index() + 2,
-                        obj = {};
-                    text = text.trim('\r\n');
-                    $.each(text.split('\r\n'), function (i2, v2) {
-                        $.each(v2.split('\t'), function (i3, v3) {
-                            var row = y + i2, col = x + i3;
-                            obj['cell-' + row + '-' + col] = v3
-                            console.log(row,col);
-                            $this.closest('table').find('tr:eq(' + row + ') td:eq(' + col + ') input:not(:hidden)').val(v3);
-                        });
-                    });
-
-                });
-            }
-        });
-        return false;
-    });
 });

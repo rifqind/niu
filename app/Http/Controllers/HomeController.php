@@ -27,19 +27,6 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $kabs = MasterWilayah::where('kec', 'like', '000')
-            ->get();
-        foreach ($kabs as $kab) {
-            # code...
-            $text = $kab->label;
-            $partOfText = explode(' ', $text);
-            array_shift($partOfText);
-            $modifiedText = implode(' ', $partOfText);
-            $kab->label = $modifiedText;
-        }
-        $dinas = Dinas::all();
-        $tabel_final = Statustables::where('status', 5)->pluck('id');
-        // $tabels = Tabel::whereIn('id', $tabel_final)->get();
         $tabels = Statustables::where('status', 5)
             ->leftJoin('tabels', 'statustables.id_tabel', '=', 'tabels.id')
             ->leftJoin('dinas', 'tabels.id_dinas', '=', 'dinas.id')
@@ -49,17 +36,92 @@ class HomeController extends Controller
                 'statustables.id as id_statustables',
                 'statustables.tahun',
                 'tabels.*',
+                'dinas.id as id_dinas',
                 'dinas.nama as nama_dinas',
+                'master_wilayah.wilayah_fullcode as kode_wilayah',
                 'master_wilayah.label as nama_regions',
-                'subjects.label as nama_subjects'
+                'subjects.id as id_subjects',
+                'subjects.label as nama_subjects',
+                'statustables.updated_at as status_updated',
             ]);
-        $subjects = Subject::all();
-        $tahuns = Statustables::where('status', 5)->distinct()->get('tahun');
+        $dinas = [];
+        $provs = [];
+        $kabs = [];
+        $kecs = [];
+        $desa = [];
+        $subjects = [];
+        foreach ($tabels as $tabel) {
+            # code...
+            $dinas[] = [
+                'id' => $tabel->id_dinas,
+                'nama' => $tabel->nama_dinas,
+            ];
+            $text = $tabel->nama_regions;
+            $partOfText = explode(' ', $text);
+            array_shift($partOfText);
+            $modifiedText = implode(' ', $partOfText);
 
+            $kode = $tabel->kode_wilayah;
+            $kabupaten_kode = substr($kode, 2, 2);
+            $kecamatan_kode = substr($kode, 4, 3);
+            $desa_kode = substr($kode, 7, 3);
+            if ($kabupaten_kode != '00') {
+                $kab_label = MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                    ->where('kec', 'like', '000')->value('label');
+                $partOfText = explode(' ', $kab_label);
+                array_shift($partOfText);
+                $modifiedKabLabel = implode(' ', $partOfText);
+                $kabs[] = [
+                    'label' => $modifiedKabLabel,
+                    'wilayah_fullcode' => MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                        ->where('kec', 'like', '000')->value('wilayah_fullcode')
+                ];
+
+                if ($kecamatan_kode != '000') {
+                    $kec_label = MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                        ->where('kec', 'like', $kecamatan_kode)->value('label');
+                    $partOfText = explode(' ', $kec_label);
+                    array_shift($partOfText);
+                    $modifiedKecLabel = implode(' ', $partOfText);
+                    $kecs[] = [
+                        'label' => $modifiedKecLabel,
+                        'parent_code' => $kabupaten_kode,
+                        'wilayah_fullcode' => MasterWilayah::where('kab', 'like', $kabupaten_kode)
+                            ->where('kec', 'like', $kecamatan_kode)->value('wilayah_fullcode'),
+                    ];
+
+                    if ($desa_kode != '000') {
+                        $desa[] = [
+                            'label' => $modifiedText,
+                            'parent_code' => $kabupaten_kode.$kecamatan_kode,
+                            'wilayah_fullcode' => $kode,
+                        ];
+                    }
+                }
+            }
+            $subjects[] = [
+                'id' => $tabel->id_subjects,
+                'label' => $tabel->nama_subjects,
+            ];
+        }
+        $provs[] = [
+            'label' => 'SULAWESI UTARA',
+            'wilayah_fullcode' => '7100000000'
+        ];
+        $kabs = array_unique($kabs, SORT_REGULAR);
+        $kecs = array_unique($kecs, SORT_REGULAR);
+        $desa = array_unique($desa, SORT_REGULAR);
+        $wilayahs = (sizeof($kabs) > 0) ? array_merge($provs, $kabs) : [];
+        $subjects = array_unique($subjects, SORT_REGULAR);
+        // $subjects = Subject::all();
+        $tahuns = Statustables::where('status', 5)->distinct()->get('tahun');
         $countfinals = Statustables::where('status', 5)->count();
         $counttabels = $tabels->count();
         return view('frontpage', [
-            'kabs' => $kabs,
+            // 'kabs' => $kabs,
+            'kecs' => $kecs,
+            'desa' => $desa,
+            'wilayahs' => $wilayahs,
             'dinas' => $dinas,
             'tabels' => $tabels,
             'subjects' => $subjects,
@@ -71,59 +133,25 @@ class HomeController extends Controller
 
     public function getSearch(Request $request)
     {
-        $wilayah = $request->input('wilayah', []);
+        $kecs = $request->input('kecs', []);
+        $desa = $request->input('desa', []);
+        if ($kecs) {
+            # code...
+            if ($desa) {
+                # code...
+                $wilayah = $desa;
+            } else {
+                $wilayah = $kecs;
+            }
+        } else {
+            $wilayah = $request->input('wilayah', []);
+        }
+
         $dinas = $request->input('dinas', []);
         $subject = $request->input('subject', []);
         $tahuns = $request->input('tahuns', []);
 
         $searchWord = $request->input('searchData');
-
-
-        // $tabels = Statustables::where(function ($query) use ($wilayah) {
-        //     if (!empty($wilayah)) {
-        //         $query->whereIn('regions.id', $wilayah);
-        //     }
-        // })
-        //     ->where(function ($query) use ($dinas) {
-        //         if (!empty($dinas)) {
-        //             $query->whereIn('dinas.id', $dinas);
-        //         }
-        //     })
-        //     ->where(function ($query) use ($subject) {
-        //         if (!empty($subject)) {
-        //             $query->whereIn('subjects.id', $subject);
-        //         }
-        //     })
-        //     ->leftJoin('tabels', 'statustables.id_tabel', '=', 'tabels.id')
-        //     ->leftJoin('dinas', 'tabels.id_dinas', '=', 'dinas.id')
-        //     ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
-        //     ->leftJoin('subjects', 'tabels.id_subjek', '=', 'subjects.id')
-        //     ->get([
-        //         'statustables.tahun',
-        //         'tabels.*',
-        //         'dinas.nama as nama_dinas',
-        //         'regions.nama as nama_regions',
-        //         'subjects.label as nama_subjects'
-        //     ]);
-
-        // $tabels = Statustables::when($searchWord, function ($query) use ($searchWord) {
-        //     return $query
-        //         ->where('tabels.label', 'like', '%' . $searchWord . '%')
-        //         ->orWhere('dinas.nama', 'like', '%' . $searchWord . '%')
-        //         ->orWhere('regions.nama', 'like', '%' . $searchWord . '%')
-        //         ->orWhere('subjects.label', 'like', '%' . $searchWord . '%');
-        // })
-        //     ->leftJoin('tabels', 'statustables.id_tabel', '=', 'tabels.id')
-        //     ->leftJoin('dinas', 'tabels.id_dinas', '=', 'dinas.id')
-        //     ->leftJoin('regions', 'dinas.id_regions', '=', 'regions.id')
-        //     ->leftJoin('subjects', 'tabels.id_subjek', '=', 'subjects.id')
-        //     ->get([
-        //         'statustables.tahun',
-        //         'tabels.*',
-        //         'dinas.nama as nama_dinas',
-        //         'regions.nama as nama_regions',
-        //         'subjects.label as nama_subjects'
-        //     ]);
 
         $tabels = Statustables::when(!empty($wilayah), function ($query) use ($wilayah) {
             $query->whereIn('master_wilayah.wilayah_fullcode', $wilayah);
@@ -155,17 +183,12 @@ class HomeController extends Controller
                 'tabels.*',
                 'dinas.nama as nama_dinas',
                 'master_wilayah.label as nama_regions',
-                'subjects.label as nama_subjects'
+                'subjects.label as nama_subjects',
+                'statustables.updated_at as status_updated',
             ]);
 
 
         $counttabels = $tabels->count();
-        // return response()->json([
-        //     'wilayah' => $wilayah,
-        //     'dinas' => $dinas,
-        //     'subject' => $subject,
-        //     'tabel' => $tabel,
-        // ]);
         return view('tabel-list', compact('tabels', 'counttabels'))->render();
     }
 
@@ -177,12 +200,12 @@ class HomeController extends Controller
         if (auth()->user()->role != 'produsen') {
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
-            $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? $id_wilayah["kabs"] : [$wilayah]) : $id_wilayah["kabs"])
+            $ourDinas = Dinas::whereIn('wilayah_fullcode', ($wilayah != "all") ?  ((!$wilayah) ? MasterWilayah::getDinasWilayah() : [$wilayah]) : MasterWilayah::getDinasWilayah())
                 ->pluck('id');
             $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
             // dd($id_wilayah);
             $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
-                ->whereIn('d.wilayah_fullcode', $id_wilayah["kabs"])
+                ->whereIn('d.wilayah_fullcode', MasterWilayah::getDinasWilayah())
                 ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
                 ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
                 ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')
@@ -291,7 +314,7 @@ class HomeController extends Controller
     public function monitoring()
     {
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+        $ourDinas = Dinas::whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->pluck('id');
         $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
 
         $this_monitoring = DB::table('statustables as s')
@@ -323,7 +346,7 @@ class HomeController extends Controller
         $years = $request->year;
         // dd($years);
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+        $ourDinas = Dinas::whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->pluck('id');
         $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
         $years_all = Statustables::whereIn('id_tabel', $myTabels)->distinct()->orderBy('tahun')->pluck('tahun');
 
@@ -401,12 +424,12 @@ class HomeController extends Controller
         if (auth()->user()->role != 'produsen') {
             # code...
             $id_wilayah = MasterWilayah::getMyWilayahId();
-            $ourDinas = Dinas::whereIn('wilayah_fullcode', $id_wilayah["kabs"])->pluck('id');
+            $ourDinas = Dinas::whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->pluck('id');
             // dd($ourDinas);
             $myTabels = Tabel::whereIn('id_dinas', $ourDinas)->pluck('id');
 
             $notifikasiList = Notifikasi::where('notifikasi.id_user', '!=', auth()->user()->id)
-                ->whereIn('d.wilayah_fullcode', $id_wilayah["kabs"])
+                ->whereIn('d.wilayah_fullcode', MasterWilayah::getDinasWilayah())
                 ->leftJoin('statustables as s', 's.id', '=', 'notifikasi.id_statustabel')
                 ->leftJoin('tabels as t', 't.id', '=', 's.id_tabel')
                 ->leftJoin('dinas as d', 'd.id', '=', 't.id_dinas')

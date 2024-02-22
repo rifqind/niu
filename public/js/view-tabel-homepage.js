@@ -68,4 +68,36 @@ document.addEventListener("DOMContentLoaded", function () {
         downloadExcel(datas, judul_metadata_variabel);
         window.location.reload();
     });
+    $("#showMetadataVariabel").on("click", function (e) {
+        window.location.reload();
+    })
+    $(document).on("click", ".show-edit-button", function(e) {
+        // Find the closest tr and then find the .this-id element within it
+        // console.log(thisId);
+        var thisId = $(this).closest('tr').find('.this-id').attr('id');
+        $.ajax({
+            url: meta_show,
+            type: "GET",
+            data: {
+                id: thisId
+            },
+            success: function(data) {
+                // console.log(data);
+                $.each(data, function(key, value) {
+                    // Check if there is an element with the matching id
+                    var element = $("#show-" + key);
+                    $("#show-satuan").val(satuans);
+                    if (element.length > 0) {
+                        // Set the value of the form element
+                        element.val(value);
+                        element.prop('disabled', true);
+                        element.css('background-color', 'white');
+                    }
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    })
 });

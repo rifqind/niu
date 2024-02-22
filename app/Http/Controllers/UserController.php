@@ -22,10 +22,10 @@ class UserController extends Controller
     {
         //
         $number = 1;
-        $id_wilayah = MasterWilayah::getMyWilayahId();
+        $id_wilayah = MasterWilayah::getDinasWilayah();
         $users = User::orderBy('dinas.nama')
             ->leftJoin('dinas', 'users.id_dinas', '=', 'dinas.id')
-            ->whereIn('dinas.wilayah_fullcode', $id_wilayah["kabs"])->get(['users.*']);
+            ->whereIn('dinas.wilayah_fullcode', $id_wilayah)->get(['users.*']);
         foreach ($users as $user) {
             $user->number = $number;
             $number++;
@@ -51,7 +51,7 @@ class UserController extends Controller
     public function create()
     {
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
+        $dinas = Dinas::orderBy('wilayah_fullcode')->orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         return view('user.create', [
             'dinas' => $dinas,
         ]);
@@ -160,7 +160,7 @@ class UserController extends Controller
             $user = auth()->user();
         }
         $id_wilayah = MasterWilayah::getMyWilayahId();
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
+        $dinas = Dinas::orderBy('wilayah_fullcode')->orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         return view('user.edit', [
             'user' => $user,
             'dinas' => $dinas,
@@ -278,5 +278,15 @@ class UserController extends Controller
             return redirect('dashboard');
         }
         return response()->json(['messages' => "Dont Scam Us!"]);
+    }
+
+    public function attemptLogout(Request $request) {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

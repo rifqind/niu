@@ -24,8 +24,9 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="text-bold">{{ $tabel->judul_tabel }}, Tahun {{ $years }}
-                    <h4 class="my-0">
+                    <h4 class="my-0 d-flex">
                         <span class="badge" id="badges-status"> {{ $status_desc }}</span>
+                        <span class="ml-auto text-right small" id=""> Terakhir diupdate : {{ $tabel->status_updated }}</span>
                     </h4>
                 </h3>
             </div>
@@ -40,7 +41,7 @@
                                 <td rowspan="3" class="align-middle">{{ $row_label }}</td>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white">
                             @foreach ($rows as $key => $row)
                                 <tr>
                                     <td class="align-middle pl-2">{{ $key + 1 }}</td>
@@ -82,7 +83,7 @@
                                 @endforeach
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white">
                             @foreach ($rows as $key => $row)
                                 <tr>
                                     @foreach ($tahuns as $tahun)
@@ -141,6 +142,7 @@
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js" nonce="{{ Vite::cspNonce() }}"></script>
         {{-- <script src="{{ asset('js/public.js') }}"></script> --}}
         <script src="{{ asset('js/show-tabel.js') }}"></script>
+        <script src="{{ asset('js/tabel.js') }}"></script>
         <script nonce="{{ Vite::cspNonce() }}">
             const reject_final_key = new URL("{{ route('tabel.adminHandleData') }}")
             const just_route = "{{ route('tabel.update_content', $encryptedId) }}";
@@ -197,7 +199,7 @@
                     var buttonInitialText = this.innerHTML;
                     setTimeout(() => {
                         $("#spinner-border").addClass("d-none")
-                        handleSaveTable(button, buttonInitialText, decisions, catatans);
+                        handleSaveTable(button, buttonInitialText, decisions, catatans, token);
                     }, 1500);
                 })
 

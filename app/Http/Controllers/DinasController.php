@@ -22,7 +22,7 @@ class DinasController extends Controller
         $id_wilayah = MasterWilayah::getMyWilayahId();
         $kabs = $wilayah["kabs"];
         // dd($id_wilayah["kabs"]);
-        $dinas = Dinas::orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
+        $dinas = Dinas::orderBy('wilayah_fullcode')->orderBy('nama')->whereIn('wilayah_fullcode', MasterWilayah::getDinasWilayah())->get();
         foreach ($dinas as $din) {
             $din->number = $number;
             $number++;

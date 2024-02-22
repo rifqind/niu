@@ -16,7 +16,7 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="{{ route('users.edit') }}"><i class="nav-icon fas fa-user"></i> Profile</a>
 
-                <form method="POST" action="{{ route('logout') }}" id="logoutButton">
+                <form id="logoutButton">
                     @csrf
                     <button type="submit" class="dropdown-item" href=""><i class="nav-icon fas fa-sign-out-alt"></i> Log Out</button>
                 </form>

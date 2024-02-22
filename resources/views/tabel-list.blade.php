@@ -15,7 +15,7 @@
         <small class="lead smalltext-homepage" id="subjek-weight"> Subjek :
             {{ $tabel->nama_subjects }}</small>
         <small class="lead smalltext-homepage">Terakhir diupdate :
-            {{ $tabel->updated_at }}</small>
+            {{ $tabel->status_updated }}</small>
     </div>
 @endforeach
 </div>

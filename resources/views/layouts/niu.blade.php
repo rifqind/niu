@@ -88,7 +88,7 @@
             document.getElementById("logoutButton").addEventListener("click", function(e) {
                     console.log("logged out");
                     $.ajax({
-                        url: $(this).attr("action"),
+                        url: "{{route('users.logout')}}",
                         data: {_token: '{{ csrf_token() }}'},
                         type: "POST",
                         success: function(data) {

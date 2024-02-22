@@ -1,4 +1,4 @@
-const handleSaveTable = function(element, buttonInitialText, decisions, catatans) {
+const handleSaveTable = function(element, buttonInitialText, decisions, catatans, token) {
     element.disabled = true;
 
     element.innerHTML = 'Loading...';
@@ -27,7 +27,6 @@ const handleSaveTable = function(element, buttonInitialText, decisions, catatans
 
         })
     });
-    let token = '{{ csrf_token() }}'
     let data_json = ({
         'data': inputValues,
         'decisions': decisions_type,
@@ -78,3 +77,29 @@ function showSuccessAlert() {
 function hideSuccessAlert() {
     $("#success-alert").addClass("d-none");
 }
+
+document.addEventListener("DOMContentLoaded", function(e) {
+    $('#rekon-view').on('paste', 'input', function (e) {
+        const $this = $(this);
+        // let panjang_ndas = $('thead').children().length
+        $.each(e.originalEvent.clipboardData.items, function (i, v) {
+            if (v.type === 'text/plain') {
+                v.getAsString(function (text) {
+                    var x = $this.closest('td').index(),
+                        y = $this.closest('tr').index() + 2,
+                        obj = {};
+                    text = text.trim('\r\n');
+                    $.each(text.split('\r\n'), function (i2, v2) {
+                        $.each(v2.split('\t'), function (i3, v3) {
+                            var row = y + i2, col = x + i3;
+                            obj['cell-' + row + '-' + col] = v3
+                            $this.closest('table').find('tr:eq(' + row + ') td:eq(' + col + ') input:not(:hidden)').val(v3);
+                        });
+                    });
+
+                });
+            }
+        });
+        return false;
+    });
+})

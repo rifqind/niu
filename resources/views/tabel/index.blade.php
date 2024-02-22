@@ -42,10 +42,11 @@
                     <th class="align-middle">#</th>
                     <th class="align-middle table-width-25">Nama Tabel</th>
                     <th class="align-middle table-width-20">Produsen Data</th>
-                    <th class="align-middle">Nama Row</th>
+                    {{-- <th class="align-middle">Nama Row</th> --}}
                     <th class="align-middle">Daftar Kolom</th>
                     <th class="align-middle">Tahun</th>
                     <th class="align-middle">Status Pengisian</th>
+                    <th class="align-middle">Terakhir di-Update</th>
                     <th class="align-middle deleted">Cek / Ubah Isian</th>
                     @if ($role != 'produsen')
                         <th class="align-middle deleted">Hapus</th>
@@ -55,6 +56,7 @@
                     <td class="align-middle search-header">#</td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
+                    {{-- <td class="align-middle search-header"><input type="text" class="search-input form-control"></td> --}}
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
@@ -71,7 +73,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
                         <td>{{ $tab['nama_dinas'] }}</td>
-                        <td>{{ $tab['row_label'] }}</td>
+                        {{-- <td>{{ $tab['row_label'] }}</td> --}}
                         <td>
                             @foreach ($tab['columns'] as $column)
                                 <span class="badge badge-info">
@@ -82,6 +84,7 @@
                         <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
 
                         <td>{{ $tab['status'] }}</td>
+                        <td>{{ $tab['status_updated'] }}</td>
                         <td class="text-center deleted">
                             <a
                                 href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">
