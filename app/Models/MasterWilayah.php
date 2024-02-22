@@ -51,7 +51,19 @@ class MasterWilayah extends Model
             # code...
             $lists = MasterWilayah::pluck('wilayah_fullcode');
         } else {
-            $lists = MasterWilayah::where('kab', auth()->user()->dinas->wilayah->kab)->pluck('wilayah_fullcode');
+            if (auth()->user()->role == 'admin') {
+                # code...
+                if (auth()->user()->dinas->wilayah_fullcode == "7101000000") {
+                    # code...
+                    $lists = MasterWilayah::whereIn('kab', ['01','10'])->pluck('wilayah_fullcode');
+                } else if (auth()->user()->dinas->wilayah_fullcode == "7105000000") {
+                    $lists = MasterWilayah::whereIn('kab', ['05','09'])->pluck('wilayah_fullcode');
+                } else {
+                    $lists = MasterWilayah::where('kab', auth()->user()->dinas->wilayah->kab)->pluck('wilayah_fullcode');
+                }
+            } else {
+                $lists = MasterWilayah::where('kab', auth()->user()->dinas->wilayah->kab)->pluck('wilayah_fullcode');
+            }
         }
         return $lists;
     }
