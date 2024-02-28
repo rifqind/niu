@@ -71,7 +71,7 @@
                 <b>Version</b> Beta
             </div>
             <div class="text-center">
-                <strong>Copyright &copy; 2023 <a href="https://sulut.bps.go.id">BPS Provinsi Sulawesi Utara</a></strong>
+                <strong>Copyright &copy; 2024 <a href="https://sulut.bps.go.id">BPS Provinsi Sulawesi Utara</a></strong>
             </div>
         </footer>
 

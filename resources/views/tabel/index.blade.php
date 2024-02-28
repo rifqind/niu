@@ -8,6 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/index-tabel.css') }}">
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -69,7 +70,7 @@
             </thead>
             <tbody id="body-tabel" class="bg-white">
                 @foreach ($tables as $index => $tab)
-                    <tr>
+                    <tr class="">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $tab['label'] }}</td>
                         <td>{{ $tab['nama_dinas'] }}</td>
@@ -84,7 +85,7 @@
                         <td><span class="badge badge-info">{{ $tab['tahun'] }}</span></td>
 
                         <td>{{ $tab['status'] }}</td>
-                        <td>{{ $tab['status_updated'] }}</td>
+                        <td class="text-center">{{$tab['who_updated']}}<br>{{ $tab['status_updated'] }}</td>
                         <td class="text-center deleted">
                             <a
                                 href="{{ route('tabel.show', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id_statustables'])]) }}">

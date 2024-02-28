@@ -20,6 +20,7 @@ use App\Models\Statustables;
 use App\Models\Subject;
 use App\Models\Turtahun;
 use App\Models\TurTahunGroup;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,7 @@ class TabelController extends Controller
                     'sdesc.label as status',
                     'statustables.id as id_statustables',
                     'statustables.updated_at as status_updated',
+                    'statustables.edited_by as edited_by',
                 )
                 ->get();
         } else {
@@ -68,16 +70,12 @@ class TabelController extends Controller
                     'sdesc.label as status',
                     'statustables.id as id_statustables',
                     'statustables.updated_at as status_updated',
+                    'statustables.edited_by as edited_by',
                 )
                 ->get();
         }
         $table_objects = [];
         foreach ($tables as $table) {
-            // $tabels = Statustables::where('id_tabel', $table->id)
-            //     ->join('tabels AS t', 'statustables.id_tabel', '=', 't.id')
-            //     ->join('status_desc as sdesc', 'sdesc.id', '=', 'statustables.status')
-            //     ->select('t.*', 'statustables.tahun', 'sdesc.label as status')
-            //     ->get();
             $datacontents = Datacontent::where('id_tabel', $table->id)->get();
             $id_rows = [];
             $id_columns = [];
@@ -121,6 +119,9 @@ class TabelController extends Controller
                 return response()->json(array('error' => $e->getMessage(), 'tersangka' => $table->id, 'rows' => $rows));
             }
             $columns = Column::whereIn('id', $id_columns)->get();
+            $who_updated = User::where('id', $table->edited_by)->value('username');
+            $when_updated = $table->status_updated;
+            // $who_when_updated = $who_updated.' ('.$when_updated.')';
             array_push($table_objects, [
                 // 'datacontents' => $datacontents,
                 'label' => $table->label,
@@ -133,7 +134,8 @@ class TabelController extends Controller
                 // 'turtahuns' => $turtahuns,
                 'status' => $table->status,
                 'id_statustables' => $table->id_statustables,
-                'status_updated' => $table->status_updated,
+                'status_updated' => $when_updated,
+                'who_updated' => $who_updated,
             ]);
         }
 
@@ -715,20 +717,22 @@ class TabelController extends Controller
                 ->where('tahun', $data[0]['tahun'])
                 ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
                 ->first(['statustables.*', 'status_desc.label as statuslabel']);
-
+            
+            $isKominfo = auth()->user()->role == "kominfo";
+            $Admins = ($isKominfo) ? "Kominfo" : "Admin";
             if ($status->status == '4') {
                 # code...
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => "Admin telah me-reject data (perlu perbaikan) dengan judul ",
+                    'komentar' => $Admins." telah me-reject data (perlu perbaikan) dengan judul ",
                 ]);
             } elseif ($status->status == '5') {
                 # code...
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => "Admin telah me-finalkan data dengan judul ",
+                    'komentar' => $Admins." telah me-finalkan data dengan judul ",
                 ]);
             }
             DB::commit();
@@ -779,7 +783,7 @@ class TabelController extends Controller
             DB::rollBack();
             return response()->json([
                 'object' => $th,
-                'message' => 'asu',
+                'message' => 'sorry u cant do something like this',
             ]);
         }
         return response()->json([

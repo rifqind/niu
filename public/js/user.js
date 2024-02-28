@@ -90,32 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // $(document).ready(function() {
     changeRoles();
     getPagination("#tabel-user");
-    // $("#formSearch").submit(function (e) {
-    //     // console.log("asu");
-    //     e.preventDefault();
-
-    //     $.ajax({
-    //         url: $(this).attr("action"),
-    //         type: "GET",
-    //         data: $(this).serialize(),
-    //         beforeSend: function () {
-    //             $("#spinner-border").removeClass("d-none");
-    //         },
-    //         complete: function () {
-    //             setTimeout(function () {
-    //                 $("#spinner-border").addClass("d-none");
-    //             }, 320);
-    //         },
-    //         success: function (data) {
-    //             // console.log(data);
-    //             updateTable(data.users);
-    //             changeRoles();
-    //         },
-    //         error: function (jqXHR, textStatus, errorThrown) {
-    //             // console.log(errorThrown);
-    //         },
-    //     });
-    // });
     $("#resetPassword").on("click", function (e) {
         let id = $("#idHidden").val();
         if (
@@ -255,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     $("#changePassword").on("click", function (e) {
         e.preventDefault();
-        // console.log("asu");
         $("#card-password").removeClass("d-none");
     });
     $(document).on("click", ".delete-trash", function (e) {
