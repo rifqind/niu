@@ -193,7 +193,6 @@
                 const desa_kode = {{ Js::from($desa) }}
                 const kabs_kode = {{ Js::from($wilayahs) }}
                 document.addEventListener('DOMContentLoaded', function() {
-                    // alert('asu')
                     $('#dinas-select').filterMultiSelect({
                         placeholderText: 'Pilih Produsen Data'
                     });

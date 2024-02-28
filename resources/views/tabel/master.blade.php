@@ -163,7 +163,6 @@
                     $('#idHiddenTabel').val(id.id);
                 })
                 document.getElementById('deleteTabels').addEventListener('click', function(e) {
-                    // console.log('asu');
                     let id = $('#idHiddenTabel').val();
                     $.ajax({
                         url: "{{ route('tabel.destroy') }}",

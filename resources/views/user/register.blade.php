@@ -15,7 +15,6 @@
     </x-slot>
     <div class="container vh-100 ">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            {{-- asu --}}
             <div class="card" style="min-width: 50vw">
                 <div class="card-header h4 text-center">Daftar Pengguna Baru</div>
                 <form action="{{ route('users.store') }}" method="POST" id="formUser">

@@ -23,7 +23,6 @@
     <div class="cube"></div> --}}
     <div class="container vh-100">
         <div class="flex-column d-flex justify-content-center align-items-center h-100">
-            {{-- asu --}}
             <div class="card shadow login-card" id="card-login">
                 <div class="row">
                     <div class="col-md-5">
