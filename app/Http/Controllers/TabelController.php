@@ -720,21 +720,19 @@ class TabelController extends Controller
                 ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
                 ->first(['statustables.*', 'status_desc.label as statuslabel']);
 
-            $isKominfo = auth()->user()->role == "kominfo";
-            $Admins = ($isKominfo) ? "Kominfo" : "Admin";
             if ($status->status == '4') {
                 # code...
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => $Admins . " telah me-reject data (perlu perbaikan) dengan judul ",
+                    'komentar' => "Admin telah me-reject data (perlu perbaikan) dengan judul ",
                 ]);
             } elseif ($status->status == '5') {
                 # code...
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => $Admins . " telah me-finalkan data dengan judul ",
+                    'komentar' => "Admin telah me-finalkan data dengan judul ",
                 ]);
             }
             DB::commit();
