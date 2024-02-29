@@ -1,21 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
-    $('#satuan').val(satuans);
-    $('#id_tabel').val(id);
+function toggleButton() {
     if (roles != "produsen") {
         $("#user-need-prompt").addClass("d-none");
-        if (status == "3") {
+        if (status_metavars == "3") {
             $("#admin-need-prompt").removeClass("d-none");
         }
-        if (status == "5") {
+        if (status_metavars == "5") {
             $("#final-metavar").addClass("d-none");
         }
     } else {
-        if (status == "3" | status == "5") {
+        if (status_metavars == "3" | status_metavars == "5") {
             $("#user-need-prompt").addClass("d-none");
         } else {
             $("#user-need-prompt").removeClass("d-none");
         }
     }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    $('#satuan').val(satuans);
+    $('#id_tabel').val(id);
     $(document).on("click", ".final-reject", function(e) {
         e.preventDefault();
         const button = this;
@@ -50,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     $("#createModal").modal('hide');
                     $("#list-tabels").html(data);
+                    toggleButton()
                 }
             },
             error: function(data) {
@@ -113,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // console.log(data);
                 $("#updateModal").modal('hide');
                 $("#list-tabels").html(data);
+                toggleButton();
             },
             error: function(data) {
                 console.log(data);
@@ -138,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // console.log(data);
                 $("#deleteModal").modal('hide');
                 $("#list-tabels").html(data);
+                toggleButton();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert(errorThrown);

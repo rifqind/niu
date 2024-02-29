@@ -9,7 +9,6 @@ use App\Models\ColumnGroup;
 
 use App\Models\Datacontent;
 use App\Models\Dinas;
-use App\Models\MasterDesa;
 use App\Models\MasterWilayah;
 use App\Models\Notifikasi;
 use App\Models\Region;
@@ -25,7 +24,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use PhpParser\Node\Expr\Cast\Array_;
 
 class TabelController extends Controller
 {
@@ -341,7 +339,8 @@ class TabelController extends Controller
                 [
                     'id_tabel' => $newTable->id,
                     'tahun' => $request->periode['tahun'],
-                    'status' => 1
+                    'status' => 1,
+                    'edited_by' => auth()->user()->id,
                 ]
             );
             Notifikasi::create([
@@ -443,7 +442,8 @@ class TabelController extends Controller
             $newStatus = Statustables::create([
                 'id_tabel' => $decryptedId,
                 'tahun' => $request->tahun,
-                'status' => '1'
+                'status' => '1',
+                'edited_by' => auth()->user()->id,
             ]);
             Datacontent::insert($newDataContents);
             return redirect(route('tabel.master'))->with('success', 'Berhasil Menyalin Tabel !');
@@ -655,7 +655,8 @@ class TabelController extends Controller
             Statustables::where('id_tabel', $data[0]['id_tabel'])
                 ->where('tahun', $data[0]['tahun'])
                 ->update([
-                    'status' => ($decisions == "save") ? '2' : '3'
+                    'status' => ($decisions == "save") ? '2' : '3',
+                    'edited_by' => auth()->user()->id,
                 ]);
             $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
                 ->where('tahun', $data[0]['tahun'])
@@ -711,13 +712,14 @@ class TabelController extends Controller
             Statustables::where('id_tabel', $data[0]['id_tabel'])
                 ->where('tahun', $data[0]['tahun'])
                 ->update([
-                    'status' => ($decisions == "reject") ? '4' : '5'
+                    'status' => ($decisions == "reject") ? '4' : '5',
+                    'edited_by' => auth()->user()->id,
                 ]);
             $status = Statustables::where('id_tabel', $data[0]['id_tabel'])
                 ->where('tahun', $data[0]['tahun'])
                 ->leftJoin('status_desc', 'statustables.status', '=', 'status_desc.id')
                 ->first(['statustables.*', 'status_desc.label as statuslabel']);
-            
+
             $isKominfo = auth()->user()->role == "kominfo";
             $Admins = ($isKominfo) ? "Kominfo" : "Admin";
             if ($status->status == '4') {
@@ -725,14 +727,14 @@ class TabelController extends Controller
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => $Admins." telah me-reject data (perlu perbaikan) dengan judul ",
+                    'komentar' => $Admins . " telah me-reject data (perlu perbaikan) dengan judul ",
                 ]);
             } elseif ($status->status == '5') {
                 # code...
                 Notifikasi::create([
                     'id_statustabel' => $status->id,
                     'id_user' => auth()->user()->id,
-                    'komentar' => $Admins." telah me-finalkan data dengan judul ",
+                    'komentar' => $Admins . " telah me-finalkan data dengan judul ",
                 ]);
             }
             DB::commit();
