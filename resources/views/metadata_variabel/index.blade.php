@@ -8,6 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <link rel="stylesheet" href="{{ url('') }}/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/index-tabel.css') }}">
     </x-slot>
 
     <x-slot name="breadcrumb">
@@ -38,10 +39,12 @@
                     <th class="align-middle tabel-width-25">Nama Tabel</th>
                     <th class="align-middle tabel-width-20">Produsen Data</th>
                     <th class="align-middle">Status Metadata Variabel</th>
+                    <th class="align-middle">Terakhir di-update</th>
                     <th class="align-middle">Cek / Ubah Isian</th>
                 </tr>
                 <tr>
                     <td class="align-middle search-header">#</td>
+                    <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
                     <td class="align-middle search-header"><input type="text" class="search-input form-control"></td>
@@ -59,6 +62,7 @@
                         @else
                             <td>{{ $tab['status_desc'] }}</td>
                         @endif
+                        <td>{{$tab['who_updated']}}<br>{{ $tab['when_updated'] }}</td>
                         <td class="text-center">
                             <a href="{{ route('metavar.lists', ['id' => Illuminate\Support\Facades\Crypt::encrypt($tab['id'])]) }}">
                                 <i class="fas fa-eye"></i>

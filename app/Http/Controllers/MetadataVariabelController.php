@@ -6,6 +6,7 @@ use App\Models\MasterWilayah;
 use App\Models\MetadataVariabel;
 use App\Models\MetadataVariabelStatus;
 use App\Models\Tabel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -42,8 +43,12 @@ class MetadataVariabelController extends Controller
             if (!$checkMetavar) {
                 # code...
                 $tabel->status_metavar = '0';
+                $tabel->when_updated = "-";
+                $tabel->who_updated = "-";
             } else {
                 $tabel->status_metavar = $checkMetavar->status;
+                $tabel->when_updated = $checkMetavar->updated_at;
+                $tabel->who_updated = User::where('id', $checkMetavar->edited_by)->value('username');
             }
         }
         return view('metadata_variabel.index', [
@@ -113,15 +118,18 @@ class MetadataVariabelController extends Controller
             ]);
             $check_metavar_status = MetadataVariabelStatus::where('id_tabel', $id_tabel)->first();
             // dd($check_metavar_status);
+            // dd(auth()->user()->id);
             if (!$check_metavar_status) {
                 # code...
                 $metavar_status = MetadataVariabelStatus::where('id_tabel', $id_tabel)->create([
                     'id_tabel' => $id_tabel,
                     'status' => 2,
+                    'edited_by' => auth()->user()->id,
                 ]);
             } else {
                 $check_metavar_status->update([
-                    'status' => 2,
+                    'status' => 4,
+                    'edited_by' => auth()->user()->id,
                 ]);
             }
             DB::commit();
@@ -232,6 +240,7 @@ class MetadataVariabelController extends Controller
         $decryptedId = decrypt($id);
         $this_metavar_status = MetadataVariabelStatus::where('id_tabel', $decryptedId)->update([
             'status' => 3,
+            'edited_by' => auth()->user()->id,
         ]);
         return redirect()->route('metavar.index');
     }
@@ -243,6 +252,7 @@ class MetadataVariabelController extends Controller
 
         $this_metavar_status = MetadataVariabelStatus::where('id_tabel', $decryptedId)->update([
             'status' => ($decisions == "reject-metavar") ? 4 : 5,
+            'edited_by' => auth()->user()->id,
         ]);
 
         return redirect()->route('metavar.index');

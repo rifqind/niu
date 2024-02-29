@@ -63,13 +63,14 @@
             let satuans = {{ Js::from($satuan[0]) }}
             const id = {{ Js::from($id) }}
             const roles = {{ Js::from($this_role) }}
-            let status = {{ Js::from($status_metavars) }}
-            if (status.length == 0) {
-                status = 0
+            let status_metavars = {{ Js::from($status_metavars) }}
+            if (status_metavars.length == 0) {
+                status_metavars = 0
             } else {
-                status = status[0]
+                status_metavars = status_metavars[0]
             }
             document.addEventListener("DOMContentLoaded", function(e) {
+                toggleButton()
                 $("#masterModal").on("show.bs.modal", function(e) {
                     $(".row-select").select2({
                         width: '100%',
